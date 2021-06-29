@@ -1,0 +1,3 @@
+.hhconfig export-ignore
+tests/ export-ignore
+test-data/ export-ignore

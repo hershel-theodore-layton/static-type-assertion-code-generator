@@ -1,0 +1,15 @@
+{
+  "name": "hershel-theodore-layton/static-type-assertion-code-generator",
+  "description": "Codegen functions equivalent to type testing `as` expressions.",
+  "license": "MIT",
+  "require": {
+    "hhvm": "^4.73",
+    "hhvm/hsl": "^4.41"
+  },
+  "require-dev": {
+    "hhvm/hhvm-autoload": "^3.2",
+    "hhvm/hhast": "^4.64",
+    "hhvm/hacktest": "^2.2",
+    "facebook/fbexpect": "^2.7"
+  }
+}
