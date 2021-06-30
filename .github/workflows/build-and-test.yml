@@ -16,7 +16,8 @@ jobs:
         hhvm:
           - '4.73'
           - latest
-          - nightly
+          # Testing on nightlies causes a segfault. Enable testing on nightly later.
+          # - nightly
     runs-on: ${{matrix.os}}-latest
     steps:
       - uses: actions/checkout@v2
