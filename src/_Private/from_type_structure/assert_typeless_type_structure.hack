@@ -37,6 +37,17 @@ function assert_typeless_type_structure(
     } else {
       Shapes::removeKey(inout $partial__0, 'elem_types');
     }
+    if (Shapes::keyExists($partial__0, 'return_type')) {
+      invariant(
+        \HH\is_dict_or_darray($partial__0['return_type']),
+        'Can not safely cast to dict',
+      );
+      $partial__0['return_type'] = infer_keytype_arraykey(
+        dict($partial__0['return_type']),
+      );
+    } else {
+      Shapes::removeKey(inout $partial__0, 'return_type');
+    }
     if (Shapes::keyExists($partial__0, 'param_types')) {
       invariant(
         \HH\is_vec_or_varray($partial__0['param_types']),
@@ -69,9 +80,22 @@ function assert_typeless_type_structure(
         \HH\is_dict_or_darray($partial__0['fields']),
         'Can not safely cast to dict',
       );
-      $partial__0['fields'] = dict($partial__0['fields']);
+      $partial__0['fields'] = infer_keytype_arraykey(
+        dict($partial__0['fields']),
+      );
     } else {
       Shapes::removeKey(inout $partial__0, 'fields');
+    }
+    if (Shapes::keyExists($partial__0, 'value')) {
+      invariant(
+        \HH\is_dict_or_darray($partial__0['value']),
+        'Can not safely cast to dict',
+      );
+      $partial__0['value'] = infer_keytype_arraykey(
+        dict($partial__0['value']),
+      );
+    } else {
+      Shapes::removeKey(inout $partial__0, 'value');
     }
     return $partial__0;
   }();
