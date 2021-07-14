@@ -14,7 +14,7 @@ final class VecTest extends HackTest {
   }
 
   public function test_okay_values(): void {
-    static::okayValues(
+    static::okayValues<vec<num>>(
       $x ==> VecTestCodegenTargetClass::vecOfNum($x),
       dict[
         'empty vec' => vec[],

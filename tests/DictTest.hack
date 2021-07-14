@@ -25,7 +25,7 @@ final class DictTest extends HackTest {
   }
 
   public function test_okay_values(): void {
-    static::okayValues(
+    static::okayValues<dict<int, bool>>(
       $x ==> DictTestCodegenTargetClass::dictIntToBool($x),
       dict[
         'empty dict' => dict[],

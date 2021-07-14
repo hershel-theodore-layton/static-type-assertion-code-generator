@@ -23,9 +23,9 @@ trait TestHelpers {
     );
   }
 
-  final static protected function okayValues(
-    (function(mixed): mixed) $assertion,
-    dict<string, mixed> $values,
+  final static protected function okayValues<<<__Explicit>> T>(
+    (function(mixed): T) $assertion,
+    dict<string, T> $values,
   ): void {
     foreach ($values as $name => $value) {
       try {

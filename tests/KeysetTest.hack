@@ -14,7 +14,7 @@ final class KeysetTest extends HackTest {
   }
 
   public function test_okay_values(): void {
-    static::okayValues(
+    static::okayValues<keyset<string>>(
       $x ==> KeysetTestCodegenTargetClass::keysetOfString($x),
       dict[
         'empty keyset' => keyset[],
