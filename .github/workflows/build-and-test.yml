@@ -24,4 +24,4 @@ jobs:
         run: git checkout -b CI_current_pull_request
       - uses: hhvm/actions/hack-lint-test@master
         with:
-          hhvm: "${{matrix.hhvm}} -hhvm.hack.lang.enable_first_class_function_pointers=1"
+          hhvm: "${{matrix.hhvm}} -dhhvm.hack.lang.enable_first_class_function_pointers=1"
