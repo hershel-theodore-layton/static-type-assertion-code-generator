@@ -67,7 +67,7 @@ function from_type_structure(TypelessTypeStructure $s): TypeDescription {
     case TypeStructureKind::OF_NORETURN:
       invariant_violation('Unsupported type OF_NORETURN');
     case TypeStructureKind::OF_NOTHING:
-      return new NothingTypeDescription();
+      invariant_violation('Unsupported type OF_NOTHING');
     case TypeStructureKind::OF_NULL:
       return new NullTypeDescription();
     case TypeStructureKind::OF_NUM:

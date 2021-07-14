@@ -2,10 +2,6 @@
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class MixedTypeDescription implements TypeDescription {
-  public function isAssertable(): bool {
-    return true;
-  }
-
   public function isEnforceable(): bool {
     return true;
   }

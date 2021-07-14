@@ -22,10 +22,6 @@ trait AssertUsingAs {
     return static::TYPE_NAME;
   }
 
-  final public function isAssertable(): bool {
-    return true;
-  }
-
   final public function isEnforceable(): bool {
     return true;
   }
