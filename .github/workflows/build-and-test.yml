@@ -16,8 +16,7 @@ jobs:
         hhvm:
           - '4.73'
           - latest
-          # Testing on nightlies causes a segfault. Enable testing on nightly later.
-          # - nightly
+          - nightly
     runs-on: ${{matrix.os}}-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,4 +24,4 @@ jobs:
         run: git checkout -b CI_current_pull_request
       - uses: hhvm/actions/hack-lint-test@master
         with:
-          hhvm: ${{matrix.hhvm}}
+          hhvm: ${{matrix.hhvm -hhvm.hack.lang.enable_first_class_function_pointers=1}}
