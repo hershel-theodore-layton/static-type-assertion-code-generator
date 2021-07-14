@@ -35,6 +35,10 @@ final class ShapeTest extends HackTest {
       'shapeWithUnicodeKey',
       "shape('☃' => vec<string>)",
     );
+    $ch->createMethod<shape('\'' => vec<string>)>(
+      'shapeWithQuoteInKey',
+      "shape('\'' => vec<string>)",
+    );
   }
 
   public function test_okay_values(): void {
@@ -99,6 +103,13 @@ final class ShapeTest extends HackTest {
       dict[
         'shape with unicode key' =>
           shape('☃' => vec['we handled this character correctly in codegen']),
+      ],
+    );
+    static::okayValues<shape('\'' => vec<string>)>(
+      $x ==> ShapeTestCodegenTargetClass::shapeWithQuoteInKey($x),
+      dict[
+        'shape with quote in key' =>
+          shape('\'' => vec['we handled this character correctly in codegen']),
       ],
     );
   }
