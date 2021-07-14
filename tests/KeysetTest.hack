@@ -15,7 +15,7 @@ final class KeysetTest extends HackTest {
 
   public function test_okay_values(): void {
     static::okayValues(
-      KeysetTestCodegenTargetClass::keysetOfString<>,
+      $x ==> KeysetTestCodegenTargetClass::keysetOfString($x),
       dict[
         'empty keyset' => keyset[],
         'keyset of string' => keyset['a', 'b', 'c'],
@@ -25,7 +25,7 @@ final class KeysetTest extends HackTest {
 
   public function test_bad_values(): void {
     static::badValues(
-      KeysetTestCodegenTargetClass::keysetOfString<>,
+      $x ==> KeysetTestCodegenTargetClass::keysetOfString($x),
       dict[
         'not a keyset' => dict[],
         'keyset of int' => keyset[1, 2, 3],

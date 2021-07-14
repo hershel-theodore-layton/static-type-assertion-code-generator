@@ -26,7 +26,7 @@ final class DictTest extends HackTest {
 
   public function test_okay_values(): void {
     static::okayValues(
-      DictTestCodegenTargetClass::dictIntToBool<>,
+      $x ==> DictTestCodegenTargetClass::dictIntToBool($x),
       dict[
         'empty dict' => dict[],
         'dict of int to bool' => dict[5 => true, 2 => false],
@@ -36,7 +36,7 @@ final class DictTest extends HackTest {
 
   public function test_bad_values(): void {
     static::badValues(
-      DictTestCodegenTargetClass::dictIntToBool<>,
+      $x ==> DictTestCodegenTargetClass::dictIntToBool($x),
       dict[
         'not a dict' => vec[],
         'dict of string to bool' => dict['string' => false],
