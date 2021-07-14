@@ -104,7 +104,9 @@ final class ShapeTypeDescription implements TypeDescription {
       },
     )
       |> Str\join($$, ', ')
-      |> $this->allowsUnknownFields ? $$.', ...' : $$
+      |> $this->allowsUnknownFields
+        ? (C\is_empty($this->fields) ? $$.'...' : $$.', ...')
+        : $$
       |> Str\format('shape(%s)', $$);
   }
 }
