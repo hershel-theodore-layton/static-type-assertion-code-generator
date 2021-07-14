@@ -25,4 +25,4 @@ jobs:
       - uses: hhvm/actions/hack-lint-test@master
         with:
           hhvm: ${{matrix.hhvm}}
-          hhvm_flags: "-dhhvm.hack.lang.enable_first_class_function_pointers=1"
+          hhvm_flags: -dhhvm.hack.lang.enable_first_class_function_pointers=true
