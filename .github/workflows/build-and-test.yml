@@ -14,7 +14,13 @@ jobs:
       matrix:
         os: [ ubuntu ]
         hhvm:
-          - '4.73'
+          # Instead of testing in 4.73, we test in hhvm 4.74
+          # This version fixed a bug where hh_client wouldn't understand shape keys with quotes
+          # The tests do pass on hhvm 4.73 with version_compare.
+          # The hhvm/actions/hack-lint-test action runs hh_client before hacktest.
+          # For this reason, we can not test on 4.73.
+          # If you find a bug on 4.73 which is not found by the test suite, open an issue on github.
+          - '4.74'
           - latest
           - nightly
     runs-on: ${{matrix.os}}-latest
