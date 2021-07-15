@@ -24,7 +24,7 @@ async function run_static_type_assertion_code_generator_async(
     );
 
   $start = \clock_gettime_ns(\CLOCK_MONOTONIC);
-  assert_json_shape($json);
+  AssertJsonShape::assertJsonShape($json);
   $total = \clock_gettime_ns(\CLOCK_MONOTONIC) - $start;
 
   echo Str\format(<<<'STATS'

@@ -14,15 +14,34 @@ async function codegen_async(): Awaitable<void> {
 /** This code was @generated during benchmarking, run `hhvm benchmark/2-codegen.hack` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
-function assert_json_shape(mixed $htl_static_type_assertion_codegen_seed_expression): JsonShape {
-  return %s;
+final abstract class AssertJsonShape {
+  public static function assertJsonShape(mixed $htl_static_type_assertion_codegen_seed_expression): JsonShape {
+    return %s;
+  }
+  private static function assertTEntities(mixed $htl_static_type_assertion_codegen_seed_expression): TEntities {
+    return %s;
+  }
+  private static function assertTUser(mixed $htl_static_type_assertion_codegen_seed_expression): TUser {
+    return %s;
+  }
 }
 
 HACK
   ,
   StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-    StaticTypeAssertionCodegen\from_type<JsonShape>(),
+    StaticTypeAssertionCodegen\from_type<JsonShape>(
+      dict[
+        TEntities::class => AssertJsonShape::class.'::assertTEntities',
+        TUser::class => AssertJsonShape::class.'::assertTUser',
+      ],
+    ),
+  ),
+  StaticTypeAssertionCodegen\emit_body_for_assertion_function(
+    StaticTypeAssertionCodegen\from_type<TEntities>(),
+  ),
+  StaticTypeAssertionCodegen\emit_body_for_assertion_function(
+    StaticTypeAssertionCodegen\from_type<TUser>(),
   ),
   );
-  \file_put_contents(__DIR__.'/assert_json_shape.hack', $code);
+  \file_put_contents(__DIR__.'/AssertJsonShape.hack', $code);
 }
