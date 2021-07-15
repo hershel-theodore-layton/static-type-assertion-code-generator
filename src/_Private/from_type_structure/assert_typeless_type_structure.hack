@@ -6,25 +6,25 @@ function assert_typeless_type_structure(
 ): TypelessTypeStructure {
   return () ==> {
     $partial__0 = $htl_static_type_assertion_codegen_seed_expression as shape(
-      ?'nullable' => ?bool,
-      'kind' => int,
-      ?'name' => string,
+      ?'access_list' => KeyedContainer<_, _>,
+      ?'alias' => string,
+      ?'allows_unknown_fields' => ?bool,
       ?'classname' => string,
       ?'elem_types' => KeyedContainer<_, _>,
-      ?'return_type' => KeyedContainer<_, _>,
-      ?'param_types' => KeyedContainer<_, _>,
-      ?'generic_types' => KeyedContainer<_, _>,
-      ?'root_name' => ?string,
-      ?'access_list' => KeyedContainer<_, _>,
-      ?'fields' => KeyedContainer<_, _>,
-      ?'allows_unknown_fields' => ?bool,
-      ?'is_cls_cns' => bool,
-      ?'optional_shape_field' => ?bool,
-      ?'value' => KeyedContainer<_, _>,
-      ?'typevars' => string,
-      ?'alias' => string,
       ?'exact' => bool,
+      ?'fields' => KeyedContainer<_, _>,
+      ?'generic_types' => KeyedContainer<_, _>,
+      ?'is_cls_cns' => bool,
+      'kind' => int,
       ?'like' => bool,
+      ?'name' => string,
+      ?'nullable' => ?bool,
+      ?'optional_shape_field' => ?bool,
+      ?'param_types' => KeyedContainer<_, _>,
+      ?'return_type' => KeyedContainer<_, _>,
+      ?'root_name' => ?string,
+      ?'typevars' => string,
+      ?'value' => KeyedContainer<_, _>,
     );
 
     // Erase hadva-ness
@@ -91,9 +91,7 @@ function assert_typeless_type_structure(
         \HH\is_dict_or_darray($partial__0['value']),
         'Can not safely cast to dict',
       );
-      $partial__0['value'] = infer_keytype_arraykey(
-        dict($partial__0['value']),
-      );
+      $partial__0['value'] = infer_keytype_arraykey(dict($partial__0['value']));
     } else {
       Shapes::removeKey(inout $partial__0, 'value');
     }
