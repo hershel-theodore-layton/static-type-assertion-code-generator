@@ -3,3 +3,4 @@ composer.lock
 .var/
 .vscode/
 vendor/
+benchmark/benchmark.json

@@ -1,5 +1,6 @@
 {
   "roots": [
+    "benchmark/",
     "src/",
     "tests/"
   ],
