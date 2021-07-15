@@ -22,7 +22,11 @@ final class CodegenHelper implements \IDisposable {
     $this->file = static::CODEGEN_BASE.$codegenTargetClass.'.generated.hack';
   }
 
-  public function createMethod<reify T>(string $name, string $type): void {
+  public function createMethod<reify T>(
+    string $name,
+    string $type,
+    StaticTypeAssertionCodegen\TTypeAliasAsserters $table = dict[],
+  ): void {
     invariant(
       !C\contains_key($this->methods, $name),
       'Method name %s not unique',
@@ -30,7 +34,7 @@ final class CodegenHelper implements \IDisposable {
     );
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-        StaticTypeAssertionCodegen\from_type<T>(),
+        StaticTypeAssertionCodegen\from_type<T>($table),
       ),
       'type' => $type,
     );

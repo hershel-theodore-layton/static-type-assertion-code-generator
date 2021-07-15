@@ -5,19 +5,44 @@ use namespace HH\Lib\{C, Vec};
 
 // Hopefully an alternative is found before this is removed from hhvm.
 // Maybe follow what TypeAssert does?
-function from_type_structure(CleanTypeStructure $s): TypeDescription {
+function from_type_structure(
+  CleanTypeStructure $s,
+  dict<string, string> $table,
+): TypeDescription {
   if ($s['nullable'] ?? false) {
     $s['nullable'] = false;
-    return new NullableTypeDescription(from_type_structure($s));
+    return new NullableTypeDescription(from_type_structure($s, $table));
   }
 
-  invariant(
-    $s['kind'] is TypeStructureKind,
-    'Type %d is not present in the TypeStructure enum and therefore not supported',
-    $s['kind'],
-  );
+  $kind = TypeStructureKind::assert($s['kind']);
+  $alias = Shapes::idx($s, 'alias');
+  if ($alias is nonnull) {
+    if (C\contains_key($table, $alias)) {
+      return new CallThisUserSuppliedFunction(
+        $table[$alias],
+        // This check is a best effort.
+        // We can't know if the newtype is fully opaque or if the lower bound is an arraykey.
+        // This check enforces that the runtim backing type is an arraykey.
+        // Hack may disagree if the lower bound is missing or a super type.
+        C\contains_key(
+          keyset[
+            TypeStructureKind::OF_ARRAYKEY,
+            TypeStructureKind::OF_INT,
+            TypeStructureKind::OF_STRING,
+          ],
+          $kind,
+        ),
+      );
+    }
+    invariant(
+      !Shapes::idx($s, 'opaque', false),
+      'Could not generate typesafe code for %s. '.
+      'This type is a newtype and no TypeAliasAsserter was provided.',
+      $alias,
+    );
+  }
 
-  switch ($s['kind']) {
+  switch ($kind) {
     case TypeStructureKind::OF_ARRAY:
       invariant_violation('Unsupported type OF_ARRAY, use dict or vec instead');
     case TypeStructureKind::OF_ARRAYKEY:
@@ -32,8 +57,8 @@ function from_type_structure(CleanTypeStructure $s): TypeDescription {
       $generics = Shapes::at($s, 'generic_types');
       invariant(C\count($generics) === 2, 'Malformed dict<_, _> type');
       return new DictTypeDescription(
-        from_type_structure(clean_type_structure($generics[0])),
-        from_type_structure(clean_type_structure($generics[1])),
+        from_type_structure(clean_type_structure($generics[0]), $table),
+        from_type_structure(clean_type_structure($generics[1]), $table),
       );
     case TypeStructureKind::OF_DYNAMIC:
       invariant_violation('Unsupported type OF_DYNAMIC');
@@ -58,6 +83,7 @@ function from_type_structure(CleanTypeStructure $s): TypeDescription {
               'Malformed keyset<_> type',
             ),
           ),
+          $table,
         ),
       );
     case TypeStructureKind::OF_MIXED:
@@ -87,7 +113,7 @@ function from_type_structure(CleanTypeStructure $s): TypeDescription {
             return new ShapeField(
               $name,
               $t['optional_shape_field'] ?? false,
-              from_type_structure($t),
+              from_type_structure($t, $table),
             );
           },
         ),
@@ -101,7 +127,7 @@ function from_type_structure(CleanTypeStructure $s): TypeDescription {
       return new TupleTypeDescription(
         Vec\map(
           Shapes::at($s, 'elem_types'),
-          $e ==> from_type_structure(clean_type_structure($e)),
+          $e ==> from_type_structure(clean_type_structure($e), $table),
         ),
       );
     case TypeStructureKind::OF_UNRESOLVED:
@@ -116,6 +142,7 @@ function from_type_structure(CleanTypeStructure $s): TypeDescription {
           clean_type_structure(
             C\onlyx(Shapes::at($s, 'generic_types'), 'Malformed vec<_> type'),
           ),
+          $table,
         ),
       );
     case TypeStructureKind::OF_VEC_OR_DICT:
