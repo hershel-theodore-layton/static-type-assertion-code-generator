@@ -18,6 +18,7 @@ type TypelessTypeStructure = shape(
   ?'like' => bool,
   ?'name' => string,
   ?'nullable' => ?bool,
+  ?'opaque' => bool,
   ?'optional_shape_field' => ?bool,
   ?'param_types' => KeyedContainer<int, mixed>,
   ?'return_type' => KeyedContainer<arraykey, mixed>,

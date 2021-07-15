@@ -19,6 +19,7 @@ function assert_typeless_type_structure(
       ?'like' => bool,
       ?'name' => string,
       ?'nullable' => ?bool,
+      ?'opaque' => bool,
       ?'optional_shape_field' => ?bool,
       ?'param_types' => KeyedContainer<_, _>,
       ?'return_type' => KeyedContainer<_, _>,
