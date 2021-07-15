@@ -15,13 +15,13 @@ async function codegen_async(): Awaitable<void> {
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 final abstract class AssertJsonShape {
-  public static function assertJsonShape(mixed $htl_static_type_assertion_codegen_seed_expression): JsonShape {
+  public static function assertJsonShape(mixed $htl_untyped_variable): JsonShape {
     return %s;
   }
-  private static function assertTEntities(mixed $htl_static_type_assertion_codegen_seed_expression): TEntities {
+  private static function assertTEntities(mixed $htl_untyped_variable): TEntities {
     return %s;
   }
-  private static function assertTUser(mixed $htl_static_type_assertion_codegen_seed_expression): TUser {
+  private static function assertTUser(mixed $htl_untyped_variable): TUser {
     return %s;
   }
 }

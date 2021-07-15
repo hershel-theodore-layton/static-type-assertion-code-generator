@@ -2,10 +2,10 @@
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 function clean_type_structure(
-  mixed $htl_static_type_assertion_codegen_seed_expression,
+  mixed $htl_untyped_variable,
 ): CleanTypeStructure {
   return () ==> {
-    $partial__0 = $htl_static_type_assertion_codegen_seed_expression as shape(
+    $partial__0 = $htl_untyped_variable as shape(
       ?'access_list' => KeyedContainer<_, _>,
       ?'alias' => string,
       ?'allows_unknown_fields' => ?bool,

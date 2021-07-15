@@ -61,11 +61,7 @@ trait TestHelpers {
     string $method,
     string $expression,
   ): void {
-    $body = Str\replace(
-      $expression,
-      '__SEED__',
-      '$htl_static_type_assertion_codegen_seed_expression',
-    );
+    $body = Str\replace($expression, '__SEED__', '$htl_untyped_variable');
 
     invariant(self::$code is nonnull, 'No code has been generated yet');
     $actual_body = Regex\replace_with(
