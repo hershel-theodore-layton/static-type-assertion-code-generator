@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 // Built-in as https://github.com/facebook/hhvm/blob/master/hphp/hack/hhi/typestructure.hhi
 // This can not be used portably, because of hadva.
 // Removed classname-ness to classname, since this can not be asserted.
-type TypelessTypeStructure = shape(
+type CleanTypeStructure = shape(
   ?'access_list' => KeyedContainer<int, mixed>,
   ?'alias' => string,
   ?'allows_unknown_fields' => ?bool,

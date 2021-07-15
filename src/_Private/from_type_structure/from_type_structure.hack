@@ -5,7 +5,7 @@ use namespace HH\Lib\{C, Vec};
 
 // Hopefully an alternative is found before this is removed from hhvm.
 // Maybe follow what TypeAssert does?
-function from_type_structure(TypelessTypeStructure $s): TypeDescription {
+function from_type_structure(CleanTypeStructure $s): TypeDescription {
   if ($s['nullable'] ?? false) {
     $s['nullable'] = false;
     return new NullableTypeDescription(from_type_structure($s));
@@ -32,8 +32,8 @@ function from_type_structure(TypelessTypeStructure $s): TypeDescription {
       $generics = Shapes::at($s, 'generic_types');
       invariant(C\count($generics) === 2, 'Malformed dict<_, _> type');
       return new DictTypeDescription(
-        from_type_structure(assert_typeless_type_structure($generics[0])),
-        from_type_structure(assert_typeless_type_structure($generics[1])),
+        from_type_structure(clean_type_structure($generics[0])),
+        from_type_structure(clean_type_structure($generics[1])),
       );
     case TypeStructureKind::OF_DYNAMIC:
       invariant_violation('Unsupported type OF_DYNAMIC');
@@ -52,7 +52,7 @@ function from_type_structure(TypelessTypeStructure $s): TypeDescription {
     case TypeStructureKind::OF_KEYSET:
       return new KeysetTypeDescription(
         from_type_structure(
-          assert_typeless_type_structure(
+          clean_type_structure(
             C\onlyx(
               Shapes::at($s, 'generic_types'),
               'Malformed keyset<_> type',
@@ -79,7 +79,7 @@ function from_type_structure(TypelessTypeStructure $s): TypeDescription {
         Vec\map_with_key(
           Shapes::at($s, 'fields'),
           ($name, $t) ==> {
-            $t = assert_typeless_type_structure($t);
+            $t = clean_type_structure($t);
             invariant(
               $name is string && !Shapes::idx($t, 'is_cls_cns', false),
               'Class constants a shape keys are not supported.',
@@ -101,7 +101,7 @@ function from_type_structure(TypelessTypeStructure $s): TypeDescription {
       return new TupleTypeDescription(
         Vec\map(
           Shapes::at($s, 'elem_types'),
-          $e ==> from_type_structure(assert_typeless_type_structure($e)),
+          $e ==> from_type_structure(clean_type_structure($e)),
         ),
       );
     case TypeStructureKind::OF_UNRESOLVED:
@@ -113,7 +113,7 @@ function from_type_structure(TypelessTypeStructure $s): TypeDescription {
     case TypeStructureKind::OF_VEC:
       return new VecTypeDescription(
         from_type_structure(
-          assert_typeless_type_structure(
+          clean_type_structure(
             C\onlyx(Shapes::at($s, 'generic_types'), 'Malformed vec<_> type'),
           ),
         ),

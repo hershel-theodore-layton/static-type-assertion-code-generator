@@ -1,9 +1,9 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-function assert_typeless_type_structure(
+function clean_type_structure(
   mixed $htl_static_type_assertion_codegen_seed_expression,
-): TypelessTypeStructure {
+): CleanTypeStructure {
   return () ==> {
     $partial__0 = $htl_static_type_assertion_codegen_seed_expression as shape(
       ?'access_list' => KeyedContainer<_, _>,
@@ -27,6 +27,20 @@ function assert_typeless_type_structure(
       ?'typevars' => string,
       ?'value' => KeyedContainer<_, _>,
     );
+
+    // Type structures are sometimes lacking the opaque field for newtypes.
+    // We can patch around this by using runtime reflection.
+    if (
+      Shapes::keyExists($partial__0, 'alias') &&
+      !Shapes::idx($partial__0, 'opaque', false) &&
+      idx(
+        (new \ReflectionTypeAlias($partial__0['alias']))->getTypeStructure(),
+        'opaque',
+        false,
+      )
+    ) {
+      $partial__0['opaque'] = true;
+    }
 
     // Erase hadva-ness
     if (Shapes::keyExists($partial__0, 'elem_types')) {
