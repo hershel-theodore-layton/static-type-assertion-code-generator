@@ -26,7 +26,7 @@ https://github.com/simdjson/simdjson/blob/master/LICENSE
 The authors of simdjson use this file as a benchmark.
 The file is complex enough to be tough to parse and validate, but very realisitic.
 I did not create a specially crafted json file for this benchmark. https://en.wikipedia.org/wiki/Nothing-up-my-sleeve_number.
-I do not claim that the authors of simdjson have licensed this file directly.
+I do not claim that the authors of simdjson have licensed this file correctly.
 If downloading or benchmarking with this file makes you uncomfortable, please exit this application now.
 You can benchmark using a file you provide by placing the file at:
 $cache_file
