@@ -24,5 +24,5 @@ HACK
     StaticTypeAssertionCodegen\from_type<JsonShape>(),
   ),
   );
-  \file_put_contents(__DIR__.'/private/assert_json_shape.hack', $code);
+  \file_put_contents(__DIR__.'/assert_json_shape.hack', $code);
 }
