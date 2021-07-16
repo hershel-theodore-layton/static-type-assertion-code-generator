@@ -34,6 +34,6 @@ final class KeysetTest extends HackTest {
   }
 
   public function test_effient_code(): void {
-    static::bodyOfMethodOughtToBe('keysetOfArrayKey', '__SEED__ as keyset<_>');
+    static::bodyOfMethodOughtToBe('keysetOfArrayKey', 'return __SEED__ as keyset<_>;');
   }
 }

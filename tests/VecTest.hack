@@ -37,6 +37,6 @@ final class VecTest extends HackTest {
   }
 
   public function test_effient_code(): void {
-    static::bodyOfMethodOughtToBe('vecOfMixed', '__SEED__ as vec<_>');
+    static::bodyOfMethodOughtToBe('vecOfMixed', 'return __SEED__ as vec<_>;');
   }
 }

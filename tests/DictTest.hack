@@ -49,17 +49,17 @@ final class DictTest extends HackTest {
   public function test_effient_code(): void {
     static::bodyOfMethodOughtToBe(
       'dictArraykeyToBool',
-      '() ==> { $out = dict[]; foreach ((__SEED__ as dict<_, _>) as $k => $v) { $out[$k] = $v as bool; } return $out; }()',
-      //            no validation here, since arraykey does not need to be validated ^^
+      '$out = dict[]; foreach ((__SEED__ as dict<_, _>) as $k => $v) { $out[$k] = $v as bool; } return $out;',
+      //   no validation here, since arraykey does not need to be validated ^^
     );
     static::bodyOfMethodOughtToBe(
       'dictStringToMixed',
-      '() ==> { $out = dict[]; foreach ((__SEED__ as dict<_, _>) as $k => $v) { $out[$k as string] = $v; } return $out; }()',
-      //                               no validation here, since mixed does not need to be validated ^^
+      '$out = dict[]; foreach ((__SEED__ as dict<_, _>) as $k => $v) { $out[$k as string] = $v; } return $out;',
+      //                      no validation here, since mixed does not need to be validated ^^
     );
     static::bodyOfMethodOughtToBe(
       'dictArraykeyToMixed',
-      '__SEED__ as dict<_, _>',
+      'return __SEED__ as dict<_, _>;',
     );
   }
 }

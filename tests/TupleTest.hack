@@ -58,17 +58,17 @@ final class TupleTest extends HackTest {
   public function test_effient_code(): void {
     static::bodyOfMethodOughtToBe(
       'tupleMixedMixedMixed',
-      '__SEED__ as (mixed, mixed, mixed)',
+      'return __SEED__ as (mixed, mixed, mixed);',
     );
     static::bodyOfMethodOughtToBe(
       'tupleIntMixedVecOfMixedBool',
-      '__SEED__ as (int, vec<_>, bool)',
+      'return __SEED__ as (int, vec<_>, bool);',
       // enforceable vec<mixed>
     );
     static::bodyOfMethodOughtToBe(
       'tupleIntMixedVecOfIntBool',
-      '() ==> { $partial = __SEED__ as (int, mixed, bool); return tuple($partial[0], () ==> { $out = vec[]; foreach (($partial[1] as vec<_>) as $v) { $out[] = $v as int; } return $out; }(), $partial[2]); }()',
-      //  mixed here, no need to `as vec<_>` ^^^^^   validate here and copy the rest ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      '$partial = __SEED__ as (int, mixed, bool); return tuple($partial[0], () ==> { $out = vec[]; foreach (($partial[1] as vec<_>) as $v) { $out[] = $v as int; } return $out; }(), $partial[2]);',
+      //  mixed no use for `vec<_>` ^^^^^   validate here and copy the rest ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     );
   }
 }

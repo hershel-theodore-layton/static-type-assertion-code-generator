@@ -16,13 +16,13 @@ namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 final abstract class AssertJsonShape {
   public static function assertJsonShape(mixed $htl_untyped_variable): JsonShape {
-    return %s;
+    %s
   }
   private static function assertTEntities(mixed $htl_untyped_variable): TEntities {
-    return %s;
+    %s
   }
   private static function assertTUser(mixed $htl_untyped_variable): TUser {
-    return %s;
+    %s
   }
 }
 

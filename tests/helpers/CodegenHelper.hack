@@ -56,7 +56,7 @@ HACK
     Vec\map_with_key(
       $this->methods,
       ($name, $its) ==> Str\format(
-        '  public static function %s(mixed $htl_untyped_variable): %s { return %s; }',
+        '  public static function %s(mixed $htl_untyped_variable): %s { %s }',
         $name,
         $its['type'],
         $its['body'],

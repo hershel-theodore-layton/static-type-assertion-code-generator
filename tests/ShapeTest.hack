@@ -153,39 +153,36 @@ final class ShapeTest extends HackTest {
   }
 
   public function test_effient_code(): void {
-    static::bodyOfMethodOughtToBe('emptyShape', '__SEED__ as shape()');
+    static::bodyOfMethodOughtToBe('emptyShape', 'return __SEED__ as shape();');
     static::bodyOfMethodOughtToBe(
       'emptyShapeWithExtraFields',
-      '__SEED__ as shape(...)',
+      'return __SEED__ as shape(...);',
     );
     static::bodyOfMethodOughtToBe(
       'nullableShapeOptionalAToNullableIntWithExtraFields',
-      "__SEED__ as ?shape(?'a' => ?int, ...)",
+      "return __SEED__ as ?shape(?'a' => ?int, ...);",
       // This is still enforceable in one go.
     );
 
     static::bodyOfMethodOughtToBe(
       'shapeOptionalAVecOfIntBStringWithExtraFields',
       // hackfmt-ignore
-      '() ==> { '.
-        '$partial = __SEED__ as shape(?\'a\' => mixed, \'b\' => string, ...); '.
-      //                 no need to assert here ^^^^^
-      //        we can assert here, so we won't have to copy it ^^^^^^, unlike tuples, which we always copy
-        'if (Shapes::keyExists($partial, \'a\')) { '.
-          '$partial[\'a\'] = () ==> { '.
-            '$out = vec[]; '.
-            'foreach (($partial[\'a\'] as vec<_>) as $v) { '.
-              '$out[] = $v as int; '.
-            '} '.
-            'return $out; '.
-          '}(); '.
-        '} else { '.
-          'Shapes::removeKey(inout $partial, \'a\'); '.
-      // Hack does not trust this code without the removeKey call.
-      // The only way to get to the else is when 'a' is not present.
-        '} '.
-        'return $partial; '.
-      '}()',
+      '$partial = __SEED__ as shape(?\'a\' => mixed, \'b\' => string, ...); '.
+      //               no need to assert here ^^^^^
+      'if (Shapes::keyExists($partial, \'a\')) { '.
+        '$partial[\'a\'] = () ==> { '.
+          '$out = vec[]; '.
+          'foreach (($partial[\'a\'] as vec<_>) as $v) { '.
+            '$out[] = $v as int; '.
+          '} '.
+          'return $out; '.
+        '}(); '.
+      '} else { '.
+        'Shapes::removeKey(inout $partial, \'a\'); '.
+        // Hack does not trust this code without the removeKey call.
+        // The only way to get to the else is when 'a' is not present.
+      '} '.
+      'return $partial;',
     );
   }
 }
