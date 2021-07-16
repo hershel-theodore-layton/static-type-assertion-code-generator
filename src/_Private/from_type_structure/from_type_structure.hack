@@ -27,6 +27,7 @@ function from_type_structure(
         C\contains_key(
           keyset[
             TypeStructureKind::OF_ARRAYKEY,
+            TypeStructureKind::OF_ENUM,
             TypeStructureKind::OF_INT,
             TypeStructureKind::OF_STRING,
           ],

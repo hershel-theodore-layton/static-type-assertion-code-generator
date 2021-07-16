@@ -27,7 +27,12 @@ final class NewtypeTest extends HackTest {
         TOpaqueIntAsInt::class,
         TOpaqueIntAsInt::class,
       ),
-      dict[TOpaqueIntAsInt::class => static::class.'::assertOpaqueInt'],
+      dict[TOpaqueIntAsInt::class => static::class.'::assertOpaqueIntAsInt'],
+    );
+    $ch->createMethod<keyset<TOpaqueIntAsInt>>(
+      'keysetOfTOpaqueIntAsInt',
+      'keyset<\\'.TOpaqueIntAsInt::class.'>',
+      dict[TOpaqueIntAsInt::class => static::class.'::assertOpaqueIntAsInt'],
     );
   }
 
@@ -59,6 +64,17 @@ final class NewtypeTest extends HackTest {
     );
   }
 
+  public function test_types_backend_by_arraykeys_can_be_used_as_an_arraykey(
+  ): void {
+    static::okayValues<keyset<TOpaqueIntAsInt>>(
+      $x ==> NewtypeTestCodegenTargetClass::keysetOfTOpaqueIntAsInt($x),
+      dict[
+        'empty keyset' => keyset[],
+        'keyset of TOpaqueIntAsInt' => keyset[6],
+      ],
+    );
+  }
+
   public function test_reified_generics_do_not_appear_consistently(): void {
     expect(static::isOpaque<TIntAlias>())->toBeNull();
     expect(static::isOpaque<TOpaqueIntAsInt>())->toBeTrue();
@@ -86,7 +102,7 @@ final class NewtypeTest extends HackTest {
     )->toEqual('<missing>');
   }
 
-  public static function assertOpaqueInt(mixed $mixed): TOpaqueIntAsInt {
+  public static function assertOpaqueIntAsInt(mixed $mixed): TOpaqueIntAsInt {
     if (($mixed as int) < 0) {
       throw new \TypeAssertionException(
         Str\format(

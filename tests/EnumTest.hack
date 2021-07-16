@@ -21,6 +21,11 @@ final class EnumTest extends HackTest {
       '\\'.SomeEnum::class,
       dict[SomeEnum::class => static::class.'::assertEnum'],
     );
+    $ch->createMethod<keyset<SomeEnum>>(
+      'keysetOfSomeEnum',
+      'keyset<\\'.SomeEnum::class.'>',
+      dict[SomeEnum::class => static::class.'::assertEnum'],
+    );
   }
 
   public function test_throws_when_no_enum_handler_was_provided(): void {
@@ -35,6 +40,16 @@ final class EnumTest extends HackTest {
     static::okayValues<SomeEnum>(
       $x ==> EnumTestCodegenTargetClass::someEnum($x),
       dict['member of SomeEnum' => SomeEnum::ONE],
+    );
+  }
+
+  public function test_can_be_used_as_an_arraykey(): void {
+    static::okayValues<keyset<SomeEnum>>(
+      $x ==> EnumTestCodegenTargetClass::keysetOfSomeEnum($x),
+      dict[
+        'empty keyset' => keyset[],
+        'keyset of SomeEnum' => keyset[SomeEnum::ONE],
+      ],
     );
   }
 

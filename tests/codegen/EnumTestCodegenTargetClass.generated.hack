@@ -4,4 +4,5 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 final class EnumTestCodegenTargetClass {
   public static function someEnum(mixed $htl_untyped_variable): \HTL\StaticTypeAssertionCodegen\Tests\SomeEnum { return \HTL\StaticTypeAssertionCodegen\Tests\EnumTest::assertEnum($htl_untyped_variable); }
+  public static function keysetOfSomeEnum(mixed $htl_untyped_variable): keyset<\HTL\StaticTypeAssertionCodegen\Tests\SomeEnum> { $out__0 = keyset[]; foreach (($htl_untyped_variable as keyset<_>) as $k__1) { $out__0[] = \HTL\StaticTypeAssertionCodegen\Tests\EnumTest::assertEnum($k__1); } return $out__0; }
 }
