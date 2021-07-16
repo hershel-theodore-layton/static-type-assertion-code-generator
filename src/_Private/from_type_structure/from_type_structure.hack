@@ -22,7 +22,7 @@ function from_type_structure(
         $table[$alias],
         // This check is a best effort.
         // We can't know if the newtype is fully opaque or if the lower bound is an arraykey.
-        // This check enforces that the runtim backing type is an arraykey.
+        // This check enforces that the runtime backing type is an arraykey.
         // Hack may disagree if the lower bound is missing or a super type.
         C\contains_key(
           keyset[
@@ -160,6 +160,4 @@ function from_type_structure(
     case TypeStructureKind::OF_XHP:
       invariant_violation('Unsupported type OF_XHP');
   }
-
-  invariant_violation('kaboom');
 }
