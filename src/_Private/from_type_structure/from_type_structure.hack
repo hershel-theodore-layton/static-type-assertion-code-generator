@@ -63,7 +63,15 @@ function from_type_structure(
     case TypeStructureKind::OF_DYNAMIC:
       invariant_violation('Unsupported type OF_DYNAMIC');
     case TypeStructureKind::OF_ENUM:
-      invariant_violation('Unsupported type OF_ENUM');
+      $enum_name = Shapes::at($s, 'classname');
+      if (C\contains_key($table, $enum_name)) {
+        return new CallThisUserSuppliedFunction($table[$enum_name], true);
+      }
+      invariant_violation(
+        'Support for enums must be added using TTypeAliasAsserters, got %s'.
+        'See the README to learn why.',
+        $enum_name,
+      );
     case TypeStructureKind::OF_FLOAT:
       return new FloatTypeDescription();
     case TypeStructureKind::OF_FUNCTION:
