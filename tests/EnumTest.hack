@@ -1,7 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
-use namespace HH\Lib\Str;
+use namespace HH\Lib\{C, Str};
 use namespace HTL\StaticTypeAssertionCodegen;
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
@@ -54,9 +54,9 @@ final class EnumTest extends HackTest {
   }
 
   public static function assertEnum(mixed $m): SomeEnum {
-    try {
-      return SomeEnum::assert($m);
-    } catch (\UnexpectedValueException $e) {
+    if ($m is arraykey && C\contains_key(SomeEnum::getNames(), $m)) {
+      return $m as SomeEnum;
+    } else {
       throw new \TypeAssertionException(Str\format(
         'Expected %s, got %s',
         SomeEnum::class,
