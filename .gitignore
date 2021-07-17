@@ -1,6 +1,6 @@
-composer.lock
-**/*.hhast.parser-cache
 .var/
 .vscode/
-vendor/
 benchmark/benchmark.json
+vendor/
+composer.lock
+**/*.hhast.parser-cache
