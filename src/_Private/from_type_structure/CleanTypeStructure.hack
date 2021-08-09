@@ -25,4 +25,5 @@ type CleanTypeStructure = shape(
   ?'root_name' => ?string,
   ?'typevars' => string,
   ?'value' => KeyedContainer<arraykey, mixed>,
+  ...
 );

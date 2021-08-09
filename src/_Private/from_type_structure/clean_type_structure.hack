@@ -26,6 +26,7 @@ function clean_type_structure(
       ?'root_name' => ?string,
       ?'typevars' => string,
       ?'value' => KeyedContainer<_, _>,
+      ...
     );
 
     // Type structures are sometimes lacking the opaque field for newtypes.
