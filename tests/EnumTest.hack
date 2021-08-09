@@ -32,7 +32,7 @@ final class EnumTest extends HackTest {
     expect(() ==> StaticTypeAssertionCodegen\from_type<SomeEnum>())
       ->toThrow(
         InvariantException::class,
-        'Support for enums must be added using TTypeAliasAsserters',
+        'Support for enums must be added using a $type_alias_asserters entry',
       );
   }
 

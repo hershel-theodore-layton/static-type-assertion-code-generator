@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen;
 
 function from_type<reify T>(
-  TTypeAliasAsserters $type_alias_asserters = dict[],
+  dict<string, string> $type_alias_asserters = dict[],
 ): OpaqueTypeDescription {
   return \HH\ReifiedGenerics\get_type_structure<T>()
     |> _Private\clean_type_structure($$)

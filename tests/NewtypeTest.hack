@@ -44,7 +44,7 @@ final class NewtypeTest extends HackTest {
     expect(() ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>())
       ->toThrow(
         InvariantException::class,
-        'This type is a newtype and no TypeAliasAsserter was provided.',
+        'This type is a newtype and no $type_alias_asserters entry was provided.',
       );
   }
 

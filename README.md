@@ -30,13 +30,13 @@ The current version of static-type-assertion-code-generator only supports valida
  - string
  - vec<_>
 
-Support for other types can be added using aliases and TTypeAliasAsserters.
+Support for other types can be added using aliases and the `$type_alias_asserters` argument passed to `from_type<T>()`.
 
 If this static-type-assertion-code-generator does not do everything you need it to do, I recommend looking towards TypeAssert.
 
 This library is heavily inspired by [TypeAssert](https://github.com/hhvm/type-assert). TypeAssert has made different design decisions and was written for an overlapping but different purpose. TypeAssert inspects a reified generic at runtime and composes objects to approximate a fully sound assertion for the type you gave it. TypeAssert supports almost every type in Hack, but some of its assertions are not sound. Performance does matter in the minds of the TypeAssert developers, but ease of use and friendly error messages are more important to them. TypeAssert is generally a good first choice, since it gives amazingly helpful error messages when the runtime type and the expected types do not match, which will help you greatly when debugging.
 
-## TTypeAliasAsserters
+## `$type_alias_asserters in from_type<T>()`
 
 By default static-type-assertion-code-generator will recurse all the way down to primitives and generate all the code in one function. This gets bloaty pretty fast, especially for large shape types. You can reduce the size of the code you generate by pointing static-type-assertion-code-generator to functions which will validate a particular type alias. I used this technique in [the benchmark](./benchmark/2-codegen.hack) to deduplicate the `"entities"` and `"user"` keys which both appeared twice in the json and have the exact same structure in both places.
 
@@ -52,4 +52,4 @@ Hack has both `type` and `newtype` aliases. An alias created with the `type` key
 
 Hack and hhvm can not agree about how `as` works on an `enum`. When `is` and `as` were introduced in [hhvm version 3.28.0](https://hhvm.com/blog/2018/08/28/hhvm-3.28.0.html), the team noted that `is` and `as` will perform integral key conversion to main compatibility with `BuildInEnum::isValid()`. Given the enum `enum ThereCanBeOnly: int { ONE = 1; }` the `as` expression `'1' as ThereCanBeOnly` yields `string(1) "1"`. This is not sound, since a function that takes a `ThereCanBeOnly` will throw a `TypeError` when supplied with a string `"1"`. I hope that the hhvm team can deprecate and remove this behavior, since it is really confusing. Once this behavior is removed, I will update this library. A default `as` check will be codegenned, provided your hhvm version meets the minimum version requirement for the sensible `as` check.
 
-Until then, you must provide your own assertion function for enums. You have the knowledge whether `$x as YourEnum` is a safe implementation (integral key coercion can't happen for `YourEnum`). If does contain those values, you can validate using `C\contains_key(YourEnum::getNames(), $x)`, but only if your enum does not have duplicate values. If it does have duplicate values, you can use `C\contains(YourEnum::getValues(), $x)`. You may also decide you want to use `YourEnum::assert()`, which does actually change ints into strings and vice versa. Because of these many degrees of freedom, the default implementation is to stop the codegen.
+Until then, you must provide your own assertion function for enums. You have the knowledge whether `$x as YourEnum` is a safe implementation (integral key coercion can't happen for `YourEnum`). If it does contain those values, you can validate using `C\contains_key(YourEnum::getNames(), $x)`, but only if your enum does not have duplicate values. If it does have duplicate values, you can use `C\contains(YourEnum::getValues(), $x)`. You may also decide you want to use `YourEnum::assert()`, which does actually change ints into strings and vice versa. Because of these many degrees of freedom, the default implementation is to stop the codegen.

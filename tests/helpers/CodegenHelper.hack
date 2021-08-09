@@ -25,7 +25,7 @@ final class CodegenHelper implements \IDisposable {
   public function createMethod<reify T>(
     string $name,
     string $type,
-    StaticTypeAssertionCodegen\TTypeAliasAsserters $table = dict[],
+    dict<string, string> $table = dict[],
   ): void {
     invariant(
       !C\contains_key($this->methods, $name),

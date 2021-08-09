@@ -38,7 +38,7 @@ function from_type_structure(
     invariant(
       !Shapes::idx($s, 'opaque', false),
       'Could not generate typesafe code for %s. '.
-      'This type is a newtype and no TypeAliasAsserter was provided.',
+      'This type is a newtype and no $type_alias_asserters entry was provided.',
       $alias,
     );
   }
@@ -69,7 +69,7 @@ function from_type_structure(
         return new CallThisUserSuppliedFunction($table[$enum_name], true);
       }
       invariant_violation(
-        'Support for enums must be added using TTypeAliasAsserters, got %s'.
+        'Support for enums must be added using a $type_alias_asserters entry, got %s'.
         'See the README to learn why.',
         $enum_name,
       );
