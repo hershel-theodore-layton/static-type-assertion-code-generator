@@ -19,12 +19,12 @@ final class EnumTest extends HackTest {
     $ch->createMethod<SomeEnum>(
       'someEnum',
       '\\'.SomeEnum::class,
-      dict[SomeEnum::class => static::class.'::assertEnum'],
+      dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
     );
     $ch->createMethod<keyset<SomeEnum>>(
       'keysetOfSomeEnum',
       'keyset<\\'.SomeEnum::class.'>',
-      dict[SomeEnum::class => static::class.'::assertEnum'],
+      dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
     );
   }
 

@@ -27,12 +27,16 @@ final class NewtypeTest extends HackTest {
         TOpaqueIntAsInt::class,
         TOpaqueIntAsInt::class,
       ),
-      dict[TOpaqueIntAsInt::class => static::class.'::assertOpaqueIntAsInt'],
+      dict[
+        TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
+      ],
     );
     $ch->createMethod<keyset<TOpaqueIntAsInt>>(
       'keysetOfTOpaqueIntAsInt',
       'keyset<\\'.TOpaqueIntAsInt::class.'>',
-      dict[TOpaqueIntAsInt::class => static::class.'::assertOpaqueIntAsInt'],
+      dict[
+        TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
+      ],
     );
   }
 

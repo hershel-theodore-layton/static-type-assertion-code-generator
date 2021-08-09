@@ -7,19 +7,15 @@ final class CallThisUserSuppliedFunction implements TypeDescription {
   use NotAnExactSpecialType;
 
   public function __construct(
-    private string $fqn,
+    private string $func,
     private bool $isSubtypeOfArraykey,
-  ) {
-    if ($fqn[0] !== '\\') {
-      $this->fqn = '\\'.$fqn;
-    }
-  }
+  ) {}
 
   public function emitAssertionExpression(
     VariableNamer $_variable_namer,
     string $sub_expression,
   ): string {
-    return Str\format('%s(%s)', $this->fqn, $sub_expression);
+    return Str\format('%s(%s)', $this->func, $sub_expression);
   }
 
   public function emitEnforceableType(): string {
