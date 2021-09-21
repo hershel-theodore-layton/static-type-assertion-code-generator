@@ -5,7 +5,7 @@ use namespace HH\Lib\{C, Str, Vec};
 use namespace HTL\StaticTypeAssertionCodegen;
 
 /**
- * Note to self, this file is not formated by hackfmt,
+ * Note to self, this file is not formatted by hackfmt,
  * hackfmt sees at-sign-generated and leaves this file alone.
  */
 final class CodegenHelper implements \IDisposable {
@@ -34,7 +34,7 @@ final class CodegenHelper implements \IDisposable {
     );
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-        StaticTypeAssertionCodegen\from_type<T>($table),
+        StaticTypeAssertionCodegen\from_type<T>($table, panic<>),
       ),
       'type' => $type,
     );

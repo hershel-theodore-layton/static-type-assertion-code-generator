@@ -29,7 +29,9 @@ final class EnumTest extends HackTest {
   }
 
   public function test_throws_when_no_enum_handler_was_provided(): void {
-    expect(() ==> StaticTypeAssertionCodegen\from_type<SomeEnum>())
+    expect(
+      () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(dict[], panic<>),
+    )
       ->toThrow(
         InvariantException::class,
         'Support for enums must be added using a $type_alias_asserters entry',

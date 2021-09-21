@@ -41,7 +41,9 @@ final class NewtypeTest extends HackTest {
   }
 
   public function test_throws_when_no_newtype_handler_was_provided(): void {
-    expect(() ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>())
+    expect(
+      () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(dict[], panic<>),
+    )
       ->toThrow(
         InvariantException::class,
         'This type is a newtype and no $type_alias_asserters entry was provided.',

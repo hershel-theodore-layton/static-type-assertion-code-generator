@@ -9,6 +9,10 @@ async function codegen_async(): Awaitable<void> {
   require_once __DIR__.'/../vendor/autoload.hack';
   \Facebook\AutoloadMap\initialize();
 
+  $panic = ($message): nothing ==> {
+    throw new \Exception($message);
+  };
+
   $code = Str\format(<<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 /** This code was @generated during benchmarking, run `hhvm benchmark/2-codegen.hack` to update it. */
@@ -31,16 +35,17 @@ HACK
   StaticTypeAssertionCodegen\emit_body_for_assertion_function(
     StaticTypeAssertionCodegen\from_type<JsonShape>(
       dict[
-        TEntities::class => AssertJsonShape::class.'::assertTEntities',
-        TUser::class => AssertJsonShape::class.'::assertTUser',
+        TEntities::class => 'self::assertTEntities',
+        TUser::class => 'self::assertTUser',
       ],
+      $panic,
     ),
   ),
   StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-    StaticTypeAssertionCodegen\from_type<TEntities>(),
+    StaticTypeAssertionCodegen\from_type<TEntities>(dict[], $panic),
   ),
   StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-    StaticTypeAssertionCodegen\from_type<TUser>(),
+    StaticTypeAssertionCodegen\from_type<TUser>(dict[], $panic),
   ),
   );
   \file_put_contents(__DIR__.'/AssertJsonShape.hack', $code);
