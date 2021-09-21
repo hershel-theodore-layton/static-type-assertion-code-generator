@@ -30,7 +30,10 @@ final class EnumTest extends HackTest {
 
   public function test_throws_when_no_enum_handler_was_provided(): void {
     expect(
-      () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(dict[], panic<>),
+      () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(
+        dict[],
+        $x ==> panic($x),
+      ),
     )
       ->toThrow(
         InvariantException::class,

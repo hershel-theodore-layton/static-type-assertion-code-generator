@@ -42,7 +42,10 @@ final class NewtypeTest extends HackTest {
 
   public function test_throws_when_no_newtype_handler_was_provided(): void {
     expect(
-      () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(dict[], panic<>),
+      () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(
+        dict[],
+        $x ==> panic($x),
+      ),
     )
       ->toThrow(
         InvariantException::class,

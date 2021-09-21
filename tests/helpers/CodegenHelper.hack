@@ -34,7 +34,7 @@ final class CodegenHelper implements \IDisposable {
     );
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-        StaticTypeAssertionCodegen\from_type<T>($table, panic<>),
+        StaticTypeAssertionCodegen\from_type<T>($table, $x ==> panic($x)),
       ),
       'type' => $type,
     );
