@@ -36,13 +36,10 @@ final class ShapeTest extends HackTest {
       "shape('☃' => vec<string>)",
     );
 
-    // HHVM 4.73 and below do not handle this correctly in the typechecker
-    if (\version_compare(\HHVM_VERSION, '4.74', '>=')) {
-      $ch->createMethod<shape('\'' => vec<string>)>(
-        'shapeWithQuoteInKey',
-        "shape('\'' => vec<string>)",
-      );
-    }
+    $ch->createMethod<shape('\'' => vec<string>)>(
+      'shapeWithQuoteInKey',
+      "shape('\'' => vec<string>)",
+    );
   }
 
   public function test_okay_values(): void {
@@ -110,17 +107,14 @@ final class ShapeTest extends HackTest {
       ],
     );
 
-    // HHVM 4.73 and below do not handle this correctly in the typechecker
-    if (\version_compare(\HHVM_VERSION, '4.74', '>=')) {
-      static::okayValues<shape('\'' => vec<string>)>(
-        $x ==> ShapeTestCodegenTargetClass::shapeWithQuoteInKey($x),
-        dict[
-          'shape with quote in key' => shape(
-            '\'' => vec['we handled this character correctly in codegen'],
-          ),
-        ],
-      );
-    }
+    static::okayValues<shape('\'' => vec<string>)>(
+      $x ==> ShapeTestCodegenTargetClass::shapeWithQuoteInKey($x),
+      dict[
+        'shape with quote in key' => shape(
+          '\'' => vec['we handled this character correctly in codegen'],
+        ),
+      ],
+    );
   }
 
   public function test_bad_values(): void {
@@ -152,7 +146,7 @@ final class ShapeTest extends HackTest {
     );
   }
 
-  public function test_effient_code(): void {
+  public function test_efficient_code(): void {
     static::bodyOfMethodOughtToBe('emptyShape', 'return __SEED__ as shape();');
     static::bodyOfMethodOughtToBe(
       'emptyShapeWithExtraFields',
