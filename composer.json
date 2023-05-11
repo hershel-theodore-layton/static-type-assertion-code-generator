@@ -18,5 +18,10 @@
     "post-update-cmd": [
       "rm vendor/autoload.php vendor/composer/*.php"
     ]
+  },
+  "config": {
+    "allow-plugins": {
+      "hhvm/hhvm-autoload": true
+    }
   }
 }
