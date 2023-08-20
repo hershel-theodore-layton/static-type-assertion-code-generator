@@ -3,6 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\{C, Str, Vec};
 use namespace HTL\StaticTypeAssertionCodegen;
+use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
 
 /**
  * Note to self, this file is not formatted by hackfmt,
@@ -35,13 +36,13 @@ final class CodegenHelper implements \IDisposable {
     );
 
     $genned_type = StaticTypeAssertionCodegen\from_type_with_visitor<T, _, _>(
-      new TypeToString()
+      new TypeToString(),
     );
 
     invariant(
       $type is null || $genned_type !== $type,
       'Do not pass type: %s by name. The type can be generated.',
-      $type
+      $type,
     );
 
     $type ??= $genned_type;
@@ -61,7 +62,7 @@ final class CodegenHelper implements \IDisposable {
   public function __dispose(): void {
     $code = Str\format(<<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
-/** This code was @generated during testing, run `vendor/bin/hacktest tests` to update it. */
+/** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 final class %s {
@@ -84,7 +85,7 @@ HACK
     );
 
     \touch($this->file);
-    \file_put_contents($this->file, $code);
+    hackfmt($this->file, $code);
     ($this->storeMethods)($this->methods);
   }
 }
