@@ -22,6 +22,7 @@ use type HTL\StaticTypeAssertionCodegen\_Private\{
   TypeDescription,
   VecTypeDescription,
 };
+use type HTL\StaticTypeAssertionCodegenInterfaces\{TAlias, TypeDeclVisitor};
 
 final class DefaultVisitor
   implements TypeDeclVisitor<TypeDescription, ShapeField> {

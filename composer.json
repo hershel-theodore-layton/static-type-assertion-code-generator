@@ -3,7 +3,8 @@
   "description": "Codegen functions equivalent to type testing `as` expressions.",
   "license": "MIT",
   "require": {
-    "hhvm": "^4.102"
+    "hhvm": "^4.102",
+    "hershel-theodore-layton/static-type-assertion-code-generator-interfaces": "dev-master"
   },
   "require-dev": {
     "hhvm/hhvm-autoload": "^3.2",

@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\{C, Str};
-use type HTL\StaticTypeAssertionCodegen\{TAlias, TypeDeclVisitor};
+use type HTL\StaticTypeAssertionCodegenInterfaces\{TAlias, TypeDeclVisitor};
 use function HTL\StaticTypeAssertionCodegen\_Private\string_export;
 
 final class TypeToString implements TypeDeclVisitor<string, string> {

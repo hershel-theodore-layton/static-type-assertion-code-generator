@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\{C, Str};
-use type HTL\StaticTypeAssertionCodegen\TypeDeclVisitor;
+use type HTL\StaticTypeAssertionCodegenInterfaces\TypeDeclVisitor;
 
 // Hopefully an alternative is found before this is removed from hhvm.
 // Maybe follow what TypeAssert does?
