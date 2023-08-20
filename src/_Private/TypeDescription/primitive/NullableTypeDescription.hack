@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 final class NullableTypeDescription extends BaseTypeDescription {
-  use NotAnExactSpecialType;
+  use NotAnExactSpecialType, PrefersStatement;
 
   public function __construct(int $counter, private TypeDescription $inner)[] {
     parent::__construct($counter);
@@ -27,17 +27,17 @@ final class NullableTypeDescription extends BaseTypeDescription {
   }
 
   <<__Override>>
-  public function emitAssertionExpression(string $sub_expression)[]: string {
-    $var_temp = $this->suffixVariable('$temp');
-    return $this->isEnforceable()
-      ? Str\format('%s as %s', $sub_expression, $this->emitEnforceableType())
-      : Str\format(
-          '() ==> { %s = %s; return %s is null ? null : %s; }()',
-          $var_temp,
-          $sub_expression,
-          $var_temp,
-          $this->inner->emitAssertionExpression($var_temp),
-        );
+  public function getStatementFor(string $sub_expression)[]: string {
+    $out_var = $this->getTmpVar();
+
+    return Str\format(
+      'if (%s is null) { %s = null; } else { %s %s = %s;}',
+      $sub_expression,
+      $out_var,
+      $this->inner->emitAssertionStatement($sub_expression),
+      $out_var,
+      $this->inner->emitAssertionExpression($sub_expression),
+    );
   }
 
   <<__Override>>

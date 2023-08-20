@@ -4,6 +4,10 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 trait AssertUsingAs {
+  require implements TypeDescription;
+
+  use PrefersExpression;
+
   abstract const string TYPE_NAME;
 
   final public function emitAssertionExpression(

@@ -178,22 +178,20 @@ final class ShapeTest extends HackTest {
     static::bodyOfMethodOughtToBe(
       'shapeOptionalAVecOfIntBStringWithExtraFields',
       // hackfmt-ignore
-      '$partial__1 = __SEED__ as shape(?\'a\' => mixed, \'b\' => string, ...); '.
+      '$out__1 = __SEED__ as shape(?\'a\' => mixed, \'b\' => string, ...); '.
       //               no need to assert here ^^^^^
-      'if (Shapes::keyExists($partial__1, \'a\')) { '.
-        '$partial__1[\'a\'] = () ==> { '.
-          '$out__2 = vec[]; '.
-          'foreach (($partial__1[\'a\'] as vec<_>) as $v__2) { '.
-            '$out__2[] = $v__2 as int; '.
-          '} '.
-          'return $out__2; '.
-        '}(); '.
+      'if (Shapes::keyExists($out__1, \'a\')) { '.
+        '$out__2 = vec[]; '.
+        'foreach (($out__1[\'a\'] as vec<_>) as $v__2) { '.
+          '$out__2[] = $v__2 as int; '.
+        '} '.
+        '$out__1[\'a\'] = $out__2; '.
       '} else { '.
-        'Shapes::removeKey(inout $partial__1, \'a\'); '.
+        'Shapes::removeKey(inout $out__1, \'a\'); '.
         // Hack does not trust this code without the removeKey call.
         // The only way to get to the else is when 'a' is not present.
       '} '.
-      'return $partial__1;',
+      'return $out__1;',
     );
   }
 }

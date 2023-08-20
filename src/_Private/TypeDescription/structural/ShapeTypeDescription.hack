@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\{C, Str, Vec};
 
 final class ShapeTypeDescription extends BaseTypeDescription {
-  use NotASpecialType;
+  use NotASpecialType, PrefersStatement;
 
   public function __construct(
     int $counter,
@@ -15,13 +15,8 @@ final class ShapeTypeDescription extends BaseTypeDescription {
   }
 
   <<__Override>>
-  public function emitAssertionExpression(string $sub_expression)[]: string {
-    if ($this->isEnforceable()) {
-      return
-        Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
-    }
-
-    $var_partial = $this->suffixVariable('$partial');
+  public function getStatementFor(string $sub_expression)[]: string {
+    $var_out = $this->getTmpVar();
 
     $manual_override = vec[];
     foreach (
@@ -30,21 +25,27 @@ final class ShapeTypeDescription extends BaseTypeDescription {
         $f ==> !$f->getTypeDescription()->isEnforceable(),
       ) as $f
     ) {
-      $index_op = Str\format('%s[%s]', $var_partial, $f->getSourceRepr());
+      $index_op = Str\format('%s[%s]', $var_out, $f->getSourceRepr());
 
       if ($f->isOptional()) {
         $manual_override[] = Str\format(
-          'if (Shapes::keyExists(%s, %s)) { %s = %s; } else { Shapes::removeKey(inout %s, %s); }',
-          $var_partial,
+          'if (Shapes::keyExists(%s, %s)) { %s%s = %s; } else { Shapes::removeKey(inout %s, %s); }',
+          $var_out,
           $f->getSourceRepr(),
+          format_statements(
+            $f->getTypeDescription()->emitAssertionStatement($index_op),
+          ),
           $index_op,
           $f->getTypeDescription()->emitAssertionExpression($index_op),
-          $var_partial,
+          $var_out,
           $f->getSourceRepr(),
         );
       } else {
         $manual_override[] = Str\format(
-          '%s = %s;',
+          '%s%s = %s;',
+          format_statements(
+            $f->getTypeDescription()->emitAssertionStatement($index_op),
+          ),
           $index_op,
           $f->getTypeDescription()->emitAssertionExpression($index_op),
         );
@@ -52,12 +53,11 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     }
 
     return Str\format(
-      '() ==> { %s = %s as %s; %s return %s; }()',
-      $var_partial,
+      '%s = %s as %s; %s',
+      $var_out,
       $sub_expression,
       $this->getRHSOfAs(),
       Str\join($manual_override, ' '),
-      $var_partial,
     );
   }
 

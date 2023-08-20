@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 final class KeysetTypeDescription extends BaseTypeDescription {
-  use NotASpecialType;
+  use NotASpecialType, PrefersStatement;
 
   public function __construct(int $counter, private TypeDescription $key)[] {
     parent::__construct($counter);
@@ -15,21 +15,17 @@ final class KeysetTypeDescription extends BaseTypeDescription {
   }
 
   <<__Override>>
-  public function emitAssertionExpression(string $sub_expression)[]: string {
-    if ($this->key->exactlyArraykey()) {
-      return Str\format('%s as keyset<_>', $sub_expression);
-    }
-
-    $var_out = $this->suffixVariable('$out');
+  public function getStatementFor(string $sub_expression)[]: string {
+    $var_out = $this->getTmpVar();
     $var_k = $this->suffixVariable('$k');
+
     return Str\format(
-      '() ==> { %s = keyset[]; foreach ((%s as keyset<_>) as %s) { %s[] = %s; } return %s; }()',
+      '%s = keyset[]; foreach ((%s as keyset<_>) as %s) { %s[] = %s; }',
       $var_out,
       $sub_expression,
       $var_k,
       $var_out,
       $this->key->emitAssertionExpression($var_k),
-      $var_out,
     );
 
   }

@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\{C, Str, Vec};
 
 final class TupleTypeDescription extends BaseTypeDescription {
-  use NotASpecialType;
+  use NotASpecialType, PrefersStatement;
 
   public function __construct(
     int $counter,
@@ -18,17 +18,23 @@ final class TupleTypeDescription extends BaseTypeDescription {
   }
 
   <<__Override>>
-  public function emitAssertionExpression(string $sub_expression)[]: string {
-    if ($this->isEnforceable()) {
-      return
-        Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
-    }
+  public function getStatementFor(string $sub_expression)[]: string {
+    $var_out = $this->getTmpVar();
 
-    $var_partial = $this->suffixVariable('$partial');
+    $statements = Vec\map_with_key(
+      $this->elements,
+      ($i, $e) ==> {
+        $get_index = Str\format('%s[%d]', $var_out, $i);
+        return
+          $e->prefersStatement() ? $e->emitAssertionStatement($get_index) : '';
+      },
+    )
+      |> format_statements(...$$);
+
     $enforce_rest = Vec\map_with_key(
       $this->elements,
       ($i, $e) ==> {
-        $get_index = Str\format('%s[%d]', $var_partial, $i);
+        $get_index = Str\format('%s[%d]', $var_out, $i);
         return $e->isEnforceable()
           ? $get_index
           : $e->emitAssertionExpression($get_index);
@@ -38,10 +44,12 @@ final class TupleTypeDescription extends BaseTypeDescription {
       |> Str\format('tuple(%s)', $$);
 
     return Str\format(
-      '() ==> { %s = %s as %s; return %s; }()',
-      $var_partial,
+      '%s = %s as %s; %s%s = %s;',
+      $var_out,
       $sub_expression,
       $this->getRHSOfAs(),
+      $statements,
+      $var_out,
       $enforce_rest,
     );
   }

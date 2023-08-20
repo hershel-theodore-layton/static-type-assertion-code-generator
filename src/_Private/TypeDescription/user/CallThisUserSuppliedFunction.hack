@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 final class CallThisUserSuppliedFunction extends BaseTypeDescription {
-  use NotAnExactSpecialType;
+  use NotAnExactSpecialType, PrefersExpression;
 
   public function __construct(
     int $counter,
