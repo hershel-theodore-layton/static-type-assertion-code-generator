@@ -45,6 +45,13 @@ final class DefaultVisitor
   )[]: ShapeField {
     $repr = ($this->shapeFieldNameResolver)($parent_shape_name, $key);
 
+    if ($repr is null && $is_class_constant) {
+      return $this->panic(
+        'Shapes with class constant keys can not be codegenned'.
+        ' without a class constant to use in the source.',
+      );
+    }
+
     if ($repr is null) {
       if (!$key is string) {
         return $this->panic(
@@ -54,13 +61,6 @@ final class DefaultVisitor
       }
 
       $repr = _Private\string_export($key);
-    }
-
-    if ($repr is null && $is_class_constant) {
-      return $this->panic(
-        'Shapes with class constant keys can not be codegenned'.
-        ' without a class constant to use in the source.',
-      );
     }
 
     return new ShapeField($key, $repr, $is_optional, $type);
