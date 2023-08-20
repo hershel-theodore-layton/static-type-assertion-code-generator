@@ -8,8 +8,8 @@ use namespace HH\Lib\{C, Str, Vec};
 function from_type_structure(
   CleanTypeStructure $s,
   dict<string, string> $table,
-  (function(string): nothing) $panic,
-): TypeDescription {
+  (function(string)[]: nothing) $panic,
+)[]: TypeDescription {
   if ($s['nullable'] ?? false) {
     $s['nullable'] = false;
     return new NullableTypeDescription(from_type_structure($s, $table, $panic));
