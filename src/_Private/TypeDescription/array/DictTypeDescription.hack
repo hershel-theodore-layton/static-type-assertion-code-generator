@@ -9,7 +9,7 @@ final class DictTypeDescription implements TypeDescription {
   public function __construct(
     private TypeDescription $key,
     private TypeDescription $value,
-  ) {
+  )[] {
     invariant(
       $key->subtypeOfArraykey(),
       'Dicts must have an arraykey key type',
@@ -19,7 +19,7 @@ final class DictTypeDescription implements TypeDescription {
   public function emitAssertionExpression(
     VariableNamer $variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     if ($this->key->exactlyArraykey() && $this->value->exactlyMixed()) {
       return Str\format('%s as dict<_, _>', $sub_expression);
     }
@@ -44,7 +44,7 @@ final class DictTypeDescription implements TypeDescription {
     );
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
       'This operation is only supported for dict<arraykey, mixed>',
@@ -52,7 +52,7 @@ final class DictTypeDescription implements TypeDescription {
     return 'dict<_, _>';
   }
 
-  public function isEnforceable(): bool {
+  public function isEnforceable()[]: bool {
     return $this->key->exactlyArraykey() && $this->value->exactlyMixed();
   }
 }

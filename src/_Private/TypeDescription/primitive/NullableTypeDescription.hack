@@ -6,18 +6,18 @@ use namespace HH\Lib\Str;
 final class NullableTypeDescription implements TypeDescription {
   use NotAnExactSpecialType;
 
-  public function __construct(private TypeDescription $inner) {
+  public function __construct(private TypeDescription $inner)[] {
     invariant(
       !$inner->superTypeOfNull(),
       'Can not create a nullable nullable type.',
     );
   }
 
-  public function isEnforceable(): bool {
+  public function isEnforceable()[]: bool {
     return $this->inner->isEnforceable();
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     return $this->isEnforceable()
       ? '?'.$this->inner->emitEnforceableType()
       : 'mixed';
@@ -26,7 +26,7 @@ final class NullableTypeDescription implements TypeDescription {
   public function emitAssertionExpression(
     VariableNamer $variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     $var_temp = $variable_namer->name('$temp');
     return $this->isEnforceable()
       ? Str\format('%s as %s', $sub_expression, $this->emitEnforceableType())
@@ -39,11 +39,11 @@ final class NullableTypeDescription implements TypeDescription {
         );
   }
 
-  public function superTypeOfNull(): bool {
+  public function superTypeOfNull()[]: bool {
     return true;
   }
 
-  public function subtypeOfArraykey(): bool {
+  public function subtypeOfArraykey()[]: bool {
     return false;
   }
 }

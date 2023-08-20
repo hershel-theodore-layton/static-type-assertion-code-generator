@@ -6,12 +6,12 @@ use namespace HH\Lib\Str;
 final class VecTypeDescription implements TypeDescription {
   use NotASpecialType;
 
-  public function __construct(private TypeDescription $value) {}
+  public function __construct(private TypeDescription $value)[] {}
 
   public function emitAssertionExpression(
     VariableNamer $variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     if ($this->value->exactlyMixed()) {
       return Str\format('%s as vec<_>', $sub_expression);
     }
@@ -29,7 +29,7 @@ final class VecTypeDescription implements TypeDescription {
     );
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
       'This operation is only supported for vec<mixed>',
@@ -37,7 +37,7 @@ final class VecTypeDescription implements TypeDescription {
     return 'vec<_>';
   }
 
-  public function isEnforceable(): bool {
+  public function isEnforceable()[]: bool {
     return $this->value->exactlyMixed();
   }
 }

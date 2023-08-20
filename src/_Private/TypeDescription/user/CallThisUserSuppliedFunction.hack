@@ -9,28 +9,28 @@ final class CallThisUserSuppliedFunction implements TypeDescription {
   public function __construct(
     private string $func,
     private bool $isSubtypeOfArraykey,
-  ) {}
+  )[] {}
 
   public function emitAssertionExpression(
     VariableNamer $_variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     return Str\format('%s(%s)', $this->func, $sub_expression);
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     invariant_violation('User supplied handlers are not enforceable');
   }
 
-  public function isEnforceable(): bool {
+  public function isEnforceable()[]: bool {
     return false;
   }
 
-  public function subtypeOfArraykey(): bool {
+  public function subtypeOfArraykey()[]: bool {
     return $this->isSubtypeOfArraykey;
   }
 
-  public function superTypeOfNull(): bool {
+  public function superTypeOfNull()[]: bool {
     return false;
   }
 }

@@ -6,7 +6,7 @@ use namespace HH\Lib\{C, Str, Vec};
 final class TupleTypeDescription implements TypeDescription {
   use NotASpecialType;
 
-  public function __construct(private vec<TypeDescription> $elements) {
+  public function __construct(private vec<TypeDescription> $elements)[] {
     invariant(
       !C\is_empty($elements),
       'Tuples with zero elements are not supported by hhvm',
@@ -16,13 +16,10 @@ final class TupleTypeDescription implements TypeDescription {
   public function emitAssertionExpression(
     VariableNamer $variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     if ($this->isEnforceable()) {
-      return Str\format(
-        '%s as %s',
-        $sub_expression,
-        $this->emitEnforceableType(),
-      );
+      return
+        Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
     }
 
     $var_partial = $variable_namer->name('$partial');
@@ -47,7 +44,7 @@ final class TupleTypeDescription implements TypeDescription {
     );
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
       'This operation is only supported for tuples containing only enforceable types',
@@ -55,11 +52,11 @@ final class TupleTypeDescription implements TypeDescription {
     return $this->getRHSOfAs();
   }
 
-  public function isEnforceable(): bool {
+  public function isEnforceable()[]: bool {
     return C\every($this->elements, $e ==> $e->isEnforceable());
   }
 
-  private function getRHSOfAs(): string {
+  private function getRHSOfAs()[]: string {
     return Vec\map(
       $this->elements,
       $e ==> $e->isEnforceable() ? $e->emitEnforceableType() : 'mixed',

@@ -16,7 +16,7 @@ use namespace HH\Lib\Str;
  */
 function emit_body_for_assertion_function(
   OpaqueTypeDescription $type_desc,
-): string {
+)[write_props]: string {
   $expression = _Private\remove_opaqueness($type_desc)->emitAssertionExpression(
     new _Private\VariableNamer(),
     '$htl_untyped_variable',

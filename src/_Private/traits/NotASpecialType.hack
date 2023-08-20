@@ -4,11 +4,11 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 trait NotASpecialType {
   use NotAnExactSpecialType;
 
-  public function subtypeOfArraykey(): bool {
+  public function subtypeOfArraykey()[]: bool {
     return false;
   }
 
-  public function superTypeOfNull(): bool {
+  public function superTypeOfNull()[]: bool {
     return false;
   }
 }

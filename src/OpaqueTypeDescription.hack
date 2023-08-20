@@ -14,7 +14,7 @@ namespace HTL\StaticTypeAssertionCodegen {
      * Calling this function outside of this library is not supported.
      * It is `_Private` for a reason! Bad, no, do not touch!
      */
-    function remove_opaqueness(OpaqueTypeDescription $opaque): TypeDescription {
+    function remove_opaqueness(OpaqueTypeDescription $opaque)[]: TypeDescription {
       return $opaque;
     }
 
@@ -22,7 +22,7 @@ namespace HTL\StaticTypeAssertionCodegen {
      * Any TypeDescription leaving a non `_Private` function must first be made opaque.
      * Failure to do so is considered a bug.
      */
-    function make_opaque(TypeDescription $bare): OpaqueTypeDescription {
+    function make_opaque(TypeDescription $bare)[]: OpaqueTypeDescription {
       return $bare;
     }
   }

@@ -9,7 +9,7 @@ final class ShapeTypeDescription implements TypeDescription {
   public function __construct(
     private vec<ShapeField> $fields,
     private bool $allowsUnknownFields,
-  ) {
+  )[] {
     $unique_fields = Vec\unique_by($fields, $f ==> $f->getName());
     invariant(
       C\count($unique_fields) === C\count($fields),
@@ -20,13 +20,10 @@ final class ShapeTypeDescription implements TypeDescription {
   public function emitAssertionExpression(
     VariableNamer $variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     if ($this->isEnforceable()) {
-      return Str\format(
-        '%s as %s',
-        $sub_expression,
-        $this->emitEnforceableType(),
-      );
+      return
+        Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
     }
 
     $var_partial = $variable_namer->name('$partial');
@@ -38,22 +35,18 @@ final class ShapeTypeDescription implements TypeDescription {
         $f ==> !$f->getTypeDescription()->isEnforceable(),
       ) as $f
     ) {
-      $index_op = Str\format(
-        '%s[%s]',
-        $var_partial,
-        $f->getNameQuoteDelimited(),
-      );
+      $index_op = Str\format('%s[%s]', $var_partial, $f->getSourceRepr());
 
       if ($f->isOptional()) {
         $manual_override[] = Str\format(
           'if (Shapes::keyExists(%s, %s)) { %s = %s; } else { Shapes::removeKey(inout %s, %s); }',
           $var_partial,
-          $f->getNameQuoteDelimited(),
+          $f->getSourceRepr(),
           $index_op,
           $f->getTypeDescription()
             ->emitAssertionExpression($variable_namer, $index_op),
           $var_partial,
-          $f->getNameQuoteDelimited(),
+          $f->getSourceRepr(),
         );
       } else {
         $manual_override[] = Str\format(
@@ -75,7 +68,7 @@ final class ShapeTypeDescription implements TypeDescription {
     );
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
       'This operation is only supported for shapes containing only enforceable types',
@@ -83,14 +76,12 @@ final class ShapeTypeDescription implements TypeDescription {
     return $this->getRHSOfAs();
   }
 
-  public function isEnforceable(): bool {
-    return C\every(
-      $this->fields,
-      $f ==> $f->getTypeDescription()->isEnforceable(),
-    );
+  public function isEnforceable()[]: bool {
+    return
+      C\every($this->fields, $f ==> $f->getTypeDescription()->isEnforceable());
   }
 
-  private function getRHSOfAs(): string {
+  private function getRHSOfAs()[]: string {
     return Vec\map(
       $this->fields,
       $f ==> {

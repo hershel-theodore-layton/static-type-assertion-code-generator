@@ -1,16 +1,15 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-final class IntTypeDescription
-  implements MustHaveTypenameConstant, TypeDescription {
+final class IntTypeDescription implements TypeDescription {
   const string TYPE_NAME = 'int';
   use AssertUsingAs, NotAnExactSpecialType;
 
-  public function subtypeOfArraykey(): bool {
+  public function subtypeOfArraykey()[]: bool {
     return true;
   }
 
-  public function superTypeOfNull(): bool {
+  public function superTypeOfNull()[]: bool {
     return false;
   }
 }

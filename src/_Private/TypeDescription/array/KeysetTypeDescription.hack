@@ -6,7 +6,7 @@ use namespace HH\Lib\Str;
 final class KeysetTypeDescription implements TypeDescription {
   use NotASpecialType;
 
-  public function __construct(private TypeDescription $key) {
+  public function __construct(private TypeDescription $key)[] {
     invariant(
       $key->subtypeOfArraykey(),
       'Keysets must have an arraykey key type',
@@ -16,7 +16,7 @@ final class KeysetTypeDescription implements TypeDescription {
   public function emitAssertionExpression(
     VariableNamer $variable_namer,
     string $sub_expression,
-  ): string {
+  )[write_props]: string {
     if ($this->key->exactlyArraykey()) {
       return Str\format('%s as keyset<_>', $sub_expression);
     }
@@ -35,7 +35,7 @@ final class KeysetTypeDescription implements TypeDescription {
 
   }
 
-  public function emitEnforceableType(): string {
+  public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
       'This operation is only supported for keyset<arraykey>',
@@ -43,7 +43,7 @@ final class KeysetTypeDescription implements TypeDescription {
     return 'keyset<_>';
   }
 
-  public function isEnforceable(): bool {
+  public function isEnforceable()[]: bool {
     return $this->key->exactlyArraykey();
   }
 }

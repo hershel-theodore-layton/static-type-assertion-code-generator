@@ -127,6 +127,7 @@ function from_type_structure(
             }
             return new ShapeField(
               $name,
+              string_export($name),
               $t['optional_shape_field'] ?? false,
               from_type_structure($t, $table, $panic),
             );

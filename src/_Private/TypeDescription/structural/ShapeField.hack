@@ -5,28 +5,29 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 final class ShapeField {
   public function __construct(
     private string $name,
+    private string $sourceRepr,
     private bool $optional,
     private TypeDescription $type,
-  ) {}
+  )[] {}
 
-  public function getName(): string {
+  public function getName()[]: string {
     return $this->name;
   }
 
-  public function getNameQuoteDelimited(): string {
-    return \var_export($this->name, true);
+  public function getSourceRepr()[]: string {
+    return $this->sourceRepr;
   }
 
-  public function getKey(): string {
-    $name = $this->getNameQuoteDelimited();
+  public function getKey()[]: string {
+    $name = $this->getSourceRepr();
     return $this->optional ? '?'.$name : $name;
   }
 
-  public function isOptional(): bool {
+  public function isOptional()[]: bool {
     return $this->optional;
   }
 
-  public function getTypeDescription(): TypeDescription {
+  public function getTypeDescription()[]: TypeDescription {
     return $this->type;
   }
 }
