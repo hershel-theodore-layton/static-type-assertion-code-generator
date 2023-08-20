@@ -26,4 +26,4 @@ jobs:
       - uses: hhvm/actions/hack-lint-test@master
         with:
           hhvm: ${{matrix.hhvm}}
-          skip_lint: ${{ matrix.hhvm != 'latest' }}
+          skip_lint: ${{ matrix.hhvm != '4.168' }}
