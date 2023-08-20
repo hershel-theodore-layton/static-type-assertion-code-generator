@@ -3,6 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 use namespace HTL\StaticTypeAssertionCodegen;
 use namespace HH\Lib\Str;
+use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
 
 <<__EntryPoint>>
 async function codegen_async(): Awaitable<void> {
@@ -15,17 +16,17 @@ async function codegen_async(): Awaitable<void> {
 
   $code = Str\format(<<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
-/** This code was @generated during benchmarking, run `hhvm benchmark/2-codegen.hack` to update it. */
+/** This code was generated during benchmarking, run `hhvm benchmark/2-codegen.hack` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 final abstract class AssertJsonShape {
-  public static function assertJsonShape(mixed $htl_untyped_variable): JsonShape {
+  public static function assertJsonShape(mixed $htl_untyped_variable)[]: JsonShape {
     %s
   }
-  private static function assertTEntities(mixed $htl_untyped_variable): TEntities {
+  private static function assertTEntities(mixed $htl_untyped_variable)[]: TEntities {
     %s
   }
-  private static function assertTUser(mixed $htl_untyped_variable): TUser {
+  private static function assertTUser(mixed $htl_untyped_variable)[]: TUser {
     %s
   }
 }
@@ -48,5 +49,5 @@ HACK
     StaticTypeAssertionCodegen\from_type<TUser>(dict[], $panic),
   ),
   );
-  \file_put_contents(__DIR__.'/AssertJsonShape.hack', $code);
+  hackfmt(__DIR__.'/AssertJsonShape.hack', $code);
 }
