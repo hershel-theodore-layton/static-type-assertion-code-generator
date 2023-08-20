@@ -9,7 +9,7 @@ async function codegen_async(): Awaitable<void> {
   require_once __DIR__.'/../vendor/autoload.hack';
   \Facebook\AutoloadMap\initialize();
 
-  $panic = ($message): nothing ==> {
+  $panic = ($message)[]: nothing ==> {
     throw new \Exception($message);
   };
 
