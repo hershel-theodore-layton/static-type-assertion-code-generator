@@ -3,13 +3,15 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\{C, Str, Vec};
 
-final class ShapeTypeDescription implements TypeDescription {
+final class ShapeTypeDescription extends BaseTypeDescription {
   use NotASpecialType;
 
   public function __construct(
+    int $counter,
     private vec<ShapeField> $fields,
     private bool $allowsUnknownFields,
   )[] {
+    parent::__construct($counter);
     $unique_fields = Vec\unique_by($fields, $f ==> $f->getName());
     invariant(
       C\count($unique_fields) === C\count($fields),
@@ -17,16 +19,13 @@ final class ShapeTypeDescription implements TypeDescription {
     );
   }
 
-  public function emitAssertionExpression(
-    VariableNamer $variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
+  public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->isEnforceable()) {
       return
         Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
     }
 
-    $var_partial = $variable_namer->name('$partial');
+    $var_partial = $this->suffixVariable('$partial');
 
     $manual_override = vec[];
     foreach (
@@ -43,8 +42,7 @@ final class ShapeTypeDescription implements TypeDescription {
           $var_partial,
           $f->getSourceRepr(),
           $index_op,
-          $f->getTypeDescription()
-            ->emitAssertionExpression($variable_namer, $index_op),
+          $f->getTypeDescription()->emitAssertionExpression($index_op),
           $var_partial,
           $f->getSourceRepr(),
         );
@@ -52,8 +50,7 @@ final class ShapeTypeDescription implements TypeDescription {
         $manual_override[] = Str\format(
           '%s = %s;',
           $index_op,
-          $f->getTypeDescription()
-            ->emitAssertionExpression($variable_namer, $index_op),
+          $f->getTypeDescription()->emitAssertionExpression($index_op),
         );
       }
     }

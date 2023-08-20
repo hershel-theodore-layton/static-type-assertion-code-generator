@@ -3,5 +3,6 @@ namespace HTL\StaticTypeAssertionCodegen;
 
 type TAlias = shape(
   'alias' => ?string,
+  'counter' => int,
   'opaque' => bool,
 );

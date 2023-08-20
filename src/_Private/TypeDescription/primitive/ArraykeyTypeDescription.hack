@@ -1,7 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-final class ArraykeyTypeDescription implements TypeDescription {
+final class ArraykeyTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'arraykey';
   use AssertUsingAs;
 

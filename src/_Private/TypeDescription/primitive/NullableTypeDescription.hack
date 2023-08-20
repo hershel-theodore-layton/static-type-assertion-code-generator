@@ -3,10 +3,11 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\Str;
 
-final class NullableTypeDescription implements TypeDescription {
+final class NullableTypeDescription extends BaseTypeDescription {
   use NotAnExactSpecialType;
 
-  public function __construct(private TypeDescription $inner)[] {
+  public function __construct(int $counter, private TypeDescription $inner)[] {
+    parent::__construct($counter);
     invariant(
       !$inner->superTypeOfNull(),
       'Can not create a nullable nullable type.',
@@ -23,11 +24,8 @@ final class NullableTypeDescription implements TypeDescription {
       : 'mixed';
   }
 
-  public function emitAssertionExpression(
-    VariableNamer $variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
-    $var_temp = $variable_namer->name('$temp');
+  public function emitAssertionExpression(string $sub_expression)[]: string {
+    $var_temp = $this->suffixVariable('$temp');
     return $this->isEnforceable()
       ? Str\format('%s as %s', $sub_expression, $this->emitEnforceableType())
       : Str\format(
@@ -35,7 +33,7 @@ final class NullableTypeDescription implements TypeDescription {
           $var_temp,
           $sub_expression,
           $var_temp,
-          $this->inner->emitAssertionExpression($variable_namer, $var_temp),
+          $this->inner->emitAssertionExpression($var_temp),
         );
   }
 

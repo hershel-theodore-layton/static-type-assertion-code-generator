@@ -3,18 +3,18 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\Str;
 
-final class CallThisUserSuppliedFunction implements TypeDescription {
+final class CallThisUserSuppliedFunction extends BaseTypeDescription {
   use NotAnExactSpecialType;
 
   public function __construct(
+    int $counter,
     private string $func,
     private bool $isSubtypeOfArraykey,
-  )[] {}
+  )[] {
+    parent::__construct($counter);
+  }
 
-  public function emitAssertionExpression(
-    VariableNamer $_variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
+  public function emitAssertionExpression(string $sub_expression)[]: string {
     return Str\format('%s(%s)', $this->func, $sub_expression);
   }
 

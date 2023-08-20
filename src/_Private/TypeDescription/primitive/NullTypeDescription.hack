@@ -1,7 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-final class NullTypeDescription implements TypeDescription {
+final class NullTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'null';
   use AssertUsingAs, NotAnExactSpecialType;
 

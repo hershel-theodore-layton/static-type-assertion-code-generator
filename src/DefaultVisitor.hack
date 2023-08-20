@@ -51,11 +51,13 @@ final class DefaultVisitor
   }
 
   public function arraykey(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, true) ?? new ArraykeyTypeDescription();
+    return $this->resolveAlias($alias, true) ??
+      new ArraykeyTypeDescription($alias['counter']);
   }
 
   public function bool(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new BoolTypeDescription();
+    return $this->resolveAlias($alias, false) ??
+      new BoolTypeDescription($alias['counter']);
   }
 
   public function dict(
@@ -64,13 +66,17 @@ final class DefaultVisitor
     TypeDescription $value,
   )[]: TypeDescription {
     return $this->resolveAlias($alias, false) ??
-      new DictTypeDescription($key, $value);
+      new DictTypeDescription($alias['counter'], $key, $value);
   }
 
   public function enum(TAlias $alias, string $classname)[]: TypeDescription {
     return $this->resolveAlias($alias, true) ??
       $this->resolveAlias(
-        shape('alias' => $classname, 'opaque' => $alias['opaque']),
+        shape(
+          'alias' => $classname,
+          'counter' => $alias['counter'],
+          'opaque' => $alias['opaque'],
+        ),
         true,
       ) ??
       $this->panic(Str\format(
@@ -81,43 +87,49 @@ final class DefaultVisitor
   }
 
   public function float(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new FloatTypeDescription();
+    return $this->resolveAlias($alias, false) ??
+      new FloatTypeDescription($alias['counter']);
   }
 
   public function int(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, true) ?? new IntTypeDescription();
+    return $this->resolveAlias($alias, true) ??
+      new IntTypeDescription($alias['counter']);
   }
 
   public function keyset(
     TAlias $alias,
     TypeDescription $inner,
   )[]: TypeDescription {
-    return
-      $this->resolveAlias($alias, false) ?? new KeysetTypeDescription($inner);
+    return $this->resolveAlias($alias, false) ??
+      new KeysetTypeDescription($alias['counter'], $inner);
   }
 
   public function mixed(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new MixedTypeDescription();
+    return $this->resolveAlias($alias, false) ??
+      new MixedTypeDescription($alias['counter']);
   }
 
   public function nonnull(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new NonnullTypeDescription();
+    return $this->resolveAlias($alias, false) ??
+      new NonnullTypeDescription($alias['counter']);
   }
 
   public function null(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new NullTypeDescription();
+    return $this->resolveAlias($alias, false) ??
+      new NullTypeDescription($alias['counter']);
   }
 
   public function nullable(
     TAlias $alias,
     TypeDescription $inner,
   )[]: TypeDescription {
-    return
-      $this->resolveAlias($alias, false) ?? new NullableTypeDescription($inner);
+    return $this->resolveAlias($alias, false) ??
+      new NullableTypeDescription($alias['counter'], $inner);
   }
 
   public function num(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new NumTypeDescription();
+    return $this->resolveAlias($alias, false) ??
+      new NumTypeDescription($alias['counter']);
   }
 
   public function shape(
@@ -126,26 +138,28 @@ final class DefaultVisitor
     bool $is_open,
   )[]: TypeDescription {
     return $this->resolveAlias($alias, false) ??
-      new ShapeTypeDescription($fields, $is_open);
+      new ShapeTypeDescription($alias['counter'], $fields, $is_open);
   }
 
   public function string(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, true) ?? new StringTypeDescription();
+    return $this->resolveAlias($alias, true) ??
+      new StringTypeDescription($alias['counter']);
   }
 
   public function tuple(
     TAlias $alias,
     vec<TypeDescription> $elements,
   )[]: TypeDescription {
-    return
-      $this->resolveAlias($alias, false) ?? new TupleTypeDescription($elements);
+    return $this->resolveAlias($alias, false) ??
+      new TupleTypeDescription($alias['counter'], $elements);
   }
 
   public function vec(
     TAlias $alias,
     TypeDescription $inner,
   )[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ?? new VecTypeDescription($inner);
+    return $this->resolveAlias($alias, false) ??
+      new VecTypeDescription($alias['counter'], $inner);
   }
 
   private function resolveAlias(
@@ -161,6 +175,7 @@ final class DefaultVisitor
 
     if (C\contains_key($this->typeAliasAsserters, $name)) {
       return new CallThisUserSuppliedFunction(
+        $alias['counter'],
         $this->typeAliasAsserters[$name],
         $is_arraykey,
       );

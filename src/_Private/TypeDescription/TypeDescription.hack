@@ -8,10 +8,7 @@ interface TypeDescription {
   public function isEnforceable()[]: bool;
 
   // Given `$sub_expression`, emit a fully sound assertion.
-  public function emitAssertionExpression(
-    VariableNamer $variable_namer,
-    string $sub_expression,
-  )[write_props]: string;
+  public function emitAssertionExpression(string $sub_expression)[]: string;
 
   // Emit the RHS of an `as` expression.
   // Fails if not `->isEnforceable()`.
@@ -25,6 +22,9 @@ interface TypeDescription {
 
   // For upholding key type variance on construction of dict and keyset.
   public function subtypeOfArraykey()[]: bool;
+
+  // Return a unique variable name with a given prefix.
+  public function suffixVariable(string $name)[]: string;
 
   // For upholding Hack's nullability rules in as expressions.
   // `as ?mixed` is disallowed, so it `?null` and `??int`

@@ -3,30 +3,29 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\Str;
 
-final class DictTypeDescription implements TypeDescription {
+final class DictTypeDescription extends BaseTypeDescription {
   use NotASpecialType;
 
   public function __construct(
+    int $counter,
     private TypeDescription $key,
     private TypeDescription $value,
   )[] {
+    parent::__construct($counter);
     invariant(
       $key->subtypeOfArraykey(),
       'Dicts must have an arraykey key type',
     );
   }
 
-  public function emitAssertionExpression(
-    VariableNamer $variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
+  public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->key->exactlyArraykey() && $this->value->exactlyMixed()) {
       return Str\format('%s as dict<_, _>', $sub_expression);
     }
 
-    $var_out = $variable_namer->name('$out');
-    $var_k = $variable_namer->name('$k');
-    $var_v = $variable_namer->name('$v');
+    $var_out = $this->suffixVariable('$out');
+    $var_k = $this->suffixVariable('$k');
+    $var_v = $this->suffixVariable('$v');
     return Str\format(
       '() ==> { %s = dict[]; foreach ((%s as dict<_, _>) as %s => %s) { %s[%s] = %s; } return %s; }()',
       $var_out,
@@ -36,10 +35,10 @@ final class DictTypeDescription implements TypeDescription {
       $var_out,
       $this->key->exactlyArraykey()
         ? $var_k
-        : $this->key->emitAssertionExpression($variable_namer, $var_k),
+        : $this->key->emitAssertionExpression($var_k),
       $this->value->exactlyMixed()
         ? $var_v
-        : $this->value->emitAssertionExpression($variable_namer, $var_v),
+        : $this->value->emitAssertionExpression($var_v),
       $var_out,
     );
   }

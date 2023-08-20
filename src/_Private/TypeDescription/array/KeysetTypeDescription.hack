@@ -3,33 +3,31 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\Str;
 
-final class KeysetTypeDescription implements TypeDescription {
+final class KeysetTypeDescription extends BaseTypeDescription {
   use NotASpecialType;
 
-  public function __construct(private TypeDescription $key)[] {
+  public function __construct(int $counter, private TypeDescription $key)[] {
+    parent::__construct($counter);
     invariant(
       $key->subtypeOfArraykey(),
       'Keysets must have an arraykey key type',
     );
   }
 
-  public function emitAssertionExpression(
-    VariableNamer $variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
+  public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->key->exactlyArraykey()) {
       return Str\format('%s as keyset<_>', $sub_expression);
     }
 
-    $var_out = $variable_namer->name('$out');
-    $var_k = $variable_namer->name('$k');
+    $var_out = $this->suffixVariable('$out');
+    $var_k = $this->suffixVariable('$k');
     return Str\format(
       '() ==> { %s = keyset[]; foreach ((%s as keyset<_>) as %s) { %s[] = %s; } return %s; }()',
       $var_out,
       $sub_expression,
       $var_k,
       $var_out,
-      $this->key->emitAssertionExpression($variable_namer, $var_k),
+      $this->key->emitAssertionExpression($var_k),
       $var_out,
     );
 

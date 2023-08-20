@@ -1,7 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-final class StringTypeDescription implements TypeDescription {
+final class StringTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'string';
   use AssertUsingAs, NotAnExactSpecialType;
 

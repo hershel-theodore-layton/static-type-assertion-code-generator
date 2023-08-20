@@ -7,9 +7,8 @@ trait AssertUsingAs {
   abstract const string TYPE_NAME;
 
   final public function emitAssertionExpression(
-    VariableNamer $_variable_namer,
     string $sub_expression,
-  )[write_props]: string {
+  )[]: string {
     return Str\format('%s as %s', $sub_expression, static::TYPE_NAME);
   }
 

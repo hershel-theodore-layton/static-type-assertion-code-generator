@@ -9,16 +9,19 @@ use type HTL\StaticTypeAssertionCodegen\TypeDeclVisitor;
 function visit<Tt, Tf>(
   TypeDeclVisitor<Tt, Tf> $visitor,
   CleanTypeStructure $s,
+  inout int $counter,
 )[]: Tt {
+  ++$counter;
   $kind = TypeStructureKind::assert($s['kind']);
   $alias = shape(
     'alias' => $s['alias'] ?? null,
+    'counter' => $counter,
     'opaque' => $s['opaque'] ?? false,
   );
 
   if ($s['nullable'] ?? false) {
     $s['nullable'] = false;
-    return $visitor->nullable($alias, visit($visitor, $s));
+    return $visitor->nullable($alias, visit($visitor, $s, inout $counter));
   }
 
   switch ($kind) {
@@ -40,8 +43,8 @@ function visit<Tt, Tf>(
       }
       return $visitor->dict(
         $alias,
-        visit($visitor, clean($generics[0])),
-        visit($visitor, clean($generics[1])),
+        visit($visitor, clean($generics[0]), inout $counter),
+        visit($visitor, clean($generics[1]), inout $counter),
       );
     case TypeStructureKind::OF_DYNAMIC:
       return $visitor->panic('Unsupported type OF_DYNAMIC');
@@ -72,7 +75,10 @@ function visit<Tt, Tf>(
         );
       }
 
-      return $visitor->keyset($alias, visit($visitor, clean($generics[0])));
+      return $visitor->keyset(
+        $alias,
+        visit($visitor, clean($generics[0]), inout $counter),
+      );
     case TypeStructureKind::OF_MIXED:
       return $visitor->mixed($alias);
     case TypeStructureKind::OF_NONNULL:
@@ -101,8 +107,12 @@ function visit<Tt, Tf>(
           $const = $t['is_cls_cns'] ?? false;
           $optional = $t['optional_shape_field'] ?? false;
 
-          return
-            $visitor->shapeField($name, $const, $optional, visit($visitor, $t));
+          return $visitor->shapeField(
+            $name,
+            $const,
+            $optional,
+            visit($visitor, $t, inout $counter),
+          );
         }),
         $s['allows_unknown_fields'] ?? false,
       );
@@ -120,7 +130,7 @@ function visit<Tt, Tf>(
 
       return $visitor->tuple(
         $alias,
-        Vec\map($generics, $g ==> visit($visitor, clean($g))),
+        Vec\map($generics, $g ==> visit($visitor, clean($g), inout $counter)),
       );
     case TypeStructureKind::OF_UNRESOLVED:
       return $visitor->panic('Unsupported type OF_UNRESOLVED');
@@ -137,7 +147,10 @@ function visit<Tt, Tf>(
         );
       }
 
-      return $visitor->vec($alias, visit($visitor, clean($generics[0])));
+      return $visitor->vec(
+        $alias,
+        visit($visitor, clean($generics[0]), inout $counter),
+      );
     case TypeStructureKind::OF_VEC_OR_DICT:
       return $visitor->panic('Unsupported type OF_VEC_OR_DICT');
     case TypeStructureKind::OF_VOID:

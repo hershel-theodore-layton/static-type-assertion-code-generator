@@ -3,33 +3,34 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 use namespace HH\Lib\{C, Str, Vec};
 
-final class TupleTypeDescription implements TypeDescription {
+final class TupleTypeDescription extends BaseTypeDescription {
   use NotASpecialType;
 
-  public function __construct(private vec<TypeDescription> $elements)[] {
+  public function __construct(
+    int $counter,
+    private vec<TypeDescription> $elements,
+  )[] {
+    parent::__construct($counter);
     invariant(
       !C\is_empty($elements),
       'Tuples with zero elements are not supported by hhvm',
     );
   }
 
-  public function emitAssertionExpression(
-    VariableNamer $variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
+  public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->isEnforceable()) {
       return
         Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
     }
 
-    $var_partial = $variable_namer->name('$partial');
+    $var_partial = $this->suffixVariable('$partial');
     $enforce_rest = Vec\map_with_key(
       $this->elements,
       ($i, $e) ==> {
         $get_index = Str\format('%s[%d]', $var_partial, $i);
         return $e->isEnforceable()
           ? $get_index
-          : $e->emitAssertionExpression($variable_namer, $get_index);
+          : $e->emitAssertionExpression($get_index);
       },
     )
       |> Str\join($$, ', ')

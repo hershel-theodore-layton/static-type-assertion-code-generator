@@ -1,7 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-final class MixedTypeDescription implements TypeDescription {
+final class MixedTypeDescription extends BaseTypeDescription {
   public function isEnforceable()[]: bool {
     return true;
   }
@@ -10,10 +10,7 @@ final class MixedTypeDescription implements TypeDescription {
     return 'mixed';
   }
 
-  public function emitAssertionExpression(
-    VariableNamer $_variable_namer,
-    string $sub_expression,
-  )[write_props]: string {
+  public function emitAssertionExpression(string $sub_expression)[]: string {
     return $sub_expression;
   }
 
