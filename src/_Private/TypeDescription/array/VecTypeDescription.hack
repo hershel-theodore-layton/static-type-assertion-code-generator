@@ -10,6 +10,7 @@ final class VecTypeDescription extends BaseTypeDescription {
     parent::__construct($counter);
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->value->exactlyMixed()) {
       return Str\format('%s as vec<_>', $sub_expression);
@@ -28,6 +29,7 @@ final class VecTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
@@ -36,6 +38,7 @@ final class VecTypeDescription extends BaseTypeDescription {
     return 'vec<_>';
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return $this->value->exactlyMixed();
   }

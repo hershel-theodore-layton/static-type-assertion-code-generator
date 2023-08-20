@@ -5,18 +5,22 @@ final class ArraykeyTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'arraykey';
   use AssertUsingAs;
 
+  <<__Override>>
   public function exactlyArraykey()[]: bool {
     return true;
   }
 
+  <<__Override>>
   public function exactlyMixed()[]: bool {
     return false;
   }
 
+  <<__Override>>
   public function subtypeOfArraykey()[]: bool {
     return true;
   }
 
+  <<__Override>>
   public function superTypeOfNull()[]: bool {
     return false;
   }

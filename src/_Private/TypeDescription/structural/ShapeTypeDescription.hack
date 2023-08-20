@@ -19,6 +19,7 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->isEnforceable()) {
       return
@@ -65,6 +66,7 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
@@ -73,6 +75,7 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     return $this->getRHSOfAs();
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return
       C\every($this->fields, $f ==> $f->getTypeDescription()->isEnforceable());

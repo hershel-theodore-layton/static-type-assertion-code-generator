@@ -14,22 +14,27 @@ final class CallThisUserSuppliedFunction extends BaseTypeDescription {
     parent::__construct($counter);
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     return Str\format('%s(%s)', $this->func, $sub_expression);
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     invariant_violation('User supplied handlers are not enforceable');
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return false;
   }
 
+  <<__Override>>
   public function subtypeOfArraykey()[]: bool {
     return $this->isSubtypeOfArraykey;
   }
 
+  <<__Override>>
   public function superTypeOfNull()[]: bool {
     return false;
   }

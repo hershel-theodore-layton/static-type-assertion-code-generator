@@ -18,6 +18,7 @@ final class DictTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->key->exactlyArraykey() && $this->value->exactlyMixed()) {
       return Str\format('%s as dict<_, _>', $sub_expression);
@@ -43,6 +44,7 @@ final class DictTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
@@ -51,6 +53,7 @@ final class DictTypeDescription extends BaseTypeDescription {
     return 'dict<_, _>';
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return $this->key->exactlyArraykey() && $this->value->exactlyMixed();
   }

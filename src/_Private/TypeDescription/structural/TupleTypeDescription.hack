@@ -17,6 +17,7 @@ final class TupleTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->isEnforceable()) {
       return
@@ -45,6 +46,7 @@ final class TupleTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
@@ -53,6 +55,7 @@ final class TupleTypeDescription extends BaseTypeDescription {
     return $this->getRHSOfAs();
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return C\every($this->elements, $e ==> $e->isEnforceable());
   }

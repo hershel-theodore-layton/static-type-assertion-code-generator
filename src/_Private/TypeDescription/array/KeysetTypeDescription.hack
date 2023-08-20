@@ -14,6 +14,7 @@ final class KeysetTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     if ($this->key->exactlyArraykey()) {
       return Str\format('%s as keyset<_>', $sub_expression);
@@ -33,6 +34,7 @@ final class KeysetTypeDescription extends BaseTypeDescription {
 
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     invariant(
       $this->isEnforceable(),
@@ -41,6 +43,7 @@ final class KeysetTypeDescription extends BaseTypeDescription {
     return 'keyset<_>';
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return $this->key->exactlyArraykey();
   }

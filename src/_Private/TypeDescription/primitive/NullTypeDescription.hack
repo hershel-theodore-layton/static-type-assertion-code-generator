@@ -5,10 +5,12 @@ final class NullTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'null';
   use AssertUsingAs, NotAnExactSpecialType;
 
+  <<__Override>>
   public function subtypeOfArraykey()[]: bool {
     return false;
   }
 
+  <<__Override>>
   public function superTypeOfNull()[]: bool {
     return true;
   }

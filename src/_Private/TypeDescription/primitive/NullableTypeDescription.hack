@@ -14,16 +14,19 @@ final class NullableTypeDescription extends BaseTypeDescription {
     );
   }
 
+  <<__Override>>
   public function isEnforceable()[]: bool {
     return $this->inner->isEnforceable();
   }
 
+  <<__Override>>
   public function emitEnforceableType()[]: string {
     return $this->isEnforceable()
       ? '?'.$this->inner->emitEnforceableType()
       : 'mixed';
   }
 
+  <<__Override>>
   public function emitAssertionExpression(string $sub_expression)[]: string {
     $var_temp = $this->suffixVariable('$temp');
     return $this->isEnforceable()
@@ -37,10 +40,12 @@ final class NullableTypeDescription extends BaseTypeDescription {
         );
   }
 
+  <<__Override>>
   public function superTypeOfNull()[]: bool {
     return true;
   }
 
+  <<__Override>>
   public function subtypeOfArraykey()[]: bool {
     return false;
   }
