@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type Facebook\HackTest\{ExpectationFailedException, HackTest};
-use namespace HH\Lib\{C, Regex, Str};
+use namespace HH\Lib\{C, Str};
 use function Facebook\FBExpect\expect;
 
 trait TestHelpers {
@@ -62,14 +62,7 @@ trait TestHelpers {
     string $expression,
   ): void {
     $body = Str\replace($expression, '__SEED__', '$htl_untyped_variable');
-
     invariant(self::$code is nonnull, 'No code has been generated yet');
-    $actual_body = Regex\replace_with(
-      self::$code[$method]['body'],
-      re'/\\$(?<var_name>\w+)__\d+/',
-      $match ==> '$'.$match['var_name'],
-    );
-
-    expect($actual_body)->toEqual($body);
+    expect(self::$code[$method]['body'])->toEqual($body);
   }
 }

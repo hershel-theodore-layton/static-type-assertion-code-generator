@@ -58,7 +58,7 @@ final class TupleTest extends HackTest {
     );
     static::bodyOfMethodOughtToBe(
       'tupleIntMixedVecOfIntBool',
-      '$partial = __SEED__ as (int, mixed, bool); return tuple($partial[0], () ==> { $out = vec[]; foreach (($partial[1] as vec<_>) as $v) { $out[] = $v as int; } return $out; }(), $partial[2]);',
+      '$partial__1 = __SEED__ as (int, mixed, bool); return tuple($partial__1[0], () ==> { $out__3 = vec[]; foreach (($partial__1[1] as vec<_>) as $v__3) { $out__3[] = $v__3 as int; } return $out__3; }(), $partial__1[2]);',
       //  mixed no use for `vec<_>` ^^^^^   validate here and copy the rest ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     );
   }
