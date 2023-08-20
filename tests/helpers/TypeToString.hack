@@ -6,12 +6,12 @@ use type HTL\StaticTypeAssertionCodegen\{TAlias, TypeDeclVisitor};
 use function HTL\StaticTypeAssertionCodegen\_Private\string_export;
 
 final class TypeToString implements TypeDeclVisitor<string, string> {
-  public function panic(string $message)[]: nothing {
-    return panic($message);
+  public function panic(string $message)[]: string {
+    return $message;
   }
 
-  public function unsupportedType(string $type_name)[]: nothing {
-    return panic($type_name);
+  public function unsupportedType(string $type_name)[]: string {
+    return $type_name;
   }
 
   public function shapeField(
@@ -37,8 +37,25 @@ final class TypeToString implements TypeDeclVisitor<string, string> {
     return $alias['alias'] ?? 'bool';
   }
 
+  public function class(
+    TAlias $alias,
+    string $classname,
+    vec<string> $generics,
+  )[]: string {
+    return $alias['alias'] ??
+      (
+        C\is_empty($generics)
+          ? $classname
+          : Str\format('%s<%s>', $classname, Str\join($generics, ', '))
+      );
+  }
+
   public function dict(TAlias $alias, string $key, string $value)[]: string {
     return $alias['alias'] ?? Str\format('dict<%s, %s>', $key, $value);
+  }
+
+  public function dynamic(TAlias $alias)[]: string {
+    return $alias['alias'] ?? 'dynamic';
   }
 
   public function enum(TAlias $alias, string $classname)[]: string {
@@ -53,6 +70,14 @@ final class TypeToString implements TypeDeclVisitor<string, string> {
     return $alias['alias'] ?? 'int';
   }
 
+  public function interface(
+    TAlias $alias,
+    string $classname,
+    vec<string> $generics,
+  )[]: string {
+    return $alias['alias'] ?? $this->class($alias, $classname, $generics);
+  }
+
   public function keyset(TAlias $alias, string $inner)[]: string {
     return $alias['alias'] ?? Str\format('keyset<%s>', $inner);
   }
@@ -65,6 +90,10 @@ final class TypeToString implements TypeDeclVisitor<string, string> {
     return $alias['alias'] ?? 'nonnull';
   }
 
+  public function nothing(TAlias $alias)[]: string {
+    return $alias['alias'] ?? 'nothing';
+  }
+
   public function null(TAlias $alias)[]: string {
     return $alias['alias'] ?? 'null';
   }
@@ -75,6 +104,10 @@ final class TypeToString implements TypeDeclVisitor<string, string> {
 
   public function num(TAlias $alias)[]: string {
     return $alias['alias'] ?? 'num';
+  }
+
+  public function resource(TAlias $alias)[]: string {
+    return $alias['alias'] ?? 'resource';
   }
 
   public function shape(
@@ -94,6 +127,14 @@ final class TypeToString implements TypeDeclVisitor<string, string> {
     return $alias['alias'] ?? 'string';
   }
 
+  public function trait(
+    TAlias $alias,
+    string $classname,
+    vec<string> $generics,
+  )[]: string {
+    return $alias['alias'] ?? $this->class($alias, $classname, $generics);
+  }
+
   public function tuple(TAlias $alias, vec<string> $elements)[]: string {
     return $alias['alias'] ?? Str\format('(%s)', Str\join($elements, ', '));
   }
@@ -102,7 +143,7 @@ final class TypeToString implements TypeDeclVisitor<string, string> {
     return $alias['alias'] ?? Str\format('vec<%s>', $inner);
   }
 
-  public function vecOfDict(TAlias $alias, vec<string> $inner)[]: string {
+  public function vecOrDict(TAlias $alias, vec<string> $inner)[]: string {
     return
       $alias['alias'] ?? Str\format('vec_or_dict<%s>', Str\join($inner, ', '));
   }

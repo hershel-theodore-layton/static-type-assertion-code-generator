@@ -80,6 +80,23 @@ final class DefaultVisitor
       new BoolTypeDescription($alias['counter']);
   }
 
+  public function class(
+    TAlias $alias,
+    string $classname,
+    vec<mixed> $_generics,
+  )[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ??
+      $this->resolveAlias(
+        shape(
+          'alias' => $classname,
+          'counter' => $alias['counter'],
+          'opaque' => $alias['opaque'],
+        ),
+        false,
+      ) ??
+      $this->unsupportedType('class');
+  }
+
   public function dict(
     TAlias $alias,
     TypeDescription $key,
@@ -87,6 +104,11 @@ final class DefaultVisitor
   )[]: TypeDescription {
     return $this->resolveAlias($alias, false) ??
       new DictTypeDescription($alias['counter'], $key, $value);
+  }
+
+  public function dynamic(TAlias $alias)[]: TypeDescription {
+    return
+      $this->resolveAlias($alias, false) ?? $this->unsupportedType('dynamic');
   }
 
   public function enum(TAlias $alias, string $classname)[]: TypeDescription {
@@ -116,6 +138,23 @@ final class DefaultVisitor
       new IntTypeDescription($alias['counter']);
   }
 
+  public function interface(
+    TAlias $alias,
+    string $classname,
+    vec<mixed> $_generics,
+  )[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ??
+      $this->resolveAlias(
+        shape(
+          'alias' => $classname,
+          'counter' => $alias['counter'],
+          'opaque' => $alias['opaque'],
+        ),
+        false,
+      ) ??
+      $this->unsupportedType('interface');
+  }
+
   public function keyset(
     TAlias $alias,
     TypeDescription $inner,
@@ -127,6 +166,11 @@ final class DefaultVisitor
   public function mixed(TAlias $alias)[]: TypeDescription {
     return $this->resolveAlias($alias, false) ??
       new MixedTypeDescription($alias['counter']);
+  }
+
+  public function nothing(TAlias $alias)[]: TypeDescription {
+    return
+      $this->resolveAlias($alias, false) ?? $this->unsupportedType('nothing');
   }
 
   public function nonnull(TAlias $alias)[]: TypeDescription {
@@ -152,6 +196,11 @@ final class DefaultVisitor
       new NumTypeDescription($alias['counter']);
   }
 
+  public function resource(TAlias $alias)[]: TypeDescription {
+    return
+      $this->resolveAlias($alias, false) ?? $this->unsupportedType('resource');
+  }
+
   public function shape(
     TAlias $alias,
     vec<ShapeField> $fields,
@@ -164,6 +213,23 @@ final class DefaultVisitor
   public function string(TAlias $alias)[]: TypeDescription {
     return $this->resolveAlias($alias, true) ??
       new StringTypeDescription($alias['counter']);
+  }
+
+  public function trait(
+    TAlias $alias,
+    string $classname,
+    vec<mixed> $_generics,
+  )[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ??
+      $this->resolveAlias(
+        shape(
+          'alias' => $classname,
+          'counter' => $alias['counter'],
+          'opaque' => $alias['opaque'],
+        ),
+        false,
+      ) ??
+      $this->unsupportedType('trait');
   }
 
   public function tuple(
@@ -210,5 +276,13 @@ final class DefaultVisitor
     }
 
     return null;
+  }
+
+  public function vecOrDict(
+    TAlias $alias,
+    vec<TypeDescription> $_inner,
+  )[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ??
+      $this->unsupportedType('vec_or_dict');
   }
 }

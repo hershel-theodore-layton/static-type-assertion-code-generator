@@ -1,7 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-use namespace HH\Lib\{C, Str, Vec};
+use namespace HH\Lib\{C, Str};
 use type HTL\StaticTypeAssertionCodegen\TypeDeclVisitor;
 
 // Hopefully an alternative is found before this is removed from hhvm.
@@ -26,20 +26,34 @@ function visit<Tt, Tf>(
 
   switch ($kind) {
     case TypeStructureKind::OF_ARRAY:
-      return
-        $visitor->panic('Unsupported type OF_ARRAY, use dict or vec instead');
+      // A leftover enumeration value from long ago.
+      return $visitor->unsupportedType('array');
     case TypeStructureKind::OF_ARRAYKEY:
       return $visitor->arraykey($alias);
     case TypeStructureKind::OF_BOOL:
       return $visitor->bool($alias);
     case TypeStructureKind::OF_CLASS:
-      return $visitor->panic('Unsupported type OF_CLASS');
+      $classname = $s['classname'] ?? null;
+      $generics = $s['generic_types'] ?? vec[];
+
+      if ($classname is null) {
+        return $visitor->panic('Class without classname.');
+      }
+
+      return $visitor->class($alias, $classname, map_with_key_and_counter(
+        $generics,
+        inout $counter,
+        (inout $counter, $_, $g) ==> visit($visitor, clean($g), inout $counter),
+      ));
     case TypeStructureKind::OF_DARRAY:
-      return $visitor->panic('Unsupported type OF_DARRAY, use dict instead');
+      // Just use `dict<_, _>`, it is identical.
+      return $visitor->unsupportedType('darray<_, _>');
     case TypeStructureKind::OF_DICT:
       $generics = $s['generic_types'] ?? vec[];
       if (C\count($generics) !== 2) {
-        return $visitor->panic('Malformed dict<_, _> type');
+        return $visitor->panic(
+          Str\format('Dict type with %d type parameters', C\count($generics)),
+        );
       }
       return $visitor->dict(
         $alias,
@@ -47,7 +61,7 @@ function visit<Tt, Tf>(
         visit($visitor, clean($generics[1]), inout $counter),
       );
     case TypeStructureKind::OF_DYNAMIC:
-      return $visitor->panic('Unsupported type OF_DYNAMIC');
+      return $visitor->dynamic($alias);
     case TypeStructureKind::OF_ENUM:
       $enum_name = $s['classname'] ?? null;
 
@@ -59,13 +73,24 @@ function visit<Tt, Tf>(
     case TypeStructureKind::OF_FLOAT:
       return $visitor->float($alias);
     case TypeStructureKind::OF_FUNCTION:
-      return $visitor->panic('Unsupported type OF_FUNCTION');
+      return $visitor->unsupportedType('(function(...): ...)');
     case TypeStructureKind::OF_GENERIC:
-      return $visitor->panic('Unsupported type OF_GENERIC');
+      return $visitor->unsupportedType('[[generic]]');
     case TypeStructureKind::OF_INT:
       return $visitor->int($alias);
     case TypeStructureKind::OF_INTERFACE:
-      return $visitor->panic('Unsupported type OF_INTERFACE');
+      $classname = $s['classname'] ?? null;
+      $generics = $s['generic_types'] ?? vec[];
+
+      if ($classname is null) {
+        return $visitor->panic('Interface without classname.');
+      }
+
+      return $visitor->interface($alias, $classname, map_with_key_and_counter(
+        $generics,
+        inout $counter,
+        (inout $counter, $_, $g) ==> visit($visitor, clean($g), inout $counter),
+      ));
     case TypeStructureKind::OF_KEYSET:
       $generics = $s['generic_types'] ?? vec[];
 
@@ -84,15 +109,15 @@ function visit<Tt, Tf>(
     case TypeStructureKind::OF_NONNULL:
       return $visitor->nonnull($alias);
     case TypeStructureKind::OF_NORETURN:
-      return $visitor->panic('Unsupported type OF_NORETURN');
+      return $visitor->unsupportedType('noreturn');
     case TypeStructureKind::OF_NOTHING:
-      return $visitor->panic('Unsupported type OF_NOTHING');
+      return $visitor->nothing($alias);
     case TypeStructureKind::OF_NULL:
       return $visitor->null($alias);
     case TypeStructureKind::OF_NUM:
       return $visitor->num($alias);
     case TypeStructureKind::OF_RESOURCE:
-      return $visitor->panic('Unsupported type OF_RESOURCE');
+      return $visitor->resource($alias);
     case TypeStructureKind::OF_SHAPE:
       $fields = $s['fields'] ?? null;
 
@@ -102,7 +127,11 @@ function visit<Tt, Tf>(
 
       return $visitor->shape(
         $alias,
-        Vec\map_with_key($fields, ($name, $t) ==> {
+        map_with_key_and_counter($fields, inout $counter, (
+          inout $counter,
+          $name,
+          $t,
+        ) ==> {
           $t = clean($t);
           $const = $t['is_cls_cns'] ?? false;
           $optional = $t['optional_shape_field'] ?? false;
@@ -121,7 +150,18 @@ function visit<Tt, Tf>(
     case TypeStructureKind::OF_STRING:
       return $visitor->string($alias);
     case TypeStructureKind::OF_TRAIT:
-      return $visitor->panic('Unsupported type OF_TRAIT');
+      $classname = $s['classname'] ?? null;
+      $generics = $s['generic_types'] ?? vec[];
+
+      if ($classname is null) {
+        return $visitor->panic('Trait without classname.');
+      }
+
+      return $visitor->trait($alias, $classname, map_with_key_and_counter(
+        $generics,
+        inout $counter,
+        (inout $counter, $_, $g) ==> visit($visitor, clean($g), inout $counter),
+      ));
     case TypeStructureKind::OF_TUPLE:
       $generics = $s['elem_types'] ?? vec[];
 
@@ -131,14 +171,21 @@ function visit<Tt, Tf>(
 
       return $visitor->tuple(
         $alias,
-        Vec\map($generics, $g ==> visit($visitor, clean($g), inout $counter)),
+        map_with_key_and_counter(
+          $generics,
+          inout $counter,
+          (inout $counter, $_, $g) ==>
+            visit($visitor, clean($g), inout $counter),
+        ),
       );
     case TypeStructureKind::OF_UNRESOLVED:
-      return $visitor->panic('Unsupported type OF_UNRESOLVED');
+      return $visitor->unsupportedType('unresolved');
     case TypeStructureKind::OF_VARRAY:
-      return $visitor->panic('Unsupported type OF_VARRAY, use vec instead');
+      // Just use `vec<_>`, it is identical.
+      return $visitor->panic('varray<_>');
     case TypeStructureKind::OF_VARRAY_OR_DARRAY:
-      return $visitor->panic('Unsupported type OF_VARRAY_OR_DARRAY');
+      // Just use `vec_or_dict<_>`, it is identical.
+      return $visitor->panic('varray_or_darray<_>');
     case TypeStructureKind::OF_VEC:
       $generics = $s['generic_types'] ?? vec[];
 
@@ -153,10 +200,24 @@ function visit<Tt, Tf>(
         visit($visitor, clean($generics[0]), inout $counter),
       );
     case TypeStructureKind::OF_VEC_OR_DICT:
-      return $visitor->panic('Unsupported type OF_VEC_OR_DICT');
+      $generics = $s['generic_types'] ?? vec[];
+
+      if (C\is_empty($generics)) {
+        return $visitor->panic('vec_or_dict without type parameters.');
+      }
+
+      return $visitor->vecOrDict(
+        $alias,
+        map_with_key_and_counter(
+          $generics,
+          inout $counter,
+          (inout $counter, $_, $g) ==>
+            visit($visitor, clean($g), inout $counter),
+        ),
+      );
     case TypeStructureKind::OF_VOID:
-      return $visitor->panic('Unsupported type OF_VOID');
+      return $visitor->unsupportedType('void');
     case TypeStructureKind::OF_XHP:
-      return $visitor->panic('Unsupported type OF_XHP');
+      return $visitor->unsupportedType('xhp');
   }
 }
