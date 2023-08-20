@@ -62,8 +62,8 @@ function from_type_structure(
         return $panic('Malformed dict<_, _> type');
       }
       return new DictTypeDescription(
-        from_type_structure(clean_type_structure($generics[0]), $table, $panic),
-        from_type_structure(clean_type_structure($generics[1]), $table, $panic),
+        from_type_structure(clean($generics[0]), $table, $panic),
+        from_type_structure(clean($generics[1]), $table, $panic),
       );
     case TypeStructureKind::OF_DYNAMIC:
       return $panic('Unsupported type OF_DYNAMIC');
@@ -90,7 +90,7 @@ function from_type_structure(
     case TypeStructureKind::OF_KEYSET:
       return new KeysetTypeDescription(
         from_type_structure(
-          clean_type_structure(
+          clean(
             C\onlyx(
               Shapes::at($s, 'generic_types'),
               'Malformed keyset<_> type',
@@ -119,7 +119,7 @@ function from_type_structure(
         Vec\map_with_key(
           Shapes::at($s, 'fields'),
           ($name, $t) ==> {
-            $t = clean_type_structure($t);
+            $t = clean($t);
             if (!$name is string || Shapes::idx($t, 'is_cls_cns', false)) {
               return $panic(
                 'Shapes with class constant keys can not be safely codegenned.',
@@ -142,7 +142,7 @@ function from_type_structure(
       return new TupleTypeDescription(
         Vec\map(
           Shapes::at($s, 'elem_types'),
-          $e ==> from_type_structure(clean_type_structure($e), $table, $panic),
+          $e ==> from_type_structure(clean($e), $table, $panic),
         ),
       );
     case TypeStructureKind::OF_UNRESOLVED:
@@ -154,7 +154,7 @@ function from_type_structure(
     case TypeStructureKind::OF_VEC:
       return new VecTypeDescription(
         from_type_structure(
-          clean_type_structure(
+          clean(
             C\onlyx(Shapes::at($s, 'generic_types'), 'Malformed vec<_> type'),
           ),
           $table,

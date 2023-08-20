@@ -5,7 +5,7 @@ use namespace HH\Lib\Str;
 use namespace HTL\StaticTypeAssertionCodegen;
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
-use function HTL\StaticTypeAssertionCodegen\_Private\clean_type_structure;
+use function HTL\StaticTypeAssertionCodegen\_Private\clean;
 
 type TIntAlias = int;
 newtype TOpaqueIntAsInt as int = int;
@@ -120,7 +120,7 @@ final class NewtypeTest extends HackTest {
 
   private static function isOpaque<reify T>(): ?bool {
     return \HH\ReifiedGenerics\get_type_structure<T>()
-      |> clean_type_structure($$)
+      |> clean($$)
       |> Shapes::idx($$, 'opaque');
   }
 }

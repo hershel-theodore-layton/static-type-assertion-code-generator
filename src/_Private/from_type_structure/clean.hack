@@ -1,9 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-function clean_type_structure(
-  mixed $htl_untyped_variable,
-): CleanTypeStructure {
+function clean(mixed $htl_untyped_variable)[]: CleanTypeStructure {
   return () ==> {
     $partial__0 = $htl_untyped_variable as shape(
       ?'access_list' => KeyedContainer<_, _>,
@@ -58,9 +56,8 @@ function clean_type_structure(
         \HH\is_dict_or_darray($partial__0['return_type']),
         'Can not safely cast to dict',
       );
-      $partial__0['return_type'] = infer_keytype_arraykey(
-        dict($partial__0['return_type']),
-      );
+      $partial__0['return_type'] =
+        infer_keytype_arraykey(dict($partial__0['return_type']));
     } else {
       Shapes::removeKey(inout $partial__0, 'return_type');
     }
@@ -96,9 +93,8 @@ function clean_type_structure(
         \HH\is_dict_or_darray($partial__0['fields']),
         'Can not safely cast to dict',
       );
-      $partial__0['fields'] = infer_keytype_arraykey(
-        dict($partial__0['fields']),
-      );
+      $partial__0['fields'] =
+        infer_keytype_arraykey(dict($partial__0['fields']));
     } else {
       Shapes::removeKey(inout $partial__0, 'fields');
     }
