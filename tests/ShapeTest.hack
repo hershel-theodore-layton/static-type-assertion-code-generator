@@ -44,35 +44,32 @@ final class ShapeTest extends HackTest {
 
   public function test_okay_values(): void {
     static::okayValues<shape()>(
-      $x ==> ShapeTestCodegenTargetClass::emptyShape($x),
+      ShapeTestCodegenTargetClass::emptyShape<>,
       dict['empty shape' => shape()],
     );
     static::okayValues<shape(...)>(
-      $x ==> ShapeTestCodegenTargetClass::emptyShapeWithExtraFields($x),
+      ShapeTestCodegenTargetClass::emptyShapeWithExtraFields<>,
       dict[
         'empty shape' => shape(),
         'shape a to int' => shape('a' => 1),
       ],
     );
     static::okayValues<shape('a' => ?int)>(
-      $x ==> ShapeTestCodegenTargetClass::shapeAToNullableInt($x),
+      ShapeTestCodegenTargetClass::shapeAToNullableInt<>,
       dict[
         'shape a to int' => shape('a' => 1),
         'shape a to null' => shape('a' => null),
       ],
     );
     static::okayValues<shape(?'a' => int)>(
-      $x ==> ShapeTestCodegenTargetClass::shapeOptionalAToInt($x),
+      ShapeTestCodegenTargetClass::shapeOptionalAToInt<>,
       dict[
         'empty shape' => shape(),
         'shape a to int' => shape('a' => 1),
       ],
     );
     static::okayValues<?shape(?'a' => ?int, ...)>(
-      $x ==>
-        ShapeTestCodegenTargetClass::nullableShapeOptionalAToNullableIntWithExtraFields(
-          $x,
-        ),
+      ShapeTestCodegenTargetClass::nullableShapeOptionalAToNullableIntWithExtraFields<>,
       dict[
         'null' => null,
         'empty shape' => shape(),
@@ -81,7 +78,7 @@ final class ShapeTest extends HackTest {
       ],
     );
     static::okayValues<shape(?'a' => vec<int>)>(
-      $x ==> ShapeTestCodegenTargetClass::shapeOptionalAVecOfInt($x),
+      ShapeTestCodegenTargetClass::shapeOptionalAVecOfInt<>,
       dict[
         'empty shape' => shape(),
         'shape a empty vec' => shape('a' => vec[]),
@@ -89,10 +86,7 @@ final class ShapeTest extends HackTest {
       ],
     );
     static::okayValues<shape(?'a' => vec<int>, ...)>(
-      $x ==>
-        ShapeTestCodegenTargetClass::shapeOptionalAVecOfIntBStringWithExtraFields(
-          $x,
-        ),
+      ShapeTestCodegenTargetClass::shapeOptionalAVecOfIntBStringWithExtraFields<>,
       dict[
         'shape b string c string' => shape('b' => 'a', 'c' => 'extra'),
         'shape a empty vec' => shape('a' => vec[], 'b' => 'a'),
@@ -100,7 +94,7 @@ final class ShapeTest extends HackTest {
       ],
     );
     static::okayValues<shape('☃' => vec<string>)>(
-      $x ==> ShapeTestCodegenTargetClass::shapeWithUnicodeKey($x),
+      ShapeTestCodegenTargetClass::shapeWithUnicodeKey<>,
       dict[
         'shape with unicode key' =>
           shape('☃' => vec['we handled this character correctly in codegen']),
@@ -108,7 +102,7 @@ final class ShapeTest extends HackTest {
     );
 
     static::okayValues<shape('\'' => vec<string>)>(
-      $x ==> ShapeTestCodegenTargetClass::shapeWithQuoteInKey($x),
+      ShapeTestCodegenTargetClass::shapeWithQuoteInKey<>,
       dict[
         'shape with quote in key' => shape(
           '\'' => vec['we handled this character correctly in codegen'],
@@ -119,26 +113,26 @@ final class ShapeTest extends HackTest {
 
   public function test_bad_values(): void {
     static::badValues(
-      $x ==> ShapeTestCodegenTargetClass::emptyShape($x),
+      ShapeTestCodegenTargetClass::emptyShape<>,
       dict[
         'not a shape' => vec[],
         'shape a to int' => shape('a' => 1),
       ],
     );
     static::badValues(
-      $x ==> ShapeTestCodegenTargetClass::emptyShapeWithExtraFields($x),
+      ShapeTestCodegenTargetClass::emptyShapeWithExtraFields<>,
       dict['not a shape' => vec[]],
     );
     static::badValues(
-      $x ==> ShapeTestCodegenTargetClass::shapeAToNullableInt($x),
+      ShapeTestCodegenTargetClass::shapeAToNullableInt<>,
       dict['empty shape' => shape()],
     );
     static::badValues(
-      $x ==> ShapeTestCodegenTargetClass::shapeOptionalAToInt($x),
+      ShapeTestCodegenTargetClass::shapeOptionalAToInt<>,
       dict['shape a to null' => shape('a' => null)],
     );
     static::badValues(
-      $x ==> ShapeTestCodegenTargetClass::shapeWithUnicodeKey($x),
+      ShapeTestCodegenTargetClass::shapeWithUnicodeKey<>,
       dict[
         'shape with wrong unicode character' =>
           shape('❄' => '❄ is not ☃'),

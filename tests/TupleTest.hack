@@ -27,11 +27,11 @@ final class TupleTest extends HackTest {
 
   public function test_okay_values(): void {
     static::okayValues<(null)>(
-      $x ==> TupleTestCodegenTargetClass::tupleNull($x),
+      TupleTestCodegenTargetClass::tupleNull<>,
       dict['tuple null' => tuple(null)],
     );
     static::okayValues<(nonnull)>(
-      $x ==> TupleTestCodegenTargetClass::tupleNonnull($x),
+      TupleTestCodegenTargetClass::tupleNonnull<>,
       dict[
         'tuple int' => tuple(1),
         'tuple string' => tuple('a'),
@@ -39,14 +39,14 @@ final class TupleTest extends HackTest {
       ],
     );
     static::okayValues<(mixed, mixed, mixed)>(
-      $x ==> TupleTestCodegenTargetClass::tupleMixedMixedMixed($x),
+      TupleTestCodegenTargetClass::tupleMixedMixedMixed<>,
       dict['tuple int string float' => tuple(1, 'a', 1.)],
     );
   }
 
   public function test_bad_values(): void {
     static::badValues(
-      $x ==> TupleTestCodegenTargetClass::tupleNull($x),
+      TupleTestCodegenTargetClass::tupleNull<>,
       dict[
         'not a tuple' => dict[],
         'wrong arity' => tuple(null, null),

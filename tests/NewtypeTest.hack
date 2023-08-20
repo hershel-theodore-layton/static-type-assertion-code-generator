@@ -42,10 +42,7 @@ final class NewtypeTest extends HackTest {
 
   public function test_throws_when_no_newtype_handler_was_provided(): void {
     expect(
-      () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(
-        dict[],
-        $x ==> panic($x),
-      ),
+      () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(dict[], panic<>),
     )
       ->toThrow(
         InvariantException::class,
@@ -55,8 +52,7 @@ final class NewtypeTest extends HackTest {
 
   public function test_uses_user_provided_asserters(): void {
     static::okayValues<dict<TOpaqueIntAsInt, TOpaqueIntAsInt>>(
-      $x ==>
-        NewtypeTestCodegenTargetClass::opaquenessUsingUserResolvedFunctions($x),
+      NewtypeTestCodegenTargetClass::opaquenessUsingUserResolvedFunctions<>,
       dict[
         'empty dict' => dict[],
         'dict TOpaqueIntAsInt to TOpaqueIntAsInt' => dict[123 => 456],
@@ -64,8 +60,7 @@ final class NewtypeTest extends HackTest {
     );
 
     static::badValues(
-      $x ==>
-        NewtypeTestCodegenTargetClass::opaquenessUsingUserResolvedFunctions($x),
+      NewtypeTestCodegenTargetClass::opaquenessUsingUserResolvedFunctions<>,
       dict[
         'dict int to TOpaqueIntAsInt' => dict[-123 => 456],
         'dict TOpaqueIntAsInt to int' => dict[123 => -456],
@@ -76,7 +71,7 @@ final class NewtypeTest extends HackTest {
   public function test_types_backend_by_arraykeys_can_be_used_as_an_arraykey(
   ): void {
     static::okayValues<keyset<TOpaqueIntAsInt>>(
-      $x ==> NewtypeTestCodegenTargetClass::keysetOfTOpaqueIntAsInt($x),
+      NewtypeTestCodegenTargetClass::keysetOfTOpaqueIntAsInt<>,
       dict[
         'empty keyset' => keyset[],
         'keyset of TOpaqueIntAsInt' => keyset[6],

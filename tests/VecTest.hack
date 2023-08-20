@@ -15,7 +15,7 @@ final class VecTest extends HackTest {
 
   public function test_okay_values(): void {
     static::okayValues<vec<num>>(
-      $x ==> VecTestCodegenTargetClass::vecOfNum($x),
+      VecTestCodegenTargetClass::vecOfNum<>,
       dict[
         'empty vec' => vec[],
         'vec of int' => vec[1, 2, 3, 4, 5],
@@ -27,7 +27,7 @@ final class VecTest extends HackTest {
 
   public function test_bad_values(): void {
     static::badValues(
-      $x ==> VecTestCodegenTargetClass::vecOfNum($x),
+      VecTestCodegenTargetClass::vecOfNum<>,
       dict[
         'not a vec' => dict[],
         'vec of string' => vec['a', 'b', 'c'],

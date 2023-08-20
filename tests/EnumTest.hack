@@ -30,10 +30,7 @@ final class EnumTest extends HackTest {
 
   public function test_throws_when_no_enum_handler_was_provided(): void {
     expect(
-      () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(
-        dict[],
-        $x ==> panic($x),
-      ),
+      () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(dict[], panic<>),
     )
       ->toThrow(
         InvariantException::class,
@@ -43,14 +40,14 @@ final class EnumTest extends HackTest {
 
   public function test_uses_user_provided_asserters(): void {
     static::okayValues<SomeEnum>(
-      $x ==> EnumTestCodegenTargetClass::someEnum($x),
+      EnumTestCodegenTargetClass::someEnum<>,
       dict['member of SomeEnum' => SomeEnum::ONE],
     );
   }
 
   public function test_can_be_used_as_an_arraykey(): void {
     static::okayValues<keyset<SomeEnum>>(
-      $x ==> EnumTestCodegenTargetClass::keysetOfSomeEnum($x),
+      EnumTestCodegenTargetClass::keysetOfSomeEnum<>,
       dict[
         'empty keyset' => keyset[],
         'keyset of SomeEnum' => keyset[SomeEnum::ONE],
