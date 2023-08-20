@@ -24,7 +24,7 @@ final class CodegenHelper implements \IDisposable {
 
   public function createMethod<reify T>(
     string $name,
-    string $type,
+    ?string $type = null,
     dict<string, string> $table = dict[],
     ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
   ): void {
@@ -33,6 +33,19 @@ final class CodegenHelper implements \IDisposable {
       'Method name %s not unique',
       $name,
     );
+
+    $genned_type = StaticTypeAssertionCodegen\from_type_with_visitor<T, _, _>(
+      new TypeToString()
+    );
+
+    invariant(
+      $type is null || $genned_type !== $type,
+      'Do not pass type: %s by name. The type can be generated.',
+      $type
+    );
+
+    $type ??= $genned_type;
+
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
         StaticTypeAssertionCodegen\from_type<T>(

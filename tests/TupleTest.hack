@@ -9,20 +9,11 @@ final class TupleTest extends HackTest {
   <<__Override>>
   public static async function beforeFirstTestAsync(): Awaitable<void> {
     using $ch = static::newCodegenHelper();
-    $ch->createMethod<(nonnull)>('tupleNonnull', '(nonnull)');
-    $ch->createMethod<(null)>('tupleNull', '(null)');
-    $ch->createMethod<(mixed, mixed, mixed)>(
-      'tupleMixedMixedMixed',
-      '(mixed, mixed, mixed)',
-    );
-    $ch->createMethod<(int, vec<int>, bool)>(
-      'tupleIntMixedVecOfIntBool',
-      '(int, vec<int>, bool)',
-    );
-    $ch->createMethod<(int, vec<mixed>, bool)>(
-      'tupleIntMixedVecOfMixedBool',
-      '(int, vec<mixed>, bool)',
-    );
+    $ch->createMethod<(nonnull)>('tupleNonnull');
+    $ch->createMethod<(null)>('tupleNull');
+    $ch->createMethod<(mixed, mixed, mixed)>('tupleMixedMixedMixed');
+    $ch->createMethod<(int, vec<int>, bool)>('tupleIntMixedVecOfIntBool');
+    $ch->createMethod<(int, vec<mixed>, bool)>('tupleIntMixedVecOfMixedBool');
   }
 
   public function test_okay_values(): void {

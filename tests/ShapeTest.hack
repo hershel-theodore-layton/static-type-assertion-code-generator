@@ -15,36 +15,19 @@ final class ShapeTest extends HackTest {
   <<__Override>>
   public static async function beforeFirstTestAsync(): Awaitable<void> {
     using $ch = static::newCodegenHelper();
-    $ch->createMethod<shape()>('emptyShape', 'shape()');
-    $ch->createMethod<shape(...)>('emptyShapeWithExtraFields', 'shape(...)');
-    $ch->createMethod<shape('a' => ?int)>(
-      'shapeAToNullableInt',
-      "shape('a' => ?int)",
-    );
-    $ch->createMethod<shape(?'a' => int)>(
-      'shapeOptionalAToInt',
-      "shape(?'a' => int)",
-    );
+    $ch->createMethod<shape()>('emptyShape');
+    $ch->createMethod<shape(...)>('emptyShapeWithExtraFields');
+    $ch->createMethod<shape('a' => ?int)>('shapeAToNullableInt');
+    $ch->createMethod<shape(?'a' => int)>('shapeOptionalAToInt');
     $ch->createMethod<?shape(?'a' => ?int, ...)>(
       'nullableShapeOptionalAToNullableIntWithExtraFields',
-      "?shape(?'a' => ?int, ...)",
     );
-    $ch->createMethod<shape(?'a' => vec<int>)>(
-      'shapeOptionalAVecOfInt',
-      "shape(?'a' => vec<int>)",
-    );
+    $ch->createMethod<shape(?'a' => vec<int>)>('shapeOptionalAVecOfInt');
     $ch->createMethod<shape(?'a' => vec<int>, 'b' => string, ...)>(
       'shapeOptionalAVecOfIntBStringWithExtraFields',
-      "shape(?'a' => vec<int>, 'b' => string, ...)",
     );
-    $ch->createMethod<shape('☃' => vec<string>)>(
-      'shapeWithUnicodeKey',
-      "shape('☃' => vec<string>)",
-    );
-    $ch->createMethod<shape('\'' => vec<string>)>(
-      'shapeWithQuoteInKey',
-      "shape('\'' => vec<string>)",
-    );
+    $ch->createMethod<shape('☃' => vec<string>)>('shapeWithUnicodeKey');
+    $ch->createMethod<shape('\'' => vec<string>)>('shapeWithQuoteInKey');
     $ch->createMethod<shape(ShapeTest::A => int, ShapeTest::ALSO_A => string)>(
       'collidingKeys',
       'shape(ShapeTest::ALSO_A => string)',

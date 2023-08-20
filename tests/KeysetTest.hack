@@ -9,8 +9,8 @@ final class KeysetTest extends HackTest {
   <<__Override>>
   public static async function beforeFirstTestAsync(): Awaitable<void> {
     using $ch = static::newCodegenHelper();
-    $ch->createMethod<keyset<string>>('keysetOfString', 'keyset<string>');
-    $ch->createMethod<keyset<arraykey>>('keysetOfArrayKey', 'keyset<arraykey>');
+    $ch->createMethod<keyset<string>>('keysetOfString');
+    $ch->createMethod<keyset<arraykey>>('keysetOfArrayKey');
   }
 
   public function test_okay_values(): void {

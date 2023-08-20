@@ -9,8 +9,8 @@ final class VecTest extends HackTest {
   <<__Override>>
   public static async function beforeFirstTestAsync(): Awaitable<void> {
     using $ch = static::newCodegenHelper();
-    $ch->createMethod<vec<num>>('vecOfNum', 'vec<num>');
-    $ch->createMethod<vec<mixed>>('vecOfMixed', 'vec<mixed>');
+    $ch->createMethod<vec<num>>('vecOfNum');
+    $ch->createMethod<vec<mixed>>('vecOfMixed');
   }
 
   public function test_okay_values(): void {

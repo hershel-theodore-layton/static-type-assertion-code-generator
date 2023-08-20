@@ -9,6 +9,11 @@ interface TypeDeclVisitor<Tt, Tf> {
   public function panic(string $message)[]: nothing;
 
   /**
+   * Invoked when a type is encountered that is impossible to handle.
+   */
+  public function unsupportedType(string $type_name)[]: nothing;
+
+  /**
    * @param $parent_shape_name the `TAlias['alias']` of the embedding shape.
    */
   public function shapeField(

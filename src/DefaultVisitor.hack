@@ -36,6 +36,10 @@ final class DefaultVisitor
     return ($this->panic)($message);
   }
 
+  public function unsupportedType(string $message)[]: nothing {
+    return ($this->panic)($message);
+  }
+
   public function shapeField(
     ?string $parent_shape_name,
     arraykey $key,

@@ -9,19 +9,10 @@ final class DictTest extends HackTest {
   <<__Override>>
   public static async function beforeFirstTestAsync(): Awaitable<void> {
     using $ch = static::newCodegenHelper();
-    $ch->createMethod<dict<int, bool>>('dictIntToBool', 'dict<int, bool>');
-    $ch->createMethod<dict<arraykey, bool>>(
-      'dictArraykeyToBool',
-      'dict<arraykey, bool>',
-    );
-    $ch->createMethod<dict<string, mixed>>(
-      'dictStringToMixed',
-      'dict<string, mixed>',
-    );
-    $ch->createMethod<dict<arraykey, mixed>>(
-      'dictArraykeyToMixed',
-      'dict<arraykey, mixed>',
-    );
+    $ch->createMethod<dict<int, bool>>('dictIntToBool');
+    $ch->createMethod<dict<arraykey, bool>>('dictArraykeyToBool');
+    $ch->createMethod<dict<string, mixed>>('dictStringToMixed');
+    $ch->createMethod<dict<arraykey, mixed>>('dictArraykeyToMixed');
   }
 
   public function test_okay_values(): void {
