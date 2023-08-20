@@ -29,6 +29,7 @@ final class DefaultVisitor
   public function __construct(
     private dict<string, string> $typeAliasAsserters,
     private (function(string)[]: nothing) $panic,
+    private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
   )[] {}
 
   public function panic(string $message)[]: nothing {
@@ -36,18 +37,33 @@ final class DefaultVisitor
   }
 
   public function shapeField(
+    ?string $parent_shape_name,
     arraykey $key,
-    bool $cns,
-    bool $opt,
-    _Private\TypeDescription $ty,
+    bool $is_class_constant,
+    bool $is_optional,
+    TypeDescription $type,
   )[]: ShapeField {
-    if (!$key is string || $cns) {
+    $repr = ($this->shapeFieldNameResolver)($parent_shape_name, $key);
+
+    if ($repr is null) {
+      if (!$key is string) {
+        return $this->panic(
+          'Shapes with integer keys can not be codegenned'.
+          ' without a class constant to use in the source.',
+        );
+      }
+
+      $repr = _Private\string_export($key);
+    }
+
+    if ($repr is null && $is_class_constant) {
       return $this->panic(
-        'Shapes with class constant keys can not be safely codegenned.',
+        'Shapes with class constant keys can not be codegenned'.
+        ' without a class constant to use in the source.',
       );
     }
 
-    return new ShapeField($key, _Private\string_export($key), $opt, $ty);
+    return new ShapeField($key, $repr, $is_optional, $type);
   }
 
   public function arraykey(TAlias $alias)[]: TypeDescription {

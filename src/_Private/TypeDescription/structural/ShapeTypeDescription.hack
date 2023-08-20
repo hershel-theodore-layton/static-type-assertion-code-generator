@@ -12,11 +12,6 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     private bool $allowsUnknownFields,
   )[] {
     parent::__construct($counter);
-    $unique_fields = Vec\unique_by($fields, $f ==> $f->getName());
-    invariant(
-      C\count($unique_fields) === C\count($fields),
-      'Shape definition contains duplicate fields',
-    );
   }
 
   <<__Override>>

@@ -4,14 +4,25 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 // Does not support class constant shape keys (yet?)
 final class ShapeField {
   public function __construct(
-    private string $name,
+    private arraykey $nameValue,
     private string $sourceRepr,
     private bool $optional,
     private TypeDescription $type,
   )[] {}
 
-  public function getName()[]: string {
-    return $this->name;
+  /**
+   * Used to detect unsound class constant use.
+   * ```
+   * class OhNo {
+   *   const string A = 'a';
+   *   const string B = 'a';
+   *   //               ^^^
+   * }
+   * type DuplicateKey = shape(OhNo::A => int, OhNo::B => string);
+   * ```
+   */
+  public function getNameValue()[]: arraykey {
+    return $this->nameValue;
   }
 
   public function getSourceRepr()[]: string {

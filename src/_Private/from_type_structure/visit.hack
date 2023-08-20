@@ -108,6 +108,7 @@ function visit<Tt, Tf>(
           $optional = $t['optional_shape_field'] ?? false;
 
           return $visitor->shapeField(
+            $alias['alias'],
             $name,
             $const,
             $optional,

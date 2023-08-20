@@ -26,6 +26,7 @@ final class CodegenHelper implements \IDisposable {
     string $name,
     string $type,
     dict<string, string> $table = dict[],
+    ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
   ): void {
     invariant(
       !C\contains_key($this->methods, $name),
@@ -34,7 +35,11 @@ final class CodegenHelper implements \IDisposable {
     );
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-        StaticTypeAssertionCodegen\from_type<T>($table, panic<>),
+        StaticTypeAssertionCodegen\from_type<T>(
+          $table,
+          panic<>,
+          $shape_field_name_resolver,
+        ),
       ),
       'type' => $type,
     );

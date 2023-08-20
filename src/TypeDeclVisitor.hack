@@ -8,6 +8,17 @@ interface TypeDeclVisitor<Tt, Tf> {
    */
   public function panic(string $message)[]: nothing;
 
+  /**
+   * @param $parent_shape_name the `TAlias['alias']` of the embedding shape.
+   */
+  public function shapeField(
+    ?string $parent_shape_name,
+    arraykey $key,
+    bool $is_class_constant,
+    bool $is_optional,
+    Tt $type,
+  )[]: Tf;
+
   public function arraykey(TAlias $alias)[]: Tt;
   public function bool(TAlias $alias)[]: Tt;
   public function dict(TAlias $alias, Tt $key, Tt $value)[]: Tt;
@@ -21,7 +32,6 @@ interface TypeDeclVisitor<Tt, Tf> {
   public function nullable(TAlias $alias, Tt $inner)[]: Tt;
   public function num(TAlias $alias)[]: Tt;
   public function shape(TAlias $alias, vec<Tf> $fields, bool $is_open)[]: Tt;
-  public function shapeField(arraykey $key, bool $cns, bool $opt, Tt $ty)[]: Tf;
   public function string(TAlias $alias)[]: Tt;
   public function tuple(TAlias $alias, vec<Tt> $elements)[]: Tt;
   public function vec(TAlias $alias, Tt $inner)[]: Tt;
