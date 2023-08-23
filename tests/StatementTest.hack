@@ -18,7 +18,6 @@ final class StatementTest extends HackTest {
     $ch->createMethod<vec<vec<int>>>('statementInVec');
     $ch->createMethod<DeeplyNested>(
       'deeplyNestedStatement',
-      null,
       dict[HiddenInt::class => '\\'.StatementTest::class.'::hiddenInt'],
     );
   }

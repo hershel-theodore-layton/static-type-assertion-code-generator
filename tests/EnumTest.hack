@@ -18,12 +18,10 @@ final class EnumTest extends HackTest {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<SomeEnum>(
       'someEnum',
-      null,
       dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
     );
     $ch->createMethod<keyset<SomeEnum>>(
       'keysetOfSomeEnum',
-      null,
       dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
     );
   }

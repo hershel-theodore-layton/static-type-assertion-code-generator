@@ -25,7 +25,6 @@ final class CodegenHelper implements \IDisposable {
 
   public function createMethod<reify T>(
     string $name,
-    null $_type = null,
     dict<string, string> $table = dict[],
     ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
   ): void {

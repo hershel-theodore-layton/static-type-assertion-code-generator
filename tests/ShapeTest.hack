@@ -30,13 +30,11 @@ final class ShapeTest extends HackTest {
     $ch->createMethod<shape('\'' => vec<string>)>('shapeWithQuoteInKey');
     $ch->createMethod<shape(ShapeTest::A => int, ShapeTest::ALSO_A => string)>(
       'collidingKeys',
-      null,
       dict[],
       ($_, $_)[] ==> 'ShapeTest::ALSO_A',
     );
     $ch->createMethod<ExampleShape>(
       'testingArgumentsPassedToTheFieldResolver',
-      null,
       dict[],
       ($shape, $field)[] ==> {
         invariant(

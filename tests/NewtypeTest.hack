@@ -22,14 +22,12 @@ final class NewtypeTest extends HackTest {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<dict<TOpaqueIntAsInt, TOpaqueIntAsInt>>(
       'opaquenessUsingUserResolvedFunctions',
-      null,
       dict[
         TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
       ],
     );
     $ch->createMethod<keyset<TOpaqueIntAsInt>>(
       'keysetOfTOpaqueIntAsInt',
-      null,
       dict[
         TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
       ],
