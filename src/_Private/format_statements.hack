@@ -1,8 +1,8 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-use namespace HH\Lib\Str;
+use namespace HH\Lib\{Str, Vec};
 
 function format_statements(string ...$stmts)[]: string {
-  return Str\join($stmts, ' ') |> $$ !== '' ? $$.' ' : $$;
+  return Vec\filter($stmts) |> Str\join($$, ' ') |> $$ !== '' ? $$.' ' : $$;
 }
