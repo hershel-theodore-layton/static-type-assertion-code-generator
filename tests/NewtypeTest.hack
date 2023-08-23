@@ -72,15 +72,7 @@ final class NewtypeTest extends HackTest {
     );
   }
 
-  public function test_reified_generics_do_not_appear_consistently(): void {
-    expect(static::isOpaque<TIntAlias>())->toBeNull();
-    expect(static::isOpaque<TOpaqueIntAsInt>())->toBeTrue();
-    expect(static::isOpaque<TOpaqueInt>())->toBeTrue();
-    expect(static::isOpaque<TVecOfIntAlias>())->toBeNull();
-    expect(static::isOpaque<TOpaqueVecOfIntAsVecOfInt>())->toBeTrue();
-    expect(static::isOpaque<TOpaqueVecOfInt>())->toBeTrue();
-  }
-
+  // This reflection hack has since been moved to the HTL\TypeVisitor repo.
   public function test_if_this_test_fails_you_can_remove_the_cleaning_opaque_reflection_hack(
   ): void {
     expect(
@@ -109,10 +101,5 @@ final class NewtypeTest extends HackTest {
       );
     }
     return $mixed;
-  }
-
-  private static function isOpaque<reify T>(): ?bool {
-    return \HH\ReifiedGenerics\get_type_structure<T>()
-      |> Shapes::idx($$, 'opaque');
   }
 }
