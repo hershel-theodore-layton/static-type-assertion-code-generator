@@ -34,13 +34,9 @@ final class CodegenHelper implements \IDisposable {
       $name,
     );
 
-    $genned_type = StaticTypeAssertionCodegen\from_type_with_visitor<T, _, _>(
-      new TypeVisitor\TypenameVisitor(
-        $shape_field_name_resolver ?? ($_, $_)[] ==> null,
-      ),
-    );
-
-    $type = $genned_type;
+    $type = TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
+      $shape_field_name_resolver ?? ($_, $_)[] ==> null,
+    ));
 
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
