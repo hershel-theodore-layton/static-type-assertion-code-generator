@@ -22,7 +22,7 @@ use type HTL\StaticTypeAssertionCodegen\_Private\{
   TypeDescription,
   VecTypeDescription,
 };
-use type HTL\StaticTypeAssertionCodegenInterfaces\{TAlias, TypeDeclVisitor};
+use type HTL\TypeVisitor\{TAlias, TypeDeclVisitor};
 
 final class DefaultVisitor
   implements TypeDeclVisitor<TypeDescription, ShapeField> {
@@ -169,14 +169,19 @@ final class DefaultVisitor
       new MixedTypeDescription($alias['counter']);
   }
 
+  public function nonnull(TAlias $alias)[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ??
+      new NonnullTypeDescription($alias['counter']);
+  }
+
   public function nothing(TAlias $alias)[]: TypeDescription {
     return
       $this->resolveAlias($alias, false) ?? $this->unsupportedType('nothing');
   }
 
-  public function nonnull(TAlias $alias)[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ??
-      new NonnullTypeDescription($alias['counter']);
+  public function noreturn(TAlias $alias)[]: TypeDescription {
+    return
+      $this->resolveAlias($alias, false) ?? $this->unsupportedType('noreturn');
   }
 
   public function null(TAlias $alias)[]: TypeDescription {
@@ -249,6 +254,18 @@ final class DefaultVisitor
       new VecTypeDescription($alias['counter'], $inner);
   }
 
+  public function vecOrDict(
+    TAlias $alias,
+    vec<TypeDescription> $_inner,
+  )[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ??
+      $this->unsupportedType('vec_or_dict');
+  }
+
+  public function void(TAlias $alias)[]: TypeDescription {
+    return $this->resolveAlias($alias, false) ?? $this->unsupportedType('void');
+  }
+
   private function resolveAlias(
     TAlias $alias,
     bool $is_arraykey,
@@ -277,13 +294,5 @@ final class DefaultVisitor
     }
 
     return null;
-  }
-
-  public function vecOrDict(
-    TAlias $alias,
-    vec<TypeDescription> $_inner,
-  )[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ??
-      $this->unsupportedType('vec_or_dict');
   }
 }

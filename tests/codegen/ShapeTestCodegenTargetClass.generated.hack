@@ -85,7 +85,7 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function testingArgumentsPassedToTheFieldResolver(
     mixed $htl_untyped_variable,
-  ): ExampleShape {
+  ): \HTL\StaticTypeAssertionCodegen\Tests\ExampleShape {
     return $htl_untyped_variable as shape('the_expected_name' => int);
   }
 }

@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\{C, Str, Vec};
-use namespace HTL\StaticTypeAssertionCodegen;
+use namespace HTL\{StaticTypeAssertionCodegen, TypeVisitor};
 use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
 
 /**
@@ -25,7 +25,7 @@ final class CodegenHelper implements \IDisposable {
 
   public function createMethod<reify T>(
     string $name,
-    ?string $type = null,
+    null $_type = null,
     dict<string, string> $table = dict[],
     ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
   ): void {
@@ -36,16 +36,12 @@ final class CodegenHelper implements \IDisposable {
     );
 
     $genned_type = StaticTypeAssertionCodegen\from_type_with_visitor<T, _, _>(
-      new TypeToString(),
+      new TypeVisitor\TypenameVisitor(
+        $shape_field_name_resolver ?? ($_, $_)[] ==> null,
+      ),
     );
 
-    invariant(
-      $type is null || $genned_type !== $type,
-      'Do not pass type: %s by name. The type can be generated.',
-      $type,
-    );
-
-    $type ??= $genned_type;
+    $type = $genned_type;
 
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
@@ -60,7 +56,8 @@ final class CodegenHelper implements \IDisposable {
   }
 
   public function __dispose(): void {
-    $code = Str\format(<<<'HACK'
+    $code = Str\format(
+      <<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
@@ -70,18 +67,18 @@ final class %s {
 }
 
 HACK
-    ,
-    $this->codegenTargetClass,
-    Vec\map_with_key(
-      $this->methods,
-      ($name, $its) ==> Str\format(
-        '  public static function %s(mixed $htl_untyped_variable): %s { %s }',
-        $name,
-        $its['type'],
-        $its['body'],
-      ),
-    )
-      |> Str\join($$, "\n"),
+      ,
+      $this->codegenTargetClass,
+      Vec\map_with_key(
+        $this->methods,
+        ($name, $its) ==> Str\format(
+          '  public static function %s(mixed $htl_untyped_variable): %s { %s }',
+          $name,
+          $its['type'],
+          $its['body'],
+        ),
+      )
+        |> Str\join($$, "\n"),
     );
 
     \touch($this->file);
