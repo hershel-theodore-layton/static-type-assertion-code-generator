@@ -20,6 +20,7 @@ use type HTL\StaticTypeAssertionCodegen\_Private\{
   StringTypeDescription,
   TupleTypeDescription,
   TypeDescription,
+  VecOrDictTypeDescription,
   VecTypeDescription,
 };
 use type HTL\TypeVisitor\{TAlias, TypeDeclVisitor};
@@ -256,10 +257,16 @@ final class DefaultVisitor
 
   public function vecOrDict(
     TAlias $alias,
-    vec<TypeDescription> $_inner,
+    vec<TypeDescription> $inner,
   )[]: TypeDescription {
     return $this->resolveAlias($alias, false) ??
-      $this->unsupportedType('vec_or_dict');
+      new VecOrDictTypeDescription(
+        $alias['counter'],
+        C\count($inner) === 2
+          ? $inner[0]
+          : new ArraykeyTypeDescription($alias['counter']),
+        C\lastx($inner),
+      );
   }
 
   public function void(TAlias $alias)[]: TypeDescription {

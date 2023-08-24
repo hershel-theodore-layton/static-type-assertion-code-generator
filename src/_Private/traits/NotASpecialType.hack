@@ -2,6 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 trait NotASpecialType {
+  require implements TypeDescription;
   use NotAnExactSpecialType;
 
   public function subtypeOfArraykey()[]: bool {

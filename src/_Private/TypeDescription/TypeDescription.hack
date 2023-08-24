@@ -22,7 +22,11 @@ interface TypeDescription {
   public function emitEnforceableType()[]: string;
 
   // For bypassing upperbound key checks on dict and keyset.
+  // For enforcing sensible behavior on the key type of vec_or_dict.
   public function exactlyArraykey()[]: bool;
+
+  // For enforcing sensible behavior on the key type of vec_or_dict.
+  public function exactlyInt()[]: bool;
 
   // For bypassing upperbound value checks in arrays.
   public function exactlyMixed()[]: bool;

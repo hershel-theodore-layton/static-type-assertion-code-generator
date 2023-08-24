@@ -25,6 +25,11 @@ final class MixedTypeDescription extends BaseTypeDescription {
   }
 
   <<__Override>>
+  public function exactlyInt()[]: bool {
+    return false;
+  }
+
+  <<__Override>>
   public function exactlyMixed()[]: bool {
     return true;
   }
