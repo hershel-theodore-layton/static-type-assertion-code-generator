@@ -9,8 +9,4 @@ trait PrefersExpression {
   )[]: string {
     return '';
   }
-
-  final public function prefersStatement()[]: bool {
-    return false;
-  }
 }

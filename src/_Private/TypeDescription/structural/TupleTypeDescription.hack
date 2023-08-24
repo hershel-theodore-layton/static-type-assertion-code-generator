@@ -23,11 +23,8 @@ final class TupleTypeDescription extends BaseTypeDescription {
 
     $statements = Vec\map_with_key(
       $this->elements,
-      ($i, $e) ==> {
-        $get_index = Str\format('%s[%d]', $var_out, $i);
-        return
-          $e->prefersStatement() ? $e->emitAssertionStatement($get_index) : '';
-      },
+      ($i, $e) ==>
+        $e->emitAssertionStatement(Str\format('%s[%d]', $var_out, $i)),
     )
       |> format_statements(...$$);
 

@@ -15,19 +15,15 @@ trait PrefersStatement {
   final public function emitAssertionExpression(
     string $sub_expression,
   )[]: string {
-    return $this->prefersStatement()
-      ? $this->getTmpVar()
-      : Str\format('%s as %s', $sub_expression, $this->emitEnforceableType());
+    return $this->isEnforceable()
+      ? Str\format('%s as %s', $sub_expression, $this->emitEnforceableType())
+      : $this->getTmpVar();
   }
 
   final public function emitAssertionStatement(
     string $sub_expression,
   )[]: string {
     return
-      $this->prefersStatement() ? $this->getStatementFor($sub_expression) : '';
-  }
-
-  final public function prefersStatement()[]: bool {
-    return !$this->isEnforceable();
+      $this->isEnforceable() ? '' : $this->getStatementFor($sub_expression);
   }
 }

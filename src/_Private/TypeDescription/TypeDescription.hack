@@ -36,8 +36,4 @@ interface TypeDescription {
   // For upholding Hack's nullability rules in as expressions.
   // `as ?mixed` is disallowed, so it `?null` and `??int`
   public function superTypeOfNull()[]: bool;
-
-  // Some types are faster to assert in a statement compared to an expression.
-  // Such a type prefers to be asserted in a statement.
-  public function prefersStatement()[]: bool;
 }
