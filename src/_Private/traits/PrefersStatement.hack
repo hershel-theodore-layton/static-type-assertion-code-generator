@@ -4,13 +4,9 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 trait PrefersStatement {
-  require implements TypeDescription;
+  require extends BaseTypeDescription;
 
   protected abstract function getStatementFor(string $sub_expression)[]: string;
-
-  final protected function getTmpVar()[]: string {
-    return $this->suffixVariable('$out');
-  }
 
   final public function emitAssertionExpression(
     string $sub_expression,

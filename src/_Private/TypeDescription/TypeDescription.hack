@@ -9,7 +9,7 @@ interface TypeDescription {
 
   // Given `$sub_expression`, emit a fully sound assertion.
   // If doing so would require an inline lambda,
-  // return the name of your `$tmp__x` variable.
+  // return the name of your `$out__x` variable.
   public function emitAssertionExpression(string $sub_expression)[]: string;
 
   // Given `$sub_expression`, emit a fully sound assertion.
