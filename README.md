@@ -5,30 +5,32 @@ Codegen functions equivalent to type testing `as` expressions.
 ## Why static-type-assertion-code-generator?
 
 This library was written with three things in mind, in order of importance:
- - Be sound at all costs, prove to Hack that you're doing the sound thing.
- - Be as fast as possible by doing as little work as possible.
- - Assume the runtime type is correct, optimize for the happy path.
+
+- Be sound at all costs, prove to Hack that you're doing the sound thing.
+- Be as fast as possible by doing as little work as possible.
+- Assume the runtime type is correct, optimize for the happy path.
 
 Every piece of data that arrives in Hack from the outside world, that being apc, databases, json, POST data, or what have you, is all untyped. In a sound Hack program, you'll need to turn this data into typed data, before doing anything useful with it. Doing this validation by hand is tedious work which can be easily automated. The code that is generated for you is the quickest pure Hack way I know of to get this untyped data typed.
 
 The code that is generated does not rely on any library functions. You are therefore recommended to install this library as a development dependency. You should exclude the files which invoke the code generator from your production build. This way Hack does not issue errors when the library code falls away in a production build.
 
 The current version of static-type-assertion-code-generator only supports validating these types:
- 
- - arraykey
- - (a, b)
- - bool
- - dict<_, _>
- - float
- - int
- - keyset<_>
- - mixed
- - nonnull
- - null
- - num
- - shape(...)
- - string
- - vec<_>
+
+- `arraykey`
+- `(a, b)`
+- `bool`
+- `dict<_, _>`
+- `float`
+- `int`
+- `keyset<_>`
+- `mixed`
+- `nonnull`
+- `null`
+- `num`
+- `shape(...)`
+- `string`
+- `vec<_>`
+- `vec_or_dict<...>`
 
 Support for other types can be added using aliases and the `$type_alias_asserters` argument passed to `from_type<T>()`.
 
