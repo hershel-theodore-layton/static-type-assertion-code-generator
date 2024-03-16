@@ -48,17 +48,17 @@ final class VecOrDictTest extends HackTest {
   public function test_effient_code(): void {
     static::bodyOfMethodOughtToBe(
       'topTypeOneGeneric',
-      'return (__SEED__ |> $$ is vec<_> ? $$ : $$ as dict<_, _>);',
+      'return __SEED__ as vec_or_dict<_>;',
     );
     static::bodyOfMethodOughtToBe(
       'topTypeTwoGenerics',
-      'return (__SEED__ |> $$ is vec<_> ? $$ : $$ as dict<_, _>);',
+      'return __SEED__ as vec_or_dict<_>;',
     );
     //hackfmt-ignore
     static::bodyOfMethodOughtToBe(
       'intKeyed',
       '$out__1 = dict[]; '.
-      'foreach ((__SEED__ as KeyedContainer<_, _>) as $k__1 => $v__1) { '.
+      'foreach ((__SEED__ as vec_or_dict<_>) as $k__1 => $v__1) { '.
         '$out__1[$k__1 as int] = $v__1; '.
       '} '.
       '$out__1 = __SEED__ is vec<_> '.
@@ -70,7 +70,7 @@ final class VecOrDictTest extends HackTest {
     static::bodyOfMethodOughtToBe(
       'validateValue',
       '$out__1 = dict[]; '.
-      'foreach ((__SEED__ as KeyedContainer<_, _>) as $k__1 => $v__1) { '.
+      'foreach ((__SEED__ as vec_or_dict<_>) as $k__1 => $v__1) { '.
         '$out__2 = keyset[]; '.
         'foreach (($v__1 as keyset<_>) as $k__2) { '.
           '$out__2[] = $k__2 as string; '.

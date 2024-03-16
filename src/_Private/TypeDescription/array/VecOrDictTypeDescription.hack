@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 final class VecOrDictTypeDescription extends BaseTypeDescription {
-  use NotASpecialType;
+  use NotASpecialType, PrefersStatement;
 
   public function __construct(
     int $counter,
@@ -23,21 +23,7 @@ final class VecOrDictTypeDescription extends BaseTypeDescription {
   }
 
   <<__Override>>
-  public function emitAssertionExpression(string $sub_expression)[]: string {
-    return $this->isTopType()
-      ? Str\format(
-          '(%s |> $$ is vec<_> ? $$ : $$ as dict<_, _>)',
-          $sub_expression,
-        )
-      : $this->getTmpVar();
-  }
-
-  <<__Override>>
-  public function emitAssertionStatement(string $sub_expression)[]: string {
-    if ($this->isTopType()) {
-      return '';
-    }
-
+  public function getStatementFor(string $sub_expression)[]: string {
     $var_out = $this->getTmpVar();
     $var_k = $this->suffixVariable('$k');
     $var_v = $this->suffixVariable('$v');
@@ -51,9 +37,8 @@ final class VecOrDictTypeDescription extends BaseTypeDescription {
 
     return Str\format(
       '%s = dict[]; '.
-      'foreach ((%s as KeyedContainer<_, _>) as %s => %s) { %s%s[%s] = %s; } '.
+      'foreach ((%s as vec_or_dict<_>) as %s => %s) { %s%s[%s] = %s; } '.
       // This fixup ensures that the vec'ness of the input matches the output.
-      // It also throws an exception if the input was not a vec or a dict.
       '%s = %s is vec<_> ? vec(%s) : (%s as dict<_, _> |> %s);',
       $var_out,
       $sub_expression,
@@ -73,17 +58,17 @@ final class VecOrDictTypeDescription extends BaseTypeDescription {
 
   <<__Override>>
   public function emitEnforceableType()[]: string {
-    invariant_violation(
-      '$x as vec_or_dict<_, _> introduces a bugged type (literal underscore)',
+    invariant(
+      $this->isEnforceable(),
+      'This operation is only supported for vec_or_dict<arraykey, mixed>',
     );
+    // `as vec_or_dict<_, _>` is bugged, it introduces a literal `_` type.
+    // Leaving out a generic is the same as `as vec_or_dict<arraykey, _>`.
+    return 'vec_or_dict<_>';
   }
 
   <<__Override>>
   public function isEnforceable()[]: bool {
-    return false;
-  }
-
-  private function isTopType()[]: bool {
     return $this->key->exactlyArraykey() && $this->value->exactlyMixed();
   }
 }
