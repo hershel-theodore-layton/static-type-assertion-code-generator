@@ -63,7 +63,7 @@ final class VecOrDictTest extends HackTest {
       '} '.
       '$out__1 = __SEED__ is vec<_> '.
         '? vec($out__1) '.
-        ': (__SEED__ as dict<_, _> |> $out__1); return $out__1;',
+        ': $out__1; return $out__1;',
     );
 
     //hackfmt-ignore
@@ -79,7 +79,7 @@ final class VecOrDictTest extends HackTest {
       '} '.
       '$out__1 = __SEED__ is vec<_> '.
         '? vec($out__1) '.
-        ': (__SEED__ as dict<_, _> |> $out__1); return $out__1;',
+        ': $out__1; return $out__1;',
     );
   }
 }

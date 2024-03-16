@@ -39,7 +39,7 @@ final class VecOrDictTypeDescription extends BaseTypeDescription {
       '%s = dict[]; '.
       'foreach ((%s as vec_or_dict<_>) as %s => %s) { %s%s[%s] = %s; } '.
       // This fixup ensures that the vec'ness of the input matches the output.
-      '%s = %s is vec<_> ? vec(%s) : (%s as dict<_, _> |> %s);',
+      '%s = %s is vec<_> ? vec(%s) : %s;',
       $var_out,
       $sub_expression,
       $var_k,
@@ -51,7 +51,6 @@ final class VecOrDictTypeDescription extends BaseTypeDescription {
       $var_out,
       $sub_expression,
       $var_out,
-      $sub_expression,
       $var_out,
     );
   }
