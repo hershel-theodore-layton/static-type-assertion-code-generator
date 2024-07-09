@@ -1,6 +1,7 @@
 .github/ export-ignore
+benchmark/ export-ignore
 tests/ export-ignore
 .hhconfig export-ignore
 .hhvmconfig.hdf export-ignore
-hhast-lint.json export-ignore
-benchmark/ export-ignore
+composer.dev.json export-ignore
+composer.4.102.json export-ignore
