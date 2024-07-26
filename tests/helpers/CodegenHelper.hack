@@ -18,8 +18,8 @@ final class CodegenHelper implements \IDisposable {
 
   public function __construct(
     private string $codegenTargetClass,
-    private (function(this::TMethods): void) $storeMethods,
-  ) {
+    private (function(this::TMethods)[defaults]: void) $storeMethods,
+  )[] {
     $this->file = static::CODEGEN_BASE.$codegenTargetClass.'.generated.hack';
   }
 
@@ -27,7 +27,7 @@ final class CodegenHelper implements \IDisposable {
     string $name,
     dict<string, string> $table = dict[],
     ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
-  ): void {
+  )[write_props]: void {
     invariant(
       !C\contains_key($this->methods, $name),
       'Method name %s not unique',
@@ -50,9 +50,9 @@ final class CodegenHelper implements \IDisposable {
     );
   }
 
-  public function __dispose(): void {
-    $code = Str\format(
-      <<<'HACK'
+  public function __dispose()[defaults]: void {
+    // hackfmt-ignore
+    $code = Str\format(<<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
@@ -67,7 +67,7 @@ HACK
       Vec\map_with_key(
         $this->methods,
         ($name, $its) ==> Str\format(
-          '  public static function %s(mixed $htl_untyped_variable): %s { %s }',
+          '  public static function %s(mixed $htl_untyped_variable)[]: %s { %s }',
           $name,
           $its['type'],
           $its['body'],

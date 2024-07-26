@@ -3,20 +3,22 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 final class TupleTestCodegenTargetClass {
-  public static function tupleNonnull(mixed $htl_untyped_variable): (nonnull) {
+  public static function tupleNonnull(
+    mixed $htl_untyped_variable,
+  )[]: (nonnull) {
     return $htl_untyped_variable as (nonnull);
   }
-  public static function tupleNull(mixed $htl_untyped_variable): (null) {
+  public static function tupleNull(mixed $htl_untyped_variable)[]: (null) {
     return $htl_untyped_variable as (null);
   }
   public static function tupleMixedMixedMixed(
     mixed $htl_untyped_variable,
-  ): (mixed, mixed, mixed) {
+  )[]: (mixed, mixed, mixed) {
     return $htl_untyped_variable as (mixed, mixed, mixed);
   }
   public static function tupleIntMixedVecOfIntBool(
     mixed $htl_untyped_variable,
-  ): (int, vec<int>, bool) {
+  )[]: (int, vec<int>, bool) {
     $out__1 = $htl_untyped_variable as (int, mixed, bool);
     $out__3 = vec[];
     foreach (($out__1[1] as vec<_>) as $v__3) {
@@ -27,7 +29,7 @@ final class TupleTestCodegenTargetClass {
   }
   public static function tupleIntMixedVecOfMixedBool(
     mixed $htl_untyped_variable,
-  ): (int, vec<mixed>, bool) {
+  )[]: (int, vec<mixed>, bool) {
     return $htl_untyped_variable as (int, vec<_>, bool);
   }
 }

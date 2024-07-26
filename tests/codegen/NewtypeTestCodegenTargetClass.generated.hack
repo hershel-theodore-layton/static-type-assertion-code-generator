@@ -5,7 +5,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 final class NewtypeTestCodegenTargetClass {
   public static function opaquenessUsingUserResolvedFunctions(
     mixed $htl_untyped_variable,
-  ): dict<
+  )[]: dict<
     \HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt,
     \HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt,
   > {
@@ -22,7 +22,7 @@ final class NewtypeTestCodegenTargetClass {
   }
   public static function keysetOfTOpaqueIntAsInt(
     mixed $htl_untyped_variable,
-  ): keyset<\HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt> {
+  )[]: keyset<\HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt> {
     $out__1 = keyset[];
     foreach (($htl_untyped_variable as keyset<_>) as $k__1) {
       $out__1[] =

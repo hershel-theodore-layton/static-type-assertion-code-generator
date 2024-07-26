@@ -7,13 +7,14 @@ final class KeysetTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<keyset<string>>('keysetOfString');
     $ch->createMethod<keyset<arraykey>>('keysetOfArrayKey');
   }
 
-  public function test_okay_values(): void {
+  public function test_okay_values()[defaults]: void {
     static::okayValues<keyset<string>>(
       KeysetTestCodegenTargetClass::keysetOfString<>,
       dict[
@@ -23,7 +24,7 @@ final class KeysetTest extends HackTest {
     );
   }
 
-  public function test_bad_values(): void {
+  public function test_bad_values()[defaults]: void {
     static::badValues(
       KeysetTestCodegenTargetClass::keysetOfString<>,
       dict[
@@ -33,7 +34,7 @@ final class KeysetTest extends HackTest {
     );
   }
 
-  public function test_effient_code(): void {
+  public function test_effient_code()[defaults]: void {
     static::bodyOfMethodOughtToBe(
       'keysetOfArrayKey',
       'return __SEED__ as keyset<_>;',

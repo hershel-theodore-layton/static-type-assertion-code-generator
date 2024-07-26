@@ -5,7 +5,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 final class StatementTestCodegenTargetClass {
   public static function statementInDict(
     mixed $htl_untyped_variable,
-  ): dict<int, vec<int>> {
+  )[]: dict<int, vec<int>> {
     $out__1 = dict[];
     foreach (($htl_untyped_variable as dict<_, _>) as $k__1 => $v__1) {
       $out__3 = vec[];
@@ -18,7 +18,7 @@ final class StatementTestCodegenTargetClass {
   }
   public static function statementInShape(
     mixed $htl_untyped_variable,
-  ): shape('a' => vec<int>) {
+  )[]: shape('a' => vec<int>) {
     $out__1 = $htl_untyped_variable as shape('a' => mixed);
     $out__2 = vec[];
     foreach (($out__1['a'] as vec<_>) as $v__2) {
@@ -29,7 +29,7 @@ final class StatementTestCodegenTargetClass {
   }
   public static function statementInTuple(
     mixed $htl_untyped_variable,
-  ): (vec<int>) {
+  )[]: (vec<int>) {
     $out__1 = $htl_untyped_variable as (mixed);
     $out__2 = vec[];
     foreach (($out__1[0] as vec<_>) as $v__2) {
@@ -40,7 +40,7 @@ final class StatementTestCodegenTargetClass {
   }
   public static function statementInVec(
     mixed $htl_untyped_variable,
-  ): vec<vec<int>> {
+  )[]: vec<vec<int>> {
     $out__1 = vec[];
     foreach (($htl_untyped_variable as vec<_>) as $v__1) {
       $out__2 = vec[];
@@ -53,7 +53,7 @@ final class StatementTestCodegenTargetClass {
   }
   public static function deeplyNestedStatement(
     mixed $htl_untyped_variable,
-  ): \HTL\StaticTypeAssertionCodegen\Tests\DeeplyNested {
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\DeeplyNested {
     $out__1 = dict[];
     foreach (($htl_untyped_variable as dict<_, _>) as $k__1 => $v__1) {
       $out__3 = $v__1 as (mixed);

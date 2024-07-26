@@ -9,7 +9,8 @@ final class VecOrDictTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<vec_or_dict<mixed>>('topTypeOneGeneric');
     $ch->createMethod<vec_or_dict<arraykey, mixed>>('topTypeTwoGenerics');
@@ -18,12 +19,12 @@ final class VecOrDictTest extends HackTest {
     $ch->createMethod<vec_or_dict<int, keyset<string>>>('validateKeyAndValue');
   }
 
-  public function test_bad_input(): void {
+  public function test_bad_input()[defaults]: void {
     expect(() ==> from_type<vec_or_dict<string, int>>(dict[], panic<>))
       ->toThrow(InvariantException::class, 'EXACTLY arraykey or int');
   }
 
-  public function test_okay_values(): void {
+  public function test_okay_values()[defaults]: void {
     static::okayValues<vec_or_dict<int, keyset<string>>>(
       VecOrDictTestCodegenTargetClass::validateKeyAndValue<>,
       dict[
@@ -34,7 +35,7 @@ final class VecOrDictTest extends HackTest {
     );
   }
 
-  public function test_bad_values(): void {
+  public function test_bad_values()[defaults]: void {
     static::badValues(
       VecOrDictTestCodegenTargetClass::validateKeyAndValue<>,
       dict[
@@ -45,7 +46,7 @@ final class VecOrDictTest extends HackTest {
     );
   }
 
-  public function test_effient_code(): void {
+  public function test_effient_code()[defaults]: void {
     static::bodyOfMethodOughtToBe(
       'topTypeOneGeneric',
       'return __SEED__ as vec_or_dict<_>;',

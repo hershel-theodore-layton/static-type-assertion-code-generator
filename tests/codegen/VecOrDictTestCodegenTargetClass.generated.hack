@@ -5,17 +5,17 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 final class VecOrDictTestCodegenTargetClass {
   public static function topTypeOneGeneric(
     mixed $htl_untyped_variable,
-  ): vec_or_dict<mixed> {
+  )[]: vec_or_dict<mixed> {
     return $htl_untyped_variable as vec_or_dict<_>;
   }
   public static function topTypeTwoGenerics(
     mixed $htl_untyped_variable,
-  ): vec_or_dict<arraykey, mixed> {
+  )[]: vec_or_dict<arraykey, mixed> {
     return $htl_untyped_variable as vec_or_dict<_>;
   }
   public static function intKeyed(
     mixed $htl_untyped_variable,
-  ): vec_or_dict<int, mixed> {
+  )[]: vec_or_dict<int, mixed> {
     $out__1 = dict[];
     foreach (($htl_untyped_variable as vec_or_dict<_>) as $k__1 => $v__1) {
       $out__1[$k__1 as int] = $v__1;
@@ -25,7 +25,7 @@ final class VecOrDictTestCodegenTargetClass {
   }
   public static function validateValue(
     mixed $htl_untyped_variable,
-  ): vec_or_dict<keyset<string>> {
+  )[]: vec_or_dict<keyset<string>> {
     $out__1 = dict[];
     foreach (($htl_untyped_variable as vec_or_dict<_>) as $k__1 => $v__1) {
       $out__2 = keyset[];
@@ -39,7 +39,7 @@ final class VecOrDictTestCodegenTargetClass {
   }
   public static function validateKeyAndValue(
     mixed $htl_untyped_variable,
-  ): vec_or_dict<int, keyset<string>> {
+  )[]: vec_or_dict<int, keyset<string>> {
     $out__1 = dict[];
     foreach (($htl_untyped_variable as vec_or_dict<_>) as $k__1 => $v__1) {
       $out__3 = keyset[];

@@ -3,32 +3,32 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 final class ShapeTestCodegenTargetClass {
-  public static function emptyShape(mixed $htl_untyped_variable): shape() {
+  public static function emptyShape(mixed $htl_untyped_variable)[]: shape() {
     return $htl_untyped_variable as shape();
   }
   public static function emptyShapeWithExtraFields(
     mixed $htl_untyped_variable,
-  ): shape(...) {
+  )[]: shape(...) {
     return $htl_untyped_variable as shape(...);
   }
   public static function shapeAToNullableInt(
     mixed $htl_untyped_variable,
-  ): shape('a' => ?int) {
+  )[]: shape('a' => ?int) {
     return $htl_untyped_variable as shape('a' => ?int);
   }
   public static function shapeOptionalAToInt(
     mixed $htl_untyped_variable,
-  ): shape(?'a' => int) {
+  )[]: shape(?'a' => int) {
     return $htl_untyped_variable as shape(?'a' => int);
   }
   public static function nullableShapeOptionalAToNullableIntWithExtraFields(
     mixed $htl_untyped_variable,
-  ): ?shape(?'a' => ?int, ...) {
+  )[]: ?shape(?'a' => ?int, ...) {
     return $htl_untyped_variable as ?shape(?'a' => ?int, ...);
   }
   public static function shapeOptionalAVecOfInt(
     mixed $htl_untyped_variable,
-  ): shape(?'a' => vec<int>) {
+  )[]: shape(?'a' => vec<int>) {
     $out__1 = $htl_untyped_variable as shape(?'a' => mixed);
     if (Shapes::keyExists($out__1, 'a')) {
       $out__2 = vec[];
@@ -43,7 +43,7 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeOptionalAVecOfIntBStringWithExtraFields(
     mixed $htl_untyped_variable,
-  ): shape(?'a' => vec<int>, 'b' => string, ...) {
+  )[]: shape(?'a' => vec<int>, 'b' => string, ...) {
     $out__1 = $htl_untyped_variable as shape(?'a' => mixed, 'b' => string, ...);
     if (Shapes::keyExists($out__1, 'a')) {
       $out__2 = vec[];
@@ -58,7 +58,7 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeWithUnicodeKey(
     mixed $htl_untyped_variable,
-  ): shape('☃' => vec<string>) {
+  )[]: shape('☃' => vec<string>) {
     $out__1 = $htl_untyped_variable as shape('☃' => mixed);
     $out__2 = vec[];
     foreach (($out__1['☃'] as vec<_>) as $v__2) {
@@ -69,7 +69,7 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeWithQuoteInKey(
     mixed $htl_untyped_variable,
-  ): shape('\'' => vec<string>) {
+  )[]: shape('\'' => vec<string>) {
     $out__1 = $htl_untyped_variable as shape('\'' => mixed);
     $out__2 = vec[];
     foreach (($out__1['\''] as vec<_>) as $v__2) {
@@ -80,12 +80,12 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function collidingKeys(
     mixed $htl_untyped_variable,
-  ): shape(ShapeTest::ALSO_A => string) {
+  )[]: shape(ShapeTest::ALSO_A => string) {
     return $htl_untyped_variable as shape(ShapeTest::ALSO_A => string);
   }
   public static function testingArgumentsPassedToTheFieldResolver(
     mixed $htl_untyped_variable,
-  ): \HTL\StaticTypeAssertionCodegen\Tests\ExampleShape {
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\ExampleShape {
     return $htl_untyped_variable as shape('the_expected_name' => int);
   }
 }

@@ -7,7 +7,8 @@ final class DictTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<dict<int, bool>>('dictIntToBool');
     $ch->createMethod<dict<arraykey, bool>>('dictArraykeyToBool');
@@ -15,7 +16,7 @@ final class DictTest extends HackTest {
     $ch->createMethod<dict<arraykey, mixed>>('dictArraykeyToMixed');
   }
 
-  public function test_okay_values(): void {
+  public function test_okay_values()[defaults]: void {
     static::okayValues<dict<int, bool>>(
       DictTestCodegenTargetClass::dictIntToBool<>,
       dict[
@@ -25,7 +26,7 @@ final class DictTest extends HackTest {
     );
   }
 
-  public function test_bad_values(): void {
+  public function test_bad_values()[defaults]: void {
     static::badValues(
       DictTestCodegenTargetClass::dictIntToBool<>,
       dict[
@@ -37,7 +38,7 @@ final class DictTest extends HackTest {
     );
   }
 
-  public function test_effient_code(): void {
+  public function test_effient_code()[defaults]: void {
     static::bodyOfMethodOughtToBe(
       'dictArraykeyToBool',
       '$out__1 = dict[]; foreach ((__SEED__ as dict<_, _>) as $k__1 => $v__1) { $out__1[$k__1] = $v__1 as bool; } return $out__1;',

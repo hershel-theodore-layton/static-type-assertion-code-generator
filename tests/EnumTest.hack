@@ -14,7 +14,8 @@ final class EnumTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<SomeEnum>(
       'someEnum',
@@ -26,7 +27,8 @@ final class EnumTest extends HackTest {
     );
   }
 
-  public function test_throws_when_no_enum_handler_was_provided(): void {
+  public function test_throws_when_no_enum_handler_was_provided(
+  )[defaults]: void {
     expect(
       () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(dict[], panic<>),
     )
@@ -36,14 +38,14 @@ final class EnumTest extends HackTest {
       );
   }
 
-  public function test_uses_user_provided_asserters(): void {
+  public function test_uses_user_provided_asserters()[defaults]: void {
     static::okayValues<SomeEnum>(
       EnumTestCodegenTargetClass::someEnum<>,
       dict['member of SomeEnum' => SomeEnum::ONE],
     );
   }
 
-  public function test_can_be_used_as_an_arraykey(): void {
+  public function test_can_be_used_as_an_arraykey()[defaults]: void {
     static::okayValues<keyset<SomeEnum>>(
       EnumTestCodegenTargetClass::keysetOfSomeEnum<>,
       dict[
@@ -53,7 +55,7 @@ final class EnumTest extends HackTest {
     );
   }
 
-  public static function assertEnum(mixed $m): SomeEnum {
+  public static function assertEnum(mixed $m)[]: SomeEnum {
     if ($m is arraykey && C\contains_key(SomeEnum::getNames(), $m)) {
       return $m as SomeEnum;
     } else {

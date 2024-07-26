@@ -10,7 +10,8 @@ final class StatementTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<dict<int, vec<int>>>('statementInDict');
     $ch->createMethod<shape('a' => vec<int>)>('statementInShape');
@@ -22,7 +23,7 @@ final class StatementTest extends HackTest {
     );
   }
 
-  public static function hiddenInt(mixed $mixed): HiddenInt {
+  public static function hiddenInt(mixed $mixed)[]: HiddenInt {
     return $mixed as int;
   }
 }

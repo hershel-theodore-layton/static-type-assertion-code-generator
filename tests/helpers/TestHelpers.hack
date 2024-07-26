@@ -11,7 +11,7 @@ trait TestHelpers {
   private static ?dict<string, shape('body' => string, 'type' => string)> $code;
 
   <<__ReturnDisposable>>
-  final protected static function newCodegenHelper(): CodegenHelper {
+  final protected static function newCodegenHelper()[defaults]: CodegenHelper {
     invariant(self::$code is null, 'Can not call %s twice', __METHOD__);
     self::$code = dict[];
 
@@ -24,9 +24,9 @@ trait TestHelpers {
   }
 
   final static protected function okayValues<<<__Explicit>> T>(
-    (function(mixed): T) $assertion,
+    (function(mixed)[defaults]: T) $assertion,
     dict<string, T> $values,
-  ): void {
+  )[defaults]: void {
     foreach ($values as $name => $value) {
       try {
         $new_value = $assertion($value);
@@ -42,9 +42,9 @@ trait TestHelpers {
   }
 
   final static protected function badValues(
-    (function(mixed): mixed) $assertion,
+    (function(mixed)[_]: mixed) $assertion,
     dict<string, mixed> $values,
-  ): void {
+  )[ctx $assertion]: void {
     foreach ($values as $name => $value) {
       try {
         $assertion($value);
@@ -60,7 +60,7 @@ trait TestHelpers {
   final static protected function bodyOfMethodOughtToBe(
     string $method,
     string $expression,
-  ): void {
+  )[defaults]: void {
     $body = Str\replace($expression, '__SEED__', '$htl_untyped_variable');
     invariant(self::$code is nonnull, 'No code has been generated yet');
     expect(self::$code[$method]['body'])->toEqual($body);

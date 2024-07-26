@@ -5,7 +5,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 final class KeysetTestCodegenTargetClass {
   public static function keysetOfString(
     mixed $htl_untyped_variable,
-  ): keyset<string> {
+  )[]: keyset<string> {
     $out__1 = keyset[];
     foreach (($htl_untyped_variable as keyset<_>) as $k__1) {
       $out__1[] = $k__1 as string;
@@ -14,7 +14,7 @@ final class KeysetTestCodegenTargetClass {
   }
   public static function keysetOfArrayKey(
     mixed $htl_untyped_variable,
-  ): keyset<arraykey> {
+  )[]: keyset<arraykey> {
     return $htl_untyped_variable as keyset<_>;
   }
 }

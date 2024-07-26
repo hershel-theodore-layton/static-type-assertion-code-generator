@@ -7,7 +7,8 @@ final class TupleTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<(nonnull)>('tupleNonnull');
     $ch->createMethod<(null)>('tupleNull');
@@ -16,7 +17,7 @@ final class TupleTest extends HackTest {
     $ch->createMethod<(int, vec<mixed>, bool)>('tupleIntMixedVecOfMixedBool');
   }
 
-  public function test_okay_values(): void {
+  public function test_okay_values()[defaults]: void {
     static::okayValues<(null)>(
       TupleTestCodegenTargetClass::tupleNull<>,
       dict['tuple null' => tuple(null)],
@@ -35,7 +36,7 @@ final class TupleTest extends HackTest {
     );
   }
 
-  public function test_bad_values(): void {
+  public function test_bad_values()[defaults]: void {
     static::badValues(
       TupleTestCodegenTargetClass::tupleNull<>,
       dict[
@@ -46,7 +47,7 @@ final class TupleTest extends HackTest {
     );
   }
 
-  public function test_effient_code(): void {
+  public function test_effient_code()[defaults]: void {
     static::bodyOfMethodOughtToBe(
       'tupleMixedMixedMixed',
       'return __SEED__ as (mixed, mixed, mixed);',

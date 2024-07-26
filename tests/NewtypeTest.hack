@@ -17,7 +17,8 @@ final class NewtypeTest extends HackTest {
   use TestHelpers;
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<dict<TOpaqueIntAsInt, TOpaqueIntAsInt>>(
       'opaquenessUsingUserResolvedFunctions',
@@ -33,7 +34,8 @@ final class NewtypeTest extends HackTest {
     );
   }
 
-  public function test_throws_when_no_newtype_handler_was_provided(): void {
+  public function test_throws_when_no_newtype_handler_was_provided(
+  )[defaults]: void {
     expect(
       () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(dict[], panic<>),
     )
@@ -43,7 +45,7 @@ final class NewtypeTest extends HackTest {
       );
   }
 
-  public function test_uses_user_provided_asserters(): void {
+  public function test_uses_user_provided_asserters()[defaults]: void {
     static::okayValues<dict<TOpaqueIntAsInt, TOpaqueIntAsInt>>(
       NewtypeTestCodegenTargetClass::opaquenessUsingUserResolvedFunctions<>,
       dict[
@@ -62,7 +64,7 @@ final class NewtypeTest extends HackTest {
   }
 
   public function test_types_backend_by_arraykeys_can_be_used_as_an_arraykey(
-  ): void {
+  )[defaults]: void {
     static::okayValues<keyset<TOpaqueIntAsInt>>(
       NewtypeTestCodegenTargetClass::keysetOfTOpaqueIntAsInt<>,
       dict[
@@ -74,7 +76,7 @@ final class NewtypeTest extends HackTest {
 
   // This reflection hack has since been moved to the HTL\TypeVisitor repo.
   public function test_if_this_test_fails_you_can_remove_the_cleaning_opaque_reflection_hack(
-  ): void {
+  )[defaults]: void {
     expect(
       Shapes::idx(
         \HH\ReifiedGenerics\get_type_structure<TOpaqueVecOfIntAsVecOfInt>(),
@@ -91,7 +93,7 @@ final class NewtypeTest extends HackTest {
     )->toEqual('<missing>');
   }
 
-  public static function assertOpaqueIntAsInt(mixed $mixed): TOpaqueIntAsInt {
+  public static function assertOpaqueIntAsInt(mixed $mixed)[]: TOpaqueIntAsInt {
     if (($mixed as int) < 0) {
       throw new \TypeAssertionException(
         Str\format(

@@ -13,7 +13,8 @@ final class ShapeTest extends HackTest {
   const string ALSO_A = 'a';
 
   <<__Override>>
-  public static async function beforeFirstTestAsync(): Awaitable<void> {
+  public static async function beforeFirstTestAsync(
+  )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
     $ch->createMethod<shape()>('emptyShape');
     $ch->createMethod<shape(...)>('emptyShapeWithExtraFields');
@@ -53,7 +54,7 @@ final class ShapeTest extends HackTest {
     );
   }
 
-  public function test_okay_values(): void {
+  public function test_okay_values()[defaults]: void {
     static::okayValues<shape()>(
       ShapeTestCodegenTargetClass::emptyShape<>,
       dict['empty shape' => shape()],
@@ -122,7 +123,7 @@ final class ShapeTest extends HackTest {
     );
   }
 
-  public function test_bad_values(): void {
+  public function test_bad_values()[defaults]: void {
     static::badValues(
       ShapeTestCodegenTargetClass::emptyShape<>,
       dict[
@@ -151,7 +152,7 @@ final class ShapeTest extends HackTest {
     );
   }
 
-  public function test_colliding_keys(): void {
+  public function test_colliding_keys()[defaults]: void {
     // This is an hhvm bug.
     // We don't get the shape fields if the keys are duplicaites.
     // They are handed to us in a dict, which doesn't allow for duplicate keys.
@@ -161,7 +162,7 @@ final class ShapeTest extends HackTest {
     );
   }
 
-  public function test_efficient_code(): void {
+  public function test_efficient_code()[defaults]: void {
     static::bodyOfMethodOughtToBe('emptyShape', 'return __SEED__ as shape();');
     static::bodyOfMethodOughtToBe(
       'emptyShapeWithExtraFields',
