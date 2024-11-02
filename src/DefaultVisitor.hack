@@ -194,8 +194,18 @@ final class DefaultVisitor
     TAlias $alias,
     TypeDescription $inner,
   )[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ??
-      new NullableTypeDescription($alias['counter'], $inner);
+    $alias_name = $alias['alias'];
+    $maybe_aliassed_inner = $this->resolveAlias($alias, false) ?? $inner;
+
+    if ($alias_name is null) {
+      return
+        new NullableTypeDescription($alias['counter'], $maybe_aliassed_inner);
+    }
+
+    $rt = new \ReflectionTypeAlias($alias_name);
+    return $rt->getTypeStructure()['nullable'] ?? false
+      ? $maybe_aliassed_inner
+      : new NullableTypeDescription($alias['counter'], $maybe_aliassed_inner);
   }
 
   public function num(TAlias $alias)[]: TypeDescription {

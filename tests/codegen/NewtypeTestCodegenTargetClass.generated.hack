@@ -32,4 +32,33 @@ final class NewtypeTestCodegenTargetClass {
     }
     return $out__1;
   }
+  public static function vecOfNullableTOpaqueIntAsInt(
+    mixed $htl_untyped_variable,
+  )[]: vec<?\HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt> {
+    $out__1 = vec[];
+    foreach (($htl_untyped_variable as vec<_>) as $v__1) {
+      if ($v__1 is null) {
+        $out__2 = null;
+      } else {
+        $out__2 =
+          \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertOpaqueIntAsInt(
+            $v__1,
+          );
+      }
+      $out__1[] = $out__2;
+    }
+    return $out__1;
+  }
+  public static function vecOfNullableTNullableOpaqueIntAsNullableInt(
+    mixed $htl_untyped_variable,
+  )[]: vec<\HTL\StaticTypeAssertionCodegen\Tests\TNullableOpaqueIntAsNullableInt> {
+    $out__1 = vec[];
+    foreach (($htl_untyped_variable as vec<_>) as $v__1) {
+      $out__1[] =
+        \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertNullableOpaqueIntAsNullableInt(
+          $v__1,
+        );
+    }
+    return $out__1;
+  }
 }

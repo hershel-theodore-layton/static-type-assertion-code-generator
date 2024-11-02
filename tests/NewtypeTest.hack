@@ -8,6 +8,7 @@ use function Facebook\FBExpect\expect;
 
 type TIntAlias = int;
 newtype TOpaqueIntAsInt as int = int;
+newtype TNullableOpaqueIntAsNullableInt as ?int = ?int;
 newtype TOpaqueInt = int;
 type TVecOfIntAlias = vec<int>;
 newtype TOpaqueVecOfIntAsVecOfInt as vec<int> = vec<int>;
@@ -30,6 +31,20 @@ final class NewtypeTest extends HackTest {
       'keysetOfTOpaqueIntAsInt',
       dict[
         TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
+      ],
+    );
+    $ch->createMethod<vec<?TOpaqueIntAsInt>>(
+      'vecOfNullableTOpaqueIntAsInt',
+      dict[
+        TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
+      ],
+    );
+
+    $ch->createMethod<vec<?TNullableOpaqueIntAsNullableInt>>(
+      'vecOfNullableTNullableOpaqueIntAsNullableInt',
+      dict[
+        TNullableOpaqueIntAsNullableInt::class =>
+          '\\'.static::class.'::assertNullableOpaqueIntAsNullableInt',
       ],
     );
   }
@@ -74,6 +89,14 @@ final class NewtypeTest extends HackTest {
     );
   }
 
+  public function test_a_nullable_newtype_is_guarded_from_nulls(
+  )[defaults]: void {
+    static::okayValues<vec<?TOpaqueInt>>(
+      NewtypeTestCodegenTargetClass::vecOfNullableTOpaqueIntAsInt<>,
+      dict['null' => vec[null], 'int' => vec[6]],
+    );
+  }
+
   // This reflection hack has since been moved to the HTL\TypeVisitor repo.
   public function test_if_this_test_fails_you_can_remove_the_cleaning_opaque_reflection_hack(
   )[defaults]: void {
@@ -103,5 +126,11 @@ final class NewtypeTest extends HackTest {
       );
     }
     return $mixed;
+  }
+
+  public static function assertNullableOpaqueIntAsNullableInt(
+    mixed $mixed,
+  )[]: TNullableOpaqueIntAsNullableInt {
+    return $mixed is null ? $mixed : static::assertOpaqueIntAsInt($mixed);
   }
 }
