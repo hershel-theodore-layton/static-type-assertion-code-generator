@@ -8,7 +8,8 @@ use function Facebook\FBExpect\expect;
 trait TestHelpers {
   require extends HackTest;
 
-  private static ?dict<string, shape('body' => string, 'type' => string)> $code;
+  private static ?dict<string, shape('body' => string, 'type' => string /*_*/)>
+    $code;
 
   <<__ReturnDisposable>>
   final protected static function newCodegenHelper()[defaults]: CodegenHelper {

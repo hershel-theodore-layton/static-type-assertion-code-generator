@@ -3,7 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type Facebook\HackTest\HackTest;
 
-type ExampleShape = shape('the_expected_name' => int);
+type ExampleShape = shape('the_expected_name' => int/*_*/);
 
 final class ShapeTest extends HackTest {
   use TestHelpers;
@@ -16,24 +16,22 @@ final class ShapeTest extends HackTest {
   public static async function beforeFirstTestAsync(
   )[defaults]: Awaitable<void> {
     using $ch = static::newCodegenHelper();
-    $ch->createMethod<shape()>('emptyShape');
+    $ch->createMethod<shape(/*_*/)>('emptyShape');
     $ch->createMethod<shape(...)>('emptyShapeWithExtraFields');
-    $ch->createMethod<shape('a' => ?int)>('shapeAToNullableInt');
-    $ch->createMethod<shape(?'a' => int)>('shapeOptionalAToInt');
+    $ch->createMethod<shape('a' => ?int/*_*/)>('shapeAToNullableInt');
+    $ch->createMethod<shape(?'a' => int/*_*/)>('shapeOptionalAToInt');
     $ch->createMethod<?shape(?'a' => ?int, ...)>(
       'nullableShapeOptionalAToNullableIntWithExtraFields',
     );
-    $ch->createMethod<shape(?'a' => vec<int>)>('shapeOptionalAVecOfInt');
+    $ch->createMethod<shape(?'a' => vec<int>/*_*/)>('shapeOptionalAVecOfInt');
     $ch->createMethod<shape(?'a' => vec<int>, 'b' => string, ...)>(
       'shapeOptionalAVecOfIntBStringWithExtraFields',
     );
-    $ch->createMethod<shape('☃' => vec<string>)>('shapeWithUnicodeKey');
-    $ch->createMethod<shape('\'' => vec<string>)>('shapeWithQuoteInKey');
-    $ch->createMethod<shape(ShapeTest::A => int, ShapeTest::ALSO_A => string)>(
-      'collidingKeys',
-      dict[],
-      ($_, $_)[] ==> 'ShapeTest::ALSO_A',
-    );
+    $ch->createMethod<shape('☃' => vec<string>/*_*/)>('shapeWithUnicodeKey');
+    $ch->createMethod<shape('\'' => vec<string>/*_*/)>('shapeWithQuoteInKey');
+    $ch->createMethod<
+      shape(ShapeTest::A => int, ShapeTest::ALSO_A => string/*_*/),
+    >('collidingKeys', dict[], ($_, $_)[] ==> 'ShapeTest::ALSO_A');
     $ch->createMethod<ExampleShape>(
       'testingArgumentsPassedToTheFieldResolver',
       dict[],
@@ -55,7 +53,7 @@ final class ShapeTest extends HackTest {
   }
 
   public function test_okay_values()[defaults]: void {
-    static::okayValues<shape()>(
+    static::okayValues<shape(/*_*/)>(
       ShapeTestCodegenTargetClass::emptyShape<>,
       dict['empty shape' => shape()],
     );
@@ -66,14 +64,14 @@ final class ShapeTest extends HackTest {
         'shape a to int' => shape('a' => 1),
       ],
     );
-    static::okayValues<shape('a' => ?int)>(
+    static::okayValues<shape('a' => ?int/*_*/)>(
       ShapeTestCodegenTargetClass::shapeAToNullableInt<>,
       dict[
         'shape a to int' => shape('a' => 1),
         'shape a to null' => shape('a' => null),
       ],
     );
-    static::okayValues<shape(?'a' => int)>(
+    static::okayValues<shape(?'a' => int/*_*/)>(
       ShapeTestCodegenTargetClass::shapeOptionalAToInt<>,
       dict[
         'empty shape' => shape(),
@@ -89,7 +87,7 @@ final class ShapeTest extends HackTest {
         'shape a to null b to string' => shape('a' => null, 'b' => 'a'),
       ],
     );
-    static::okayValues<shape(?'a' => vec<int>)>(
+    static::okayValues<shape(?'a' => vec<int>/*_*/)>(
       ShapeTestCodegenTargetClass::shapeOptionalAVecOfInt<>,
       dict[
         'empty shape' => shape(),
@@ -105,7 +103,7 @@ final class ShapeTest extends HackTest {
         'shape a vec of int b string' => shape('a' => vec[1, 2, 3], 'b' => 'a'),
       ],
     );
-    static::okayValues<shape('☃' => vec<string>)>(
+    static::okayValues<shape('☃' => vec<string>/*_*/)>(
       ShapeTestCodegenTargetClass::shapeWithUnicodeKey<>,
       dict[
         'shape with unicode key' =>
@@ -113,7 +111,7 @@ final class ShapeTest extends HackTest {
       ],
     );
 
-    static::okayValues<shape('\'' => vec<string>)>(
+    static::okayValues<shape('\'' => vec<string>/*_*/)>(
       ShapeTestCodegenTargetClass::shapeWithQuoteInKey<>,
       dict[
         'shape with quote in key' => shape(
@@ -158,12 +156,15 @@ final class ShapeTest extends HackTest {
     // They are handed to us in a dict, which doesn't allow for duplicate keys.
     static::bodyOfMethodOughtToBe(
       'collidingKeys',
-      'return __SEED__ as shape(ShapeTest::ALSO_A => string);',
+      'return __SEED__ as shape(ShapeTest::ALSO_A => string/*_*/);',
     );
   }
 
   public function test_efficient_code()[defaults]: void {
-    static::bodyOfMethodOughtToBe('emptyShape', 'return __SEED__ as shape();');
+    static::bodyOfMethodOughtToBe(
+      'emptyShape',
+      'return __SEED__ as shape(/*_*/);',
+    );
     static::bodyOfMethodOughtToBe(
       'emptyShapeWithExtraFields',
       'return __SEED__ as shape(...);',

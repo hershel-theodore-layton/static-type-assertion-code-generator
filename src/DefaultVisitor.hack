@@ -32,6 +32,7 @@ final class DefaultVisitor
     private dict<string, string> $typeAliasAsserters,
     private (function(string)[]: nothing) $panic,
     private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
+    private shape(?'closed_shape_suffix' => string /*_*/) $options,
   )[] {}
 
   public function panic(string $message)[]: nothing {
@@ -224,7 +225,12 @@ final class DefaultVisitor
     bool $is_open,
   )[]: TypeDescription {
     return $this->resolveAlias($alias, false) ??
-      new ShapeTypeDescription($alias['counter'], $fields, $is_open);
+      new ShapeTypeDescription(
+        $alias['counter'],
+        $fields,
+        $is_open,
+        $this->options['closed_shape_suffix'] ?? '',
+      );
   }
 
   public function string(TAlias $alias)[]: TypeDescription {

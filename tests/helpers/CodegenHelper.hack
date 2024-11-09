@@ -11,7 +11,8 @@ use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
  */
 final class CodegenHelper implements \IDisposable {
   const string CODEGEN_BASE = __DIR__.'/../codegen/';
-  const type TMethods = dict<string, shape('body' => string, 'type' => string)>;
+  const type TMethods =
+    dict<string, shape('body' => string, 'type' => string /*_*/)>;
 
   private this::TMethods $methods = dict[];
   private string $file;
@@ -34,8 +35,11 @@ final class CodegenHelper implements \IDisposable {
       $name,
     );
 
+    $options = shape('closed_shape_suffix' => '/*_*/');
+
     $type = TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
       $shape_field_name_resolver ?? ($_, $_)[] ==> null,
+      $options,
     ));
 
     $this->methods[$name] = shape(
@@ -44,6 +48,7 @@ final class CodegenHelper implements \IDisposable {
           $table,
           panic<>,
           $shape_field_name_resolver,
+          $options,
         ),
       ),
       'type' => $type,

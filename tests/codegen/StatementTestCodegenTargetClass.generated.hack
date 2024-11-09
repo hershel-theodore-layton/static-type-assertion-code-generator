@@ -18,8 +18,8 @@ final class StatementTestCodegenTargetClass {
   }
   public static function statementInShape(
     mixed $htl_untyped_variable,
-  )[]: shape('a' => vec<int>) {
-    $out__1 = $htl_untyped_variable as shape('a' => mixed);
+  )[]: shape('a' => vec<int>/*_*/) {
+    $out__1 = $htl_untyped_variable as shape('a' => mixed/*_*/);
     $out__2 = vec[];
     foreach (($out__1['a'] as vec<_>) as $v__2) {
       $out__2[] = $v__2 as int;
@@ -59,7 +59,7 @@ final class StatementTestCodegenTargetClass {
       $out__3 = $v__1 as (mixed);
       $out__4 = vec[];
       foreach (($out__3[0] as vec<_>) as $v__4) {
-        $out__5 = $v__4 as shape('a' => mixed);
+        $out__5 = $v__4 as shape('a' => mixed/*_*/);
         $out__6 = vec[];
         foreach (($out__5['a'] as vec<_>) as $v__6) {
           $out__6[] =

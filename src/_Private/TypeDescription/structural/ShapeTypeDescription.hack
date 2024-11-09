@@ -10,6 +10,7 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     int $counter,
     private vec<ShapeField> $fields,
     private bool $allowsUnknownFields,
+    private string $closedShapeSuffix,
   )[] {
     parent::__construct($counter);
   }
@@ -92,7 +93,7 @@ final class ShapeTypeDescription extends BaseTypeDescription {
       |> Str\join($$, ', ')
       |> $this->allowsUnknownFields
         ? (C\is_empty($this->fields) ? $$.'...' : $$.', ...')
-        : $$
+        : $$.$this->closedShapeSuffix
       |> Str\format('shape(%s)', $$);
   }
 }
