@@ -32,7 +32,7 @@ final class DefaultVisitor
     private dict<string, string> $typeAliasAsserters,
     private (function(string)[]: nothing) $panic,
     private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
-    private shape(?'closed_shape_suffix' => string /*_*/) $options,
+    private shape(?'closed_shape_suffix' => string /*_*/) $options = shape(),
   )[] {}
 
   public function panic(string $message)[]: nothing {
