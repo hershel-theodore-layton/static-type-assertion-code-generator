@@ -3,5 +3,5 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class NonnullTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'nonnull';
-  use AssertUsingAs, NotASpecialType;
+  use AssertUsingAs, NotASpecialType, NotAUserSuppliedFunction;
 }

@@ -13,6 +13,8 @@ newtype TOpaqueInt = int;
 type TVecOfIntAlias = vec<int>;
 newtype TOpaqueVecOfIntAsVecOfInt as vec<int> = vec<int>;
 newtype TOpaqueVecOfInt = vec<int>;
+newtype TNullable = ?string;
+type TNullableShape = ?shape('a' => int, ...);
 
 final class NewtypeTest extends HackTest {
   use TestHelpers;
@@ -27,6 +29,19 @@ final class NewtypeTest extends HackTest {
         TOpaqueIntAsInt::class => '\\'.static::class.'::assertOpaqueIntAsInt',
       ],
     );
+    $ch->createMethod<TNullable>(
+      'nullIsPassedToInherentlyNullableUserFunction',
+      dict[
+        TNullable::class => '\\'.static::class.'::assertNullableWithSentinal',
+      ],
+    );
+    $ch->createMethod<?TNullable>(
+      'nullIsPassedToInherentlyNullableUserFunctionEvenWhenRedundantlyNullable',
+      dict[
+        TNullable::class => '\\'.static::class.'::assertNullableWithSentinal',
+      ],
+    );
+    $ch->createMethod<TNullableShape>('foo');
     $ch->createMethod<keyset<TOpaqueIntAsInt>>(
       'keysetOfTOpaqueIntAsInt',
       dict[
@@ -76,6 +91,21 @@ final class NewtypeTest extends HackTest {
         'dict TOpaqueIntAsInt to int' => dict[123 => -456],
       ],
     );
+  }
+
+  public function test_user_provided_functions_for_inherently_nullable_types_are_invoked_with_null(
+  )[defaults]: void {
+    $sentinal =
+      NewtypeTestCodegenTargetClass::nullIsPassedToInherentlyNullableUserFunction(
+        null,
+      );
+    expect($sentinal)->toEqual('sentinal');
+
+    $sentinal =
+      NewtypeTestCodegenTargetClass::nullIsPassedToInherentlyNullableUserFunctionEvenWhenRedundantlyNullable(
+        null,
+      );
+    expect($sentinal)->toEqual('sentinal');
   }
 
   public function test_types_backend_by_arraykeys_can_be_used_as_an_arraykey(
@@ -132,5 +162,9 @@ final class NewtypeTest extends HackTest {
     mixed $mixed,
   )[]: TNullableOpaqueIntAsNullableInt {
     return $mixed is null ? $mixed : static::assertOpaqueIntAsInt($mixed);
+  }
+
+  public static function assertNullableWithSentinal(mixed $mixed)[]: TNullable {
+    return $mixed is null ? 'sentinal' : $mixed as string;
   }
 }

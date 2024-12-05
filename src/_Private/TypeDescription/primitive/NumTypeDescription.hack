@@ -3,5 +3,5 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class NumTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'num';
-  use AssertUsingAs, NotASpecialType;
+  use AssertUsingAs, NotASpecialType, NotAUserSuppliedFunction;
 }

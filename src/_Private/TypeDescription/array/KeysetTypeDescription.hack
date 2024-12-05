@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 final class KeysetTypeDescription extends BaseTypeDescription {
-  use NotASpecialType, PrefersStatement;
+  use NotASpecialType, NotAUserSuppliedFunction, PrefersStatement;
 
   public function __construct(int $counter, private TypeDescription $key)[] {
     parent::__construct($counter);

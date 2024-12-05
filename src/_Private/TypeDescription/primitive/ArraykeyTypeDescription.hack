@@ -3,7 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class ArraykeyTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'arraykey';
-  use AssertUsingAs;
+  use AssertUsingAs, NotAUserSuppliedFunction;
 
   <<__Override>>
   public function exactlyArraykey()[]: bool {

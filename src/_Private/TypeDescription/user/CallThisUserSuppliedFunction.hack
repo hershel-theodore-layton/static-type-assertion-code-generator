@@ -30,6 +30,11 @@ final class CallThisUserSuppliedFunction extends BaseTypeDescription {
   }
 
   <<__Override>>
+  public function isUserSuppliedFunction()[]: bool {
+    return true;
+  }
+
+  <<__Override>>
   public function subtypeOfArraykey()[]: bool {
     return $this->isSubtypeOfArraykey;
   }

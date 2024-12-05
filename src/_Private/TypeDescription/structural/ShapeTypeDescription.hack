@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\{C, Str, Vec};
 
 final class ShapeTypeDescription extends BaseTypeDescription {
-  use NotASpecialType, PrefersStatement;
+  use NotASpecialType, NotAUserSuppliedFunction, PrefersStatement;
 
   public function __construct(
     int $counter,

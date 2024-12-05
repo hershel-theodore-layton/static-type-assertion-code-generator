@@ -3,7 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class IntTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'int';
-  use AssertUsingAs;
+  use AssertUsingAs, NotAUserSuppliedFunction;
 
   <<__Override>>
   public function exactlyArraykey()[]: bool {

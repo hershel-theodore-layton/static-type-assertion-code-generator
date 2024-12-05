@@ -3,5 +3,5 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class BoolTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'bool';
-  use AssertUsingAs, NotASpecialType;
+  use AssertUsingAs, NotASpecialType, NotAUserSuppliedFunction;
 }

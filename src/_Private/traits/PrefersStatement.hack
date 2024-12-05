@@ -8,6 +8,7 @@ trait PrefersStatement {
 
   protected abstract function getStatementFor(string $sub_expression)[]: string;
 
+  <<__Override>>
   final public function emitAssertionExpression(
     string $sub_expression,
   )[]: string {
@@ -16,6 +17,7 @@ trait PrefersStatement {
       : $this->getTmpVar();
   }
 
+  <<__Override>>
   final public function emitAssertionStatement(
     string $sub_expression,
   )[]: string {

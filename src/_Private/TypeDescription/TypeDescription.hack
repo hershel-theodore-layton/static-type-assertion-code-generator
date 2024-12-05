@@ -31,6 +31,9 @@ interface TypeDescription {
   // For bypassing upperbound value checks in arrays.
   public function exactlyMixed()[]: bool;
 
+  // For working around tests/why-user-supplied-function-is-special.md
+  public function isUserSuppliedFunction()[]: bool;
+
   // For upholding key type variance on construction of dict and keyset.
   public function subtypeOfArraykey()[]: bool;
 

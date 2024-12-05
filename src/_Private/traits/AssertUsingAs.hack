@@ -10,16 +10,19 @@ trait AssertUsingAs {
 
   abstract const string TYPE_NAME;
 
+  <<__Override>>
   final public function emitAssertionExpression(
     string $sub_expression,
   )[]: string {
     return Str\format('%s as %s', $sub_expression, static::TYPE_NAME);
   }
 
+  <<__Override>>
   final public function emitEnforceableType()[]: string {
     return static::TYPE_NAME;
   }
 
+  <<__Override>>
   final public function isEnforceable()[]: bool {
     return true;
   }

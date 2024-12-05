@@ -195,18 +195,22 @@ final class DefaultVisitor
     TAlias $alias,
     TypeDescription $inner,
   )[]: TypeDescription {
-    $alias_name = $alias['alias'];
-    $maybe_aliassed_inner = $this->resolveAlias($alias, false) ?? $inner;
+    $inner = $this->resolveAlias($alias, false) ?? $inner;
 
-    if ($alias_name is null) {
-      return
-        new NullableTypeDescription($alias['counter'], $maybe_aliassed_inner);
+    // See tests/why-user-supplied-function-is-special.md
+    if (!$inner->isUserSuppliedFunction()) {
+      return new NullableTypeDescription($alias['counter'], $inner);
     }
 
-    $rt = new \ReflectionTypeAlias($alias_name);
-    return $rt->getTypeStructure()['nullable'] ?? false
-      ? $maybe_aliassed_inner
-      : new NullableTypeDescription($alias['counter'], $maybe_aliassed_inner);
+    $alias_name = $alias['alias'];
+    invariant($alias_name is nonnull, 'How else would we get a USF?');
+
+    $alias_is_inherently_nullable = new \ReflectionTypeAlias($alias_name)
+      |> $$->getTypeStructure()['nullable'] ?? false;
+
+    return $alias_is_inherently_nullable
+      ? $inner
+      : new NullableTypeDescription($alias['counter'], $inner);
   }
 
   public function num(TAlias $alias)[]: TypeDescription {

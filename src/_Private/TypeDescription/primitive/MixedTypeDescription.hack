@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class MixedTypeDescription extends BaseTypeDescription {
-  use PrefersExpression;
+  use NotAUserSuppliedFunction, PrefersExpression;
 
   <<__Override>>
   public function isEnforceable()[]: bool {

@@ -3,5 +3,5 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class FloatTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'float';
-  use AssertUsingAs, NotASpecialType;
+  use AssertUsingAs, NotASpecialType, NotAUserSuppliedFunction;
 }

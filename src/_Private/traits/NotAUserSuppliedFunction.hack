@@ -1,17 +1,11 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\_Private;
 
-trait NotASpecialType {
+trait NotAUserSuppliedFunction {
   require implements TypeDescription;
-  use NotAnExactSpecialType;
 
   <<__Override>>
-  public function subtypeOfArraykey()[]: bool {
-    return false;
-  }
-
-  <<__Override>>
-  public function superTypeOfNull()[]: bool {
+  public function isUserSuppliedFunction()[]: bool {
     return false;
   }
 }

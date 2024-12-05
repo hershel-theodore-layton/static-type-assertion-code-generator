@@ -3,7 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 
 final class StringTypeDescription extends BaseTypeDescription {
   const string TYPE_NAME = 'string';
-  use AssertUsingAs, NotAnExactSpecialType;
+  use AssertUsingAs, NotAnExactSpecialType, NotAUserSuppliedFunction;
 
   <<__Override>>
   public function subtypeOfArraykey()[]: bool {

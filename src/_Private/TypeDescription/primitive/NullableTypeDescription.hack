@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\_Private;
 use namespace HH\Lib\Str;
 
 final class NullableTypeDescription extends BaseTypeDescription {
-  use NotAnExactSpecialType, PrefersStatement;
+  use NotAnExactSpecialType, NotAUserSuppliedFunction, PrefersStatement;
 
   public function __construct(int $counter, private TypeDescription $inner)[] {
     parent::__construct($counter);

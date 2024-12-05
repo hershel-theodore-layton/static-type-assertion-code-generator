@@ -20,6 +20,27 @@ final class NewtypeTestCodegenTargetClass {
     }
     return $out__1;
   }
+  public static function nullIsPassedToInherentlyNullableUserFunction(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TNullable {
+    return
+      \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertNullableWithSentinal(
+        $htl_untyped_variable,
+      );
+  }
+  public static function nullIsPassedToInherentlyNullableUserFunctionEvenWhenRedundantlyNullable(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TNullable {
+    return
+      \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertNullableWithSentinal(
+        $htl_untyped_variable,
+      );
+  }
+  public static function foo(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TNullableShape {
+    return $htl_untyped_variable as ?shape('a' => int, ...);
+  }
   public static function keysetOfTOpaqueIntAsInt(
     mixed $htl_untyped_variable,
   )[]: keyset<\HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt> {
