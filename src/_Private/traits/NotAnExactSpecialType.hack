@@ -13,7 +13,7 @@ trait NotAnExactSpecialType {
   public function exactlyInt()[]: bool {
     return false;
   }
-  
+
   <<__Override>>
   public function exactlyMixed()[]: bool {
     return false;
