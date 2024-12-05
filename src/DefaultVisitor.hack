@@ -196,14 +196,12 @@ final class DefaultVisitor
     TypeDescription $inner,
   )[]: TypeDescription {
     $inner = $this->resolveAlias($alias, false) ?? $inner;
+    $alias_name = $alias['alias'];
 
     // See tests/why-user-supplied-function-is-special.md
-    if (!$inner->isUserSuppliedFunction()) {
+    if (!$inner->isUserSuppliedFunction() || $alias_name is null) {
       return new NullableTypeDescription($alias['counter'], $inner);
     }
-
-    $alias_name = $alias['alias'];
-    invariant($alias_name is nonnull, 'How else would we get a USF?');
 
     $alias_is_inherently_nullable = new \ReflectionTypeAlias($alias_name)
       |> $$->getTypeStructure()['nullable'] ?? false;

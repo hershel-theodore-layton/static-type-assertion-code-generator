@@ -21,6 +21,10 @@ final class EnumTest extends HackTest {
       'someEnum',
       dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
     );
+    $ch->createMethod<?SomeEnum>(
+      'nullableEnum',
+      dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
+    );
     $ch->createMethod<keyset<SomeEnum>>(
       'keysetOfSomeEnum',
       dict[SomeEnum::class => '\\'.static::class.'::assertEnum'],
@@ -42,6 +46,13 @@ final class EnumTest extends HackTest {
     static::okayValues<SomeEnum>(
       EnumTestCodegenTargetClass::someEnum<>,
       dict['member of SomeEnum' => SomeEnum::ONE],
+    );
+  }
+
+  public function test_nullable_enums()[defaults]: void {
+    static::okayValues<?SomeEnum>(
+      EnumTestCodegenTargetClass::nullableEnum<>,
+      dict['member of SomeEnum' => SomeEnum::ONE, 'null' => null],
     );
   }
 

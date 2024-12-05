@@ -10,6 +10,18 @@ final class EnumTestCodegenTargetClass {
       $htl_untyped_variable,
     );
   }
+  public static function nullableEnum(
+    mixed $htl_untyped_variable,
+  )[]: ?\HTL\StaticTypeAssertionCodegen\Tests\SomeEnum {
+    if ($htl_untyped_variable is null) {
+      $out__1 = null;
+    } else {
+      $out__1 = \HTL\StaticTypeAssertionCodegen\Tests\EnumTest::assertEnum(
+        $htl_untyped_variable,
+      );
+    }
+    return $out__1;
+  }
   public static function keysetOfSomeEnum(
     mixed $htl_untyped_variable,
   )[]: keyset<\HTL\StaticTypeAssertionCodegen\Tests\SomeEnum> {
