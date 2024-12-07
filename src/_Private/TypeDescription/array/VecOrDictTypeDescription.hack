@@ -36,10 +36,10 @@ final class VecOrDictTypeDescription extends BaseTypeDescription {
     $value_statement = $this->value->emitAssertionStatement($var_v);
 
     return Str\format(
-      '%s = dict[]; '.
-      'foreach ((%s as vec_or_dict<_>) as %s => %s) { %s%s[%s] = %s; } '.
+      "%s = dict[]; \n".
+      "foreach ((%s as vec_or_dict<_>) as %s => %s) { \n%s%s[%s] = %s; \n} \n".
       // This fixup ensures that the vec'ness of the input matches the output.
-      '%s = %s is vec<_> ? vec(%s) : %s;',
+      "%s = %s is vec<_> ? vec(%s) : %s;\n",
       $var_out,
       $sub_expression,
       $var_k,

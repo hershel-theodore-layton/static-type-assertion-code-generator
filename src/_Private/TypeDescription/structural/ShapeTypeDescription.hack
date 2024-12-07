@@ -6,13 +6,16 @@ use namespace HH\Lib\{C, Str, Vec};
 final class ShapeTypeDescription extends BaseTypeDescription {
   use NotASpecialType, NotAUserSuppliedFunction, PrefersStatement;
 
+  private string $suffix;
+
   public function __construct(
     int $counter,
     private vec<ShapeField> $fields,
-    private bool $allowsUnknownFields,
-    private string $closedShapeSuffix,
+    private bool $allows_unknown_fields,
+    private string $closed_shape_suffix,
   )[] {
     parent::__construct($counter);
+    $this->suffix = $allows_unknown_fields ? '...' : $closed_shape_suffix;
   }
 
   <<__Override>>
@@ -30,7 +33,7 @@ final class ShapeTypeDescription extends BaseTypeDescription {
 
       if ($f->isOptional()) {
         $manual_override[] = Str\format(
-          'if (Shapes::keyExists(%s, %s)) { %s%s = %s; } else { Shapes::removeKey(inout %s, %s); }',
+          "if (Shapes::keyExists(%s, %s)) { \n%s%s = %s; \n} else { \nShapes::removeKey(inout %s, %s); \n}",
           $var_out,
           $f->getSourceRepr(),
           format_statements(
@@ -54,11 +57,11 @@ final class ShapeTypeDescription extends BaseTypeDescription {
     }
 
     return Str\format(
-      '%s = %s as %s; %s',
+      "%s = %s as %s; \n%s\n",
       $var_out,
       $sub_expression,
       $this->getRHSOfAs(),
-      Str\join($manual_override, ' '),
+      Str\join($manual_override, " \n"),
     );
   }
 
@@ -90,10 +93,8 @@ final class ShapeTypeDescription extends BaseTypeDescription {
         );
       },
     )
-      |> Str\join($$, ', ')
-      |> $this->allowsUnknownFields
-        ? (C\is_empty($this->fields) ? $$.'...' : $$.', ...')
-        : $$.$this->closedShapeSuffix
-      |> Str\format('shape(%s)', $$);
+      |> Vec\concat($$, vec[$this->suffix])
+      |> Str\join($$, ", \n")
+      |> Str\format("shape(\n%s)", $$);
   }
 }

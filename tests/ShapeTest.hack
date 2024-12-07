@@ -156,7 +156,7 @@ final class ShapeTest extends HackTest {
     // They are handed to us in a dict, which doesn't allow for duplicate keys.
     static::bodyOfMethodOughtToBe(
       'collidingKeys',
-      'return __SEED__ as shape(ShapeTest::ALSO_A => string/*_*/);',
+      'return __SEED__ as shape(ShapeTest::ALSO_A => string, /*_*/);',
     );
   }
 

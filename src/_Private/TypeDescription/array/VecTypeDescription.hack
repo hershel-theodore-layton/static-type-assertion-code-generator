@@ -16,7 +16,7 @@ final class VecTypeDescription extends BaseTypeDescription {
     $var_v = $this->suffixVariable('$v');
 
     return Str\format(
-      '%s = vec[]; foreach ((%s as vec<_>) as %s) { %s%s[] = %s; }',
+      "%s = vec[]; \nforeach ((%s as vec<_>) as %s) { \n%s%s[] = %s; \n}\n",
       $var_out,
       $sub_expression,
       $var_v,

@@ -21,6 +21,7 @@ final class VecOrDictTestCodegenTargetClass {
       $out__1[$k__1 as int] = $v__1;
     }
     $out__1 = $htl_untyped_variable is vec<_> ? vec($out__1) : $out__1;
+
     return $out__1;
   }
   public static function validateValue(
@@ -35,6 +36,7 @@ final class VecOrDictTestCodegenTargetClass {
       $out__1[$k__1] = $out__2;
     }
     $out__1 = $htl_untyped_variable is vec<_> ? vec($out__1) : $out__1;
+
     return $out__1;
   }
   public static function validateKeyAndValue(
@@ -49,6 +51,7 @@ final class VecOrDictTestCodegenTargetClass {
       $out__1[$k__1 as int] = $out__3;
     }
     $out__1 = $htl_untyped_variable is vec<_> ? vec($out__1) : $out__1;
+
     return $out__1;
   }
 }

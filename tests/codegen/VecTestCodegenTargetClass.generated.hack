@@ -8,6 +8,7 @@ final class VecTestCodegenTargetClass {
     foreach (($htl_untyped_variable as vec<_>) as $v__1) {
       $out__1[] = $v__1 as num;
     }
+
     return $out__1;
   }
   public static function vecOfMixed(mixed $htl_untyped_variable)[]: vec<mixed> {

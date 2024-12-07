@@ -38,8 +38,10 @@ final abstract class AssertJsonShape {
         'in_reply_to_user_id' => ?int,
         'in_reply_to_user_id_str' => ?string,
         'lang' => string,
-        'metadata' =>
-          shape('iso_language_code' => string, 'result_type' => string),
+        'metadata' => shape(
+          'iso_language_code' => string,
+          'result_type' => string,
+        ),
         'place' => null,
         ?'possibly_sensitive' => bool,
         'retweet_count' => int,
@@ -68,8 +70,10 @@ final abstract class AssertJsonShape {
           'in_reply_to_user_id' => ?int,
           'in_reply_to_user_id_str' => ?string,
           'lang' => string,
-          'metadata' =>
-            shape('iso_language_code' => string, 'result_type' => string),
+          'metadata' => shape(
+            'iso_language_code' => string,
+            'result_type' => string,
+          ),
           'place' => null,
           ?'possibly_sensitive' => bool,
           'retweet_count' => int,
@@ -89,6 +93,7 @@ final abstract class AssertJsonShape {
       $out__12[] = $out__13;
     }
     $out__1['statuses'] = $out__12;
+
     return $out__1;
   }
   private static function assertTEntities(
@@ -103,7 +108,10 @@ final abstract class AssertJsonShape {
     );
     $out__2 = vec[];
     foreach (($out__1['hashtags'] as vec<_>) as $v__2) {
-      $out__3 = $v__2 as shape('indices' => mixed, 'text' => string);
+      $out__3 = $v__2 as shape(
+        'indices' => mixed,
+        'text' => string,
+      );
       $out__4 = vec[];
       foreach (($out__3['indices'] as vec<_>) as $v__4) {
         $out__4[] = $v__4 as int;
@@ -124,10 +132,26 @@ final abstract class AssertJsonShape {
           'media_url' => string,
           'media_url_https' => string,
           'sizes' => shape(
-            'large' => shape('h' => int, 'resize' => string, 'w' => int),
-            'medium' => shape('h' => int, 'resize' => string, 'w' => int),
-            'small' => shape('h' => int, 'resize' => string, 'w' => int),
-            'thumb' => shape('h' => int, 'resize' => string, 'w' => int),
+            'large' => shape(
+              'h' => int,
+              'resize' => string,
+              'w' => int,
+            ),
+            'medium' => shape(
+              'h' => int,
+              'resize' => string,
+              'w' => int,
+            ),
+            'small' => shape(
+              'h' => int,
+              'resize' => string,
+              'w' => int,
+            ),
+            'thumb' => shape(
+              'h' => int,
+              'resize' => string,
+              'w' => int,
+            ),
           ),
           ?'source_status_id' => int,
           ?'source_status_id_str' => string,
@@ -183,6 +207,7 @@ final abstract class AssertJsonShape {
       $out__47[] = $out__48;
     }
     $out__1['user_mentions'] = $out__47;
+
     return $out__1;
   }
   private static function assertTUser(mixed $htl_untyped_variable)[]: TUser {
@@ -228,9 +253,13 @@ final abstract class AssertJsonShape {
       'utc_offset' => ?int,
       'verified' => bool,
     );
-    $out__7 = $out__1['entities']
-      as shape('description' => mixed, ?'url' => mixed);
-    $out__8 = $out__7['description'] as shape('urls' => mixed);
+    $out__7 = $out__1['entities'] as shape(
+      'description' => mixed,
+      ?'url' => mixed,
+    );
+    $out__8 = $out__7['description'] as shape(
+      'urls' => mixed,
+    );
     $out__9 = vec[];
     foreach (($out__8['urls'] as vec<_>) as $v__9) {
       $out__10 = $v__9 as shape(
@@ -249,7 +278,9 @@ final abstract class AssertJsonShape {
     $out__8['urls'] = $out__9;
     $out__7['description'] = $out__8;
     if (Shapes::keyExists($out__7, 'url')) {
-      $out__16 = $out__7['url'] as shape('urls' => mixed);
+      $out__16 = $out__7['url'] as shape(
+        'urls' => mixed,
+      );
       $out__17 = vec[];
       foreach (($out__16['urls'] as vec<_>) as $v__17) {
         $out__18 = $v__17 as shape(
@@ -271,6 +302,7 @@ final abstract class AssertJsonShape {
       Shapes::removeKey(inout $out__7, 'url');
     }
     $out__1['entities'] = $out__7;
+
     return $out__1;
   }
 }

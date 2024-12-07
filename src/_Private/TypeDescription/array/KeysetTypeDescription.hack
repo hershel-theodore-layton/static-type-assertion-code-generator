@@ -20,7 +20,7 @@ final class KeysetTypeDescription extends BaseTypeDescription {
     $var_k = $this->suffixVariable('$k');
 
     return Str\format(
-      '%s = keyset[]; foreach ((%s as keyset<_>) as %s) { %s[] = %s; }',
+      "%s = keyset[]; \nforeach ((%s as keyset<_>) as %s) { \n%s[] = %s; \n}\n",
       $var_out,
       $sub_expression,
       $var_k,

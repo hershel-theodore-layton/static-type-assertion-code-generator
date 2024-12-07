@@ -64,6 +64,8 @@ trait TestHelpers {
   )[defaults]: void {
     $body = Str\replace($expression, '__SEED__', '$htl_untyped_variable');
     invariant(self::$code is nonnull, 'No code has been generated yet');
-    expect(self::$code[$method]['body'])->toEqual($body);
+    $generated_without_newlines =
+      Str\replace(self::$code[$method]['body'], "\n", '');
+    expect($generated_without_newlines)->toEqual($body);
   }
 }

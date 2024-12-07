@@ -32,7 +32,7 @@ final class DictTypeDescription extends BaseTypeDescription {
     $value_statement = $this->value->emitAssertionStatement($var_v);
 
     return Str\format(
-      '%s = dict[]; foreach ((%s as dict<_, _>) as %s => %s) { %s%s[%s] = %s; }',
+      "%s = dict[]; \nforeach ((%s as dict<_, _>) as %s => %s) { \n%s%s[%s] = %s; \n}\n",
       $var_out,
       $sub_expression,
       $var_k,

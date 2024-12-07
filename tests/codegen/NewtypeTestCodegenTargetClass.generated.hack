@@ -18,6 +18,7 @@ final class NewtypeTestCodegenTargetClass {
           $v__1,
         );
     }
+
     return $out__1;
   }
   public static function nullIsPassedToInherentlyNullableUserFunction(
@@ -39,7 +40,10 @@ final class NewtypeTestCodegenTargetClass {
   public static function foo(
     mixed $htl_untyped_variable,
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TNullableShape {
-    return $htl_untyped_variable as ?shape('a' => int, ...);
+    return $htl_untyped_variable as ?shape(
+      'a' => int,
+      ...
+    );
   }
   public static function keysetOfTOpaqueIntAsInt(
     mixed $htl_untyped_variable,
@@ -51,6 +55,7 @@ final class NewtypeTestCodegenTargetClass {
           $k__1,
         );
     }
+
     return $out__1;
   }
   public static function vecOfNullableTOpaqueIntAsInt(
@@ -68,6 +73,7 @@ final class NewtypeTestCodegenTargetClass {
       }
       $out__1[] = $out__2;
     }
+
     return $out__1;
   }
   public static function vecOfNullableTNullableOpaqueIntAsNullableInt(
@@ -80,6 +86,7 @@ final class NewtypeTestCodegenTargetClass {
           $v__1,
         );
     }
+
     return $out__1;
   }
 }

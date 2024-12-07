@@ -23,5 +23,5 @@ function emit_body_for_assertion_function(
   $expression =
     'return '.$type_desc->emitAssertionExpression('$htl_untyped_variable').';';
 
-  return Vec\filter(vec[$statement, $expression]) |> Str\join($$, ' ');
+  return Vec\filter(vec[$statement, $expression]) |> Str\join($$, " \n");
 }

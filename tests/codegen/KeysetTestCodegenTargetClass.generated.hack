@@ -10,6 +10,7 @@ final class KeysetTestCodegenTargetClass {
     foreach (($htl_untyped_variable as keyset<_>) as $k__1) {
       $out__1[] = $k__1 as string;
     }
+
     return $out__1;
   }
   public static function keysetOfArrayKey(
