@@ -30,7 +30,6 @@ final class EnumTestCodegenTargetClass {
       $out__1[] =
         \HTL\StaticTypeAssertionCodegen\Tests\EnumTest::assertEnum($k__1);
     }
-
     return $out__1;
   }
 }

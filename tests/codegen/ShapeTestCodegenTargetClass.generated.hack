@@ -57,7 +57,6 @@ final class ShapeTestCodegenTargetClass {
     } else {
       Shapes::removeKey(inout $out__1, 'a');
     }
-
     return $out__1;
   }
   public static function shapeOptionalAVecOfIntBStringWithExtraFields(
@@ -77,7 +76,6 @@ final class ShapeTestCodegenTargetClass {
     } else {
       Shapes::removeKey(inout $out__1, 'a');
     }
-
     return $out__1;
   }
   public static function shapeWithUnicodeKey(
@@ -92,7 +90,6 @@ final class ShapeTestCodegenTargetClass {
       $out__2[] = $v__2 as string;
     }
     $out__1['☃'] = $out__2;
-
     return $out__1;
   }
   public static function shapeWithQuoteInKey(
@@ -107,7 +104,6 @@ final class ShapeTestCodegenTargetClass {
       $out__2[] = $v__2 as string;
     }
     $out__1['\''] = $out__2;
-
     return $out__1;
   }
   public static function collidingKeys(

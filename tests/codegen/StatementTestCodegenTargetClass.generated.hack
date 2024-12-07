@@ -14,7 +14,6 @@ final class StatementTestCodegenTargetClass {
       }
       $out__1[$k__1 as int] = $out__3;
     }
-
     return $out__1;
   }
   public static function statementInShape(
@@ -29,7 +28,6 @@ final class StatementTestCodegenTargetClass {
       $out__2[] = $v__2 as int;
     }
     $out__1['a'] = $out__2;
-
     return $out__1;
   }
   public static function statementInTuple(
@@ -54,7 +52,6 @@ final class StatementTestCodegenTargetClass {
       }
       $out__1[] = $out__2;
     }
-
     return $out__1;
   }
   public static function deeplyNestedStatement(
@@ -82,7 +79,6 @@ final class StatementTestCodegenTargetClass {
       $out__3 = tuple($out__4);
       $out__1[$k__1 as int] = $out__3;
     }
-
     return $out__1;
   }
 }

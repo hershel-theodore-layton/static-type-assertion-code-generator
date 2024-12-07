@@ -10,7 +10,6 @@ final class DictTestCodegenTargetClass {
     foreach (($htl_untyped_variable as dict<_, _>) as $k__1 => $v__1) {
       $out__1[$k__1 as int] = $v__1 as bool;
     }
-
     return $out__1;
   }
   public static function dictArraykeyToBool(
@@ -20,7 +19,6 @@ final class DictTestCodegenTargetClass {
     foreach (($htl_untyped_variable as dict<_, _>) as $k__1 => $v__1) {
       $out__1[$k__1] = $v__1 as bool;
     }
-
     return $out__1;
   }
   public static function dictStringToMixed(
@@ -30,7 +28,6 @@ final class DictTestCodegenTargetClass {
     foreach (($htl_untyped_variable as dict<_, _>) as $k__1 => $v__1) {
       $out__1[$k__1 as string] = $v__1;
     }
-
     return $out__1;
   }
   public static function dictArraykeyToMixed(

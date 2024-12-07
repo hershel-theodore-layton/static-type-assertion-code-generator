@@ -18,7 +18,6 @@ final class NewtypeTestCodegenTargetClass {
           $v__1,
         );
     }
-
     return $out__1;
   }
   public static function nullIsPassedToInherentlyNullableUserFunction(
@@ -55,7 +54,6 @@ final class NewtypeTestCodegenTargetClass {
           $k__1,
         );
     }
-
     return $out__1;
   }
   public static function vecOfNullableTOpaqueIntAsInt(
@@ -73,7 +71,6 @@ final class NewtypeTestCodegenTargetClass {
       }
       $out__1[] = $out__2;
     }
-
     return $out__1;
   }
   public static function vecOfNullableTNullableOpaqueIntAsNullableInt(
@@ -86,7 +83,6 @@ final class NewtypeTestCodegenTargetClass {
           $v__1,
         );
     }
-
     return $out__1;
   }
 }
