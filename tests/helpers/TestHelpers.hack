@@ -3,7 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type Facebook\HackTest\{ExpectationFailedException, HackTest};
 use namespace HH\Lib\{C, Str};
-use function Facebook\FBExpect\expect;
+use function HTL\Expect\expect;
 
 trait TestHelpers {
   require extends HackTest;
@@ -31,7 +31,7 @@ trait TestHelpers {
     foreach ($values as $name => $value) {
       try {
         $new_value = $assertion($value);
-        expect($new_value)->toEqual($value, '%s was not preserved', $name);
+        expect($new_value)->toEqual($value);
       } catch (\TypeAssertionException $e) {
         throw new ExpectationFailedException(Str\format(
           'Expected %s to pass the assertion, but got: %s',

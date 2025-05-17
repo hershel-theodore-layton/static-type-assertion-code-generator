@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 use namespace HH\Lib\Str;
 use namespace HTL\StaticTypeAssertionCodegen;
 use type Facebook\HackTest\HackTest;
-use function Facebook\FBExpect\expect;
+use function HTL\Expect\{expect, expect_invoked};
 
 type TIntAlias = int;
 newtype TOpaqueIntAsInt as int = int;
@@ -66,11 +66,10 @@ final class NewtypeTest extends HackTest {
 
   public function test_throws_when_no_newtype_handler_was_provided(
   )[defaults]: void {
-    expect(
+    expect_invoked(
       () ==> StaticTypeAssertionCodegen\from_type<TOpaqueInt>(dict[], panic<>),
     )
-      ->toThrow(
-        InvariantException::class,
+      ->toHaveThrown<InvariantException>(
         'This type is a newtype and no $type_alias_asserters entry was provided.',
       );
   }

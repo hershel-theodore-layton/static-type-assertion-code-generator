@@ -2,7 +2,7 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type Facebook\HackTest\HackTest;
-use function Facebook\FBExpect\expect;
+use function HTL\Expect\expect_invoked;
 use function HTL\StaticTypeAssertionCodegen\from_type;
 
 final class VecOrDictTest extends HackTest {
@@ -20,8 +20,8 @@ final class VecOrDictTest extends HackTest {
   }
 
   public function test_bad_input()[defaults]: void {
-    expect(() ==> from_type<vec_or_dict<string, int>>(dict[], panic<>))
-      ->toThrow(InvariantException::class, 'EXACTLY arraykey or int');
+    expect_invoked(() ==> from_type<vec_or_dict<string, int>>(dict[], panic<>))
+      ->toHaveThrown<InvariantException>('EXACTLY arraykey or int');
   }
 
   public function test_okay_values()[defaults]: void {

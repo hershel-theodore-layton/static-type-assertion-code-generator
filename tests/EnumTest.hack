@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 use namespace HH\Lib\{C, Str};
 use namespace HTL\StaticTypeAssertionCodegen;
 use type Facebook\HackTest\HackTest;
-use function Facebook\FBExpect\expect;
+use function HTL\Expect\{expect, expect_invoked};
 
 enum SomeEnum: int {
   ONE = 1;
@@ -33,11 +33,10 @@ final class EnumTest extends HackTest {
 
   public function test_throws_when_no_enum_handler_was_provided(
   )[defaults]: void {
-    expect(
+    expect_invoked(
       () ==> StaticTypeAssertionCodegen\from_type<SomeEnum>(dict[], panic<>),
     )
-      ->toThrow(
-        InvariantException::class,
+      ->toHaveThrown<InvariantException>(
         'Support for enums must be added using a $type_alias_asserters entry',
       );
   }
