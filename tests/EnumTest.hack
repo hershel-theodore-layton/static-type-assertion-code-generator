@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 use namespace HH\Lib\{C, Str};
 use namespace HTL\StaticTypeAssertionCodegen;
 use type Facebook\HackTest\HackTest;
-use function HTL\Expect\{expect, expect_invoked};
+use function HTL\Expect\expect_invoked;
 
 enum SomeEnum: int {
   ONE = 1;
