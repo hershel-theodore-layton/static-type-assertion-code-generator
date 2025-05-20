@@ -3,23 +3,28 @@
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 final class ShapeTestCodegenTargetClass {
-  public static function emptyShape(
-    mixed $htl_untyped_variable,
-  )[]: shape(/*_*/) {
+  public static function emptyShape(mixed $htl_untyped_variable)[]: shape(
+    /*_*/
+  ) {
     return $htl_untyped_variable as shape(
       /*_*/
     );
   }
   public static function emptyShapeWithExtraFields(
     mixed $htl_untyped_variable,
-  )[]: shape(...) {
+  )[]: shape(
+    ...
+  ) {
     return $htl_untyped_variable as shape(
       ...
     );
   }
   public static function shapeAToNullableInt(
     mixed $htl_untyped_variable,
-  )[]: shape('a' => ?int/*_*/) {
+  )[]: shape(
+    'a' => ?int,
+    /*_*/
+  ) {
     return $htl_untyped_variable as shape(
       'a' => ?int,
       /*_*/
@@ -27,7 +32,10 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeOptionalAToInt(
     mixed $htl_untyped_variable,
-  )[]: shape(?'a' => int/*_*/) {
+  )[]: shape(
+    ?'a' => int,
+    /*_*/
+  ) {
     return $htl_untyped_variable as shape(
       ?'a' => int,
       /*_*/
@@ -35,7 +43,10 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function nullableShapeOptionalAToNullableIntWithExtraFields(
     mixed $htl_untyped_variable,
-  )[]: ?shape(?'a' => ?int, ...) {
+  )[]: ?shape(
+    ?'a' => ?int,
+    ...
+  ) {
     return $htl_untyped_variable as ?shape(
       ?'a' => ?int,
       ...
@@ -43,7 +54,10 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeOptionalAVecOfInt(
     mixed $htl_untyped_variable,
-  )[]: shape(?'a' => vec<int>/*_*/) {
+  )[]: shape(
+    ?'a' => vec<int>,
+    /*_*/
+  ) {
     $out__1 = $htl_untyped_variable as shape(
       ?'a' => mixed,
       /*_*/
@@ -61,7 +75,11 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeOptionalAVecOfIntBStringWithExtraFields(
     mixed $htl_untyped_variable,
-  )[]: shape(?'a' => vec<int>, 'b' => string, ...) {
+  )[]: shape(
+    ?'a' => vec<int>,
+    'b' => string,
+    ...
+  ) {
     $out__1 = $htl_untyped_variable as shape(
       ?'a' => mixed,
       'b' => string,
@@ -80,7 +98,10 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeWithUnicodeKey(
     mixed $htl_untyped_variable,
-  )[]: shape('☃' => vec<string>/*_*/) {
+  )[]: shape(
+    '☃' => vec<string>,
+    /*_*/
+  ) {
     $out__1 = $htl_untyped_variable as shape(
       '☃' => mixed,
       /*_*/
@@ -94,7 +115,10 @@ final class ShapeTestCodegenTargetClass {
   }
   public static function shapeWithQuoteInKey(
     mixed $htl_untyped_variable,
-  )[]: shape('\'' => vec<string>/*_*/) {
+  )[]: shape(
+    '\'' => vec<string>,
+    /*_*/
+  ) {
     $out__1 = $htl_untyped_variable as shape(
       '\'' => mixed,
       /*_*/
@@ -106,9 +130,10 @@ final class ShapeTestCodegenTargetClass {
     $out__1['\''] = $out__2;
     return $out__1;
   }
-  public static function collidingKeys(
-    mixed $htl_untyped_variable,
-  )[]: shape(ShapeTest::ALSO_A => string/*_*/) {
+  public static function collidingKeys(mixed $htl_untyped_variable)[]: shape(
+    ShapeTest::ALSO_A => string,
+    /*_*/
+  ) {
     return $htl_untyped_variable as shape(
       ShapeTest::ALSO_A => string,
       /*_*/

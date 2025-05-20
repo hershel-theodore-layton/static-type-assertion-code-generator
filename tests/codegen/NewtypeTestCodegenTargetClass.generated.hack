@@ -11,30 +11,20 @@ final class NewtypeTestCodegenTargetClass {
   > {
     $out__1 = dict[];
     foreach (($htl_untyped_variable as dict<_, _>) as $k__1 => $v__1) {
-      $out__1[\HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertOpaqueIntAsInt(
-        $k__1,
-      )] =
-        \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertOpaqueIntAsInt(
-          $v__1,
-        );
+      $out__1[assert_opaque_int_as_int($k__1)] =
+        assert_opaque_int_as_int($v__1);
     }
     return $out__1;
   }
   public static function nullIsPassedToInherentlyNullableUserFunction(
     mixed $htl_untyped_variable,
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TNullable {
-    return
-      \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertNullableWithSentinal(
-        $htl_untyped_variable,
-      );
+    return assert_nullable_with_sentinal($htl_untyped_variable);
   }
   public static function nullIsPassedToInherentlyNullableUserFunctionEvenWhenRedundantlyNullable(
     mixed $htl_untyped_variable,
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TNullable {
-    return
-      \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertNullableWithSentinal(
-        $htl_untyped_variable,
-      );
+    return assert_nullable_with_sentinal($htl_untyped_variable);
   }
   public static function foo(
     mixed $htl_untyped_variable,
@@ -49,10 +39,7 @@ final class NewtypeTestCodegenTargetClass {
   )[]: keyset<\HTL\StaticTypeAssertionCodegen\Tests\TOpaqueIntAsInt> {
     $out__1 = keyset[];
     foreach (($htl_untyped_variable as keyset<_>) as $k__1) {
-      $out__1[] =
-        \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertOpaqueIntAsInt(
-          $k__1,
-        );
+      $out__1[] = assert_opaque_int_as_int($k__1);
     }
     return $out__1;
   }
@@ -64,10 +51,7 @@ final class NewtypeTestCodegenTargetClass {
       if ($v__1 is null) {
         $out__2 = null;
       } else {
-        $out__2 =
-          \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertOpaqueIntAsInt(
-            $v__1,
-          );
+        $out__2 = assert_opaque_int_as_int($v__1);
       }
       $out__1[] = $out__2;
     }
@@ -78,10 +62,7 @@ final class NewtypeTestCodegenTargetClass {
   )[]: vec<\HTL\StaticTypeAssertionCodegen\Tests\TNullableOpaqueIntAsNullableInt> {
     $out__1 = vec[];
     foreach (($htl_untyped_variable as vec<_>) as $v__1) {
-      $out__1[] =
-        \HTL\StaticTypeAssertionCodegen\Tests\NewtypeTest::assertNullableOpaqueIntAsNullableInt(
-          $v__1,
-        );
+      $out__1[] = assert_nullable_opaque_int_as_nullable_int($v__1);
     }
     return $out__1;
   }

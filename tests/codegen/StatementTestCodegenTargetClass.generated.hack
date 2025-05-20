@@ -16,9 +16,10 @@ final class StatementTestCodegenTargetClass {
     }
     return $out__1;
   }
-  public static function statementInShape(
-    mixed $htl_untyped_variable,
-  )[]: shape('a' => vec<int>/*_*/) {
+  public static function statementInShape(mixed $htl_untyped_variable)[]: shape(
+    'a' => vec<int>,
+    /*_*/
+  ) {
     $out__1 = $htl_untyped_variable as shape(
       'a' => mixed,
       /*_*/
@@ -68,10 +69,7 @@ final class StatementTestCodegenTargetClass {
         );
         $out__6 = vec[];
         foreach (($out__5['a'] as vec<_>) as $v__6) {
-          $out__6[] =
-            \HTL\StaticTypeAssertionCodegen\Tests\StatementTest::hiddenInt(
-              $v__6,
-            );
+          $out__6[] = hidden_int($v__6);
         }
         $out__5['a'] = $out__6;
         $out__4[] = $out__5;
