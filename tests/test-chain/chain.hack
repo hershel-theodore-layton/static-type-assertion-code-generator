@@ -3,9 +3,10 @@ namespace HTL\Project_BEjhs0zCRby4\GeneratedTestChain;
 
 use namespace HTL\TestChain;
 
-async function tests_async(
-)[defaults]: Awaitable<TestChain\ChainController<TestChain\Chain>> {
-  return TestChain\ChainController::create(TestChain\TestChain::create<>)
+async function tests_async<T as TestChain\Chain>(
+  TestChain\ChainController<T> $controller
+)[defaults]: Awaitable<TestChain\ChainController<T>> {
+  return $controller
     ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\dict_test<>)
     ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\enum_test<>)
     ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\keyset_test<>)
