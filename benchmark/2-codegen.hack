@@ -1,14 +1,18 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
-use namespace HTL\StaticTypeAssertionCodegen;
+use namespace HH;
 use namespace HH\Lib\Str;
+use namespace HTL\StaticTypeAssertionCodegen;
 use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
 
 <<__EntryPoint>>
 async function codegen_async(): Awaitable<void> {
-  require_once __DIR__.'/../vendor/autoload.hack';
-  \Facebook\AutoloadMap\initialize();
+  $autoloader = __DIR__.'/../vendor/autoload.hack';
+  if (HH\could_include($autoloader)) {
+    require_once $autoloader;
+    HH\dynamic_fun('Facebook\AutoloadMap\initialize')();
+  }
 
   $panic = ($message)[]: nothing ==> {
     throw new \Exception($message);

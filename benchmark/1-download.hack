@@ -1,12 +1,16 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
+use namespace HH;
 use namespace HH\Asio;
 
 <<__EntryPoint>>
 async function download_async(): Awaitable<void> {
-  require_once __DIR__.'/../vendor/autoload.hack';
-  \Facebook\AutoloadMap\initialize();
+  $autoloader = __DIR__.'/../vendor/autoload.hack';
+  if (HH\could_include($autoloader)) {
+    require_once $autoloader;
+    HH\dynamic_fun('Facebook\AutoloadMap\initialize')();
+  }
 
   $cache_file = __DIR__.'/benchmark.json';
   $file_url =
