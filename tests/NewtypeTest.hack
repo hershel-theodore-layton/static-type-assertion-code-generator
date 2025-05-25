@@ -119,27 +119,7 @@ function newtype_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
         NewtypeTestCodegenTargetClass::vecOfNullableTOpaqueIntAsInt<>,
         dict['null' => vec[null], 'int' => vec[6]],
       );
-    })
-    ->test(
-      'test_if_this_test_fails_you_can_remove_the_cleaning_opaque_reflection_hack',
-      () ==> {
-        // This reflection hack has since been moved to the HTL\TypeVisitor repo.
-        expect(
-          Shapes::idx(
-            \HH\ReifiedGenerics\get_type_structure<TOpaqueVecOfIntAsVecOfInt>(),
-            'opaque',
-            '<missing>',
-          ),
-        )->toEqual('<missing>');
-        expect(
-          Shapes::idx(
-            \HH\ReifiedGenerics\get_type_structure<TOpaqueVecOfInt>(),
-            'opaque',
-            '<missing>',
-          ),
-        )->toEqual('<missing>');
-      },
-    );
+    });
 }
 
 function assert_opaque_int_as_int(mixed $mixed)[]: TOpaqueIntAsInt {
