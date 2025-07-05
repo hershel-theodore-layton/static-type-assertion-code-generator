@@ -22,39 +22,39 @@ function newtype_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
   $ch->createMethod<dict<TOpaqueIntAsInt, TOpaqueIntAsInt>>(
     'opaquenessUsingUserResolvedFunctions',
     dict[
-      TOpaqueIntAsInt::class => 'assert_opaque_int_as_int',
+      (string)TOpaqueIntAsInt::class => 'assert_opaque_int_as_int',
     ],
   );
   $ch->createMethod<TNullable>(
     'nullIsPassedToInherentlyNullableUserFunction',
     dict[
-      TNullable::class => 'assert_nullable_with_sentinal',
+      (string)TNullable::class => 'assert_nullable_with_sentinal',
     ],
   );
   $ch->createMethod<?TNullable>(
     'nullIsPassedToInherentlyNullableUserFunctionEvenWhenRedundantlyNullable',
     dict[
-      TNullable::class => 'assert_nullable_with_sentinal',
+      (string)TNullable::class => 'assert_nullable_with_sentinal',
     ],
   );
   $ch->createMethod<TNullableShape>('foo');
   $ch->createMethod<keyset<TOpaqueIntAsInt>>(
     'keysetOfTOpaqueIntAsInt',
     dict[
-      TOpaqueIntAsInt::class => 'assert_opaque_int_as_int',
+      (string)TOpaqueIntAsInt::class => 'assert_opaque_int_as_int',
     ],
   );
   $ch->createMethod<vec<?TOpaqueIntAsInt>>(
     'vecOfNullableTOpaqueIntAsInt',
     dict[
-      TOpaqueIntAsInt::class => 'assert_opaque_int_as_int',
+      (string)TOpaqueIntAsInt::class => 'assert_opaque_int_as_int',
     ],
   );
 
   $ch->createMethod<vec<?TNullableOpaqueIntAsNullableInt>>(
     'vecOfNullableTNullableOpaqueIntAsNullableInt',
     dict[
-      TNullableOpaqueIntAsNullableInt::class =>
+      (string)TNullableOpaqueIntAsNullableInt::class =>
         'assert_nullable_opaque_int_as_nullable_int',
     ],
   );
@@ -127,7 +127,7 @@ function assert_opaque_int_as_int(mixed $mixed)[]: TOpaqueIntAsInt {
     throw new \TypeAssertionException(
       Str\format(
         'Expected a %s, got a negative integer',
-        TOpaqueIntAsInt::class,
+        (string)TOpaqueIntAsInt::class,
       ),
     );
   }

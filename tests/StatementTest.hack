@@ -17,7 +17,7 @@ function statement_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
   $ch->createMethod<vec<vec<int>>>('statementInVec');
   $ch->createMethod<DeeplyNested>(
     'deeplyNestedStatement',
-    dict[HiddenInt::class => 'hidden_int'],
+    dict[(string)HiddenInt::class => 'hidden_int'],
   );
 
   return $chain->group(__FUNCTION__);

@@ -40,8 +40,8 @@ HACK
   StaticTypeAssertionCodegen\emit_body_for_assertion_function(
     StaticTypeAssertionCodegen\from_type<JsonShape>(
       dict[
-        TEntities::class => 'self::assertTEntities',
-        TUser::class => 'self::assertTUser',
+        (string)TEntities::class => 'self::assertTEntities',
+        (string)TUser::class => 'self::assertTUser',
       ],
       $panic,
     ),

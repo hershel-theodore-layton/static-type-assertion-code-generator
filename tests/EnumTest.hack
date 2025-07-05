@@ -15,15 +15,15 @@ function enum_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
   using $ch = $helper->newCodegenHelper('EnumTest');
   $ch->createMethod<SomeEnum>(
     'someEnum',
-    dict[SomeEnum::class => 'assert_enum'],
+    dict[(string)SomeEnum::class => 'assert_enum'],
   );
   $ch->createMethod<?SomeEnum>(
     'nullableEnum',
-    dict[SomeEnum::class => 'assert_enum'],
+    dict[(string)SomeEnum::class => 'assert_enum'],
   );
   $ch->createMethod<keyset<SomeEnum>>(
     'keysetOfSomeEnum',
-    dict[SomeEnum::class => 'assert_enum'],
+    dict[(string)SomeEnum::class => 'assert_enum'],
   );
 
   return $chain->group(__FUNCTION__)
@@ -64,7 +64,7 @@ function assert_enum(mixed $m)[]: SomeEnum {
   } else {
     throw new \TypeAssertionException(Str\format(
       'Expected %s, got %s',
-      SomeEnum::class,
+      (string)SomeEnum::class,
       \is_object($m) ? \get_class($m) : \gettype($m),
     ));
   }
