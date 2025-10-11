@@ -24,6 +24,7 @@ use type HTL\StaticTypeAssertionCodegen\_Private\{
   VecTypeDescription,
 };
 use type HTL\TypeVisitor\{TAlias, TypeDeclVisitor};
+use function var_export_pure;
 
 final class DefaultVisitor
   implements TypeDeclVisitor<TypeDescription, ShapeField> {
@@ -67,7 +68,7 @@ final class DefaultVisitor
         );
       }
 
-      $repr = _Private\string_export($key);
+      $repr = var_export_pure($key);
     }
 
     return new ShapeField($key, $repr, $is_optional, $type);
