@@ -65,7 +65,7 @@ function assert_enum(mixed $m)[]: SomeEnum {
     throw new \TypeAssertionException(Str\format(
       'Expected %s, got %s',
       (string)SomeEnum::class,
-      \is_object($m) ? \get_class($m) : \gettype($m),
+      \is_object($m) ? \get_class($m) : \gettype($m) as string,
     ));
   }
 }

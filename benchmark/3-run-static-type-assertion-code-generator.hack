@@ -6,7 +6,7 @@ use namespace HH\Lib\Str;
 
 <<__EntryPoint>>
 async function run_static_type_assertion_code_generator_async(
-): Awaitable<void> {
+)[defaults]: Awaitable<void> {
   $autoloader = __DIR__.'/../vendor/autoload.hack';
   if (HH\could_include($autoloader)) {
     require_once $autoloader;
@@ -19,7 +19,7 @@ async function run_static_type_assertion_code_generator_async(
   }
 
   $error = null;
-  $json = \file_get_contents(__DIR__.'/benchmark.json')
+  $json = \file_get_contents(__DIR__.'/benchmark.json') as string
     |> \json_decode_with_error(
       $$,
       inout $error,
@@ -32,13 +32,14 @@ async function run_static_type_assertion_code_generator_async(
   AssertJsonShape::assertJsonShape($json);
   $total = \clock_gettime_ns(\CLOCK_MONOTONIC) - $start;
 
-  echo Str\format(<<<'STATS'
+  echo Str\format(
+    <<<'STATS'
 StaticTypeAssertionCodegen stats:
 Total time:            %d ns (%f ms)
 
 STATS
-  ,
-  $total,
-  $total / 1000000.,
+    ,
+    $total,
+    $total / 1000000.,
   );
 }

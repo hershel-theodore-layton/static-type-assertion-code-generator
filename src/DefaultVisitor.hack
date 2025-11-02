@@ -68,7 +68,7 @@ final class DefaultVisitor
         );
       }
 
-      $repr = var_export_pure($key);
+      $repr = var_export_pure($key) as string;
     }
 
     return new ShapeField($key, $repr, $is_optional, $type);
