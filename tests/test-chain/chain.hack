@@ -7,6 +7,7 @@ async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller
 )[defaults]: Awaitable<TestChain\ChainController<\HTL\TestChain\Chain>> {
   return $controller
+    ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\deep_alias_test<>)
     ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\dict_test<>)
     ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\enum_test<>)
     ->addTestGroup(\HTL\StaticTypeAssertionCodegen\Tests\keyset_test<>)

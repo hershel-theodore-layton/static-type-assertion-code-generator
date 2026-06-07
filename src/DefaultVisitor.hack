@@ -303,10 +303,12 @@ final class DefaultVisitor
       return null;
     }
 
-    if (C\contains_key($this->typeAliasAsserters, $name)) {
+    $asserter = $this->findAsserter($name);
+
+    if ($asserter is nonnull) {
       return new CallThisUserSuppliedFunction(
         $alias['counter'],
-        $this->typeAliasAsserters[$name],
+        $asserter,
         $is_arraykey,
       );
     }
@@ -320,5 +322,25 @@ final class DefaultVisitor
     }
 
     return null;
+  }
+
+  private function findAsserter(string $name)[]: ?string {
+    $asserters = $this->typeAliasAsserters;
+
+    while ($name !== null && !C\contains_key($asserters, $name)) {
+      $name = $this->tryGetInnerAlias($name);
+    }
+
+    return idx($asserters, $name);
+  }
+
+  private function tryGetInnerAlias(string $name)[]: ?string {
+    try {
+      return new \ReflectionTypeAlias($name)
+        |> $$->getTypeStructure()['classname'] ?? null
+        |> $$ as ?string;
+    } catch (\ReflectionException $_) {
+      return null;
+    }
   }
 }
