@@ -21,13 +21,13 @@ handle nulls. If a `NullableTypeDescription` was wrapped
 around the user supplied function, `null` would never be
 passed to it. If `cast_to_nullish(mixed $mixed)[]: Nullish`
 started with the line `if ($mixed is null) return 42;`,
-the author would be surpriced if we codegen if-null-use-null.
+the author would be surprised if we codegen if-null-use-null.
 
 So in order to act in the way the user expects, we must
 have a heuristic "can this function handle nulls". The
 assumption will be:
 
- - Given `Newer` pass the value. Null is not special here.
- - Given `?Newer`, handle `null` before calling the function.
+ - Given `Newed` pass the value. Null is not special here.
+ - Given `?Newed`, handle `null` before calling the function.
  - Given `Nullish`, pass the value. Null is a valid value for `Nullish`.
  - Given `?Nullish`, treat as `Nullish`.

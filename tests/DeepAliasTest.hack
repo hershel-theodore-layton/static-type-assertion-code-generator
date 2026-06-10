@@ -9,6 +9,9 @@ type TLevel3 = TLevel2;
 type TLevel4 = TLevel3;
 type TLevel5 = TLevel4;
 
+newtype YesNo = bool;
+type MaybeYesNo = ?YesNo;
+
 <<TestChain\Discover>>
 function deep_alias_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
   $helper = new TestHelpers();
@@ -48,6 +51,12 @@ function deep_alias_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
     ],
   );
 
+  $ch->createMethod<YesNo>('yesNo', dict[(string)YesNo::class => 'yes_no']);
+  $ch->createMethod<MaybeYesNo>(
+    'maybeYesNo',
+    dict[(string)YesNo::class => 'yes_no'],
+  );
+
   return $chain->group(__FUNCTION__)
     ->test('test_plain_alias', ()[] ==> {
       $helper->bodyOfMethodOughtToBe(
@@ -78,6 +87,20 @@ function deep_alias_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
         'level5',
         'return level_3_and_4_and_5(__SEED__);',
       );
+    })
+    ->test('assert_nonnullable_newtype', ()[] ==> {
+      $helper->bodyOfMethodOughtToBe('yesNo', 'return yes_no(__SEED__);');
+    })
+    ->test('assert_nullable_alias_over_a_newtype', ()[] ==> {
+      $helper->bodyOfMethodOughtToBe(
+        'maybeYesNo',
+        'if (__SEED__ is null) {'.
+        ' $out__1 = null; '.
+        '} else {'.
+        '  $out__1 = yes_no(__SEED__);'.
+        '}'.
+        ' return $out__1;',
+      );
     });
 }
 
@@ -87,4 +110,8 @@ function level_1_and_2(mixed $mixed)[]: TLevel1 {
 
 function level_3_and_4_and_5(mixed $mixed)[]: TLevel1 {
   return $mixed as int;
+}
+
+function yes_no(mixed $mixed)[]: YesNo {
+  return $mixed as bool;
 }

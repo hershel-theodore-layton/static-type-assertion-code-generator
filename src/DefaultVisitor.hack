@@ -204,10 +204,7 @@ final class DefaultVisitor
       return new NullableTypeDescription($alias['counter'], $inner);
     }
 
-    $alias_is_inherently_nullable = new \ReflectionTypeAlias($alias_name)
-      |> $$->getTypeStructure()['nullable'] ?? false;
-
-    return $alias_is_inherently_nullable
+    return $inner->superTypeOfNull()
       ? $inner
       : new NullableTypeDescription($alias['counter'], $inner);
   }
@@ -308,8 +305,9 @@ final class DefaultVisitor
     if ($asserter is nonnull) {
       return new CallThisUserSuppliedFunction(
         $alias['counter'],
-        $asserter,
+        $asserter['assert'],
         $is_arraykey,
+        $asserter['nullable'],
       );
     }
 
@@ -324,21 +322,39 @@ final class DefaultVisitor
     return null;
   }
 
-  private function findAsserter(string $name)[]: ?string {
+  private function findAsserter(
+    string $name,
+  )[]: ?shape('assert' => string, 'nullable' => bool/*_*/) {
     $asserters = $this->typeAliasAsserters;
 
     while ($name !== null && !C\contains_key($asserters, $name)) {
-      $name = $this->tryGetInnerAlias($name);
+      $name = static::tryGetInnerAlias($name);
     }
 
-    return idx($asserters, $name);
+    $asserter = idx($asserters, $name);
+
+    if ($asserter is null || $name is null) {
+      return null;
+    }
+
+    return shape(
+      'assert' => $asserter,
+      'nullable' => static::tryGetIsNullable($name) === true,
+    );
   }
 
-  private function tryGetInnerAlias(string $name)[]: ?string {
+  private static function tryGetInnerAlias(string $name)[]: ?string {
+    return static::reflectAlias($name)['classname'] ?? null |> $$ as ?string;
+  }
+
+  private static function tryGetIsNullable(string $name)[]: ?bool {
+    return static::reflectAlias($name)['nullable'] ?? null |> $$ as ?bool;
+  }
+
+  private static function reflectAlias(string $name)[]: ?dict<arraykey, mixed> {
     try {
       return new \ReflectionTypeAlias($name)
-        |> $$->getTypeStructure()['classname'] ?? null
-        |> $$ as ?string;
+        |> $$->getTypeStructure();
     } catch (\ReflectionException $_) {
       return null;
     }

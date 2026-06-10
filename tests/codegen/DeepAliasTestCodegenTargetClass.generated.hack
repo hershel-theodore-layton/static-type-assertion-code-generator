@@ -28,4 +28,19 @@ final class DeepAliasTestCodegenTargetClass {
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TLevel5 {
     return level_3_and_4_and_5($htl_untyped_variable);
   }
+  public static function yesNo(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\YesNo {
+    return yes_no($htl_untyped_variable);
+  }
+  public static function maybeYesNo(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\MaybeYesNo {
+    if ($htl_untyped_variable is null) {
+      $out__1 = null;
+    } else {
+      $out__1 = yes_no($htl_untyped_variable);
+    }
+    return $out__1;
+  }
 }

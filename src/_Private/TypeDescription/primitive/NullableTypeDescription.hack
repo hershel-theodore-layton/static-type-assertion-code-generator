@@ -8,10 +8,6 @@ final class NullableTypeDescription extends BaseTypeDescription {
 
   public function __construct(int $counter, private TypeDescription $inner)[] {
     parent::__construct($counter);
-    invariant(
-      !$inner->superTypeOfNull(),
-      'Can not create a nullable nullable type.',
-    );
   }
 
   <<__Override>>

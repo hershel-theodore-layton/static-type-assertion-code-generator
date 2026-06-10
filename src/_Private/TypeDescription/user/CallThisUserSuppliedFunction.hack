@@ -10,6 +10,7 @@ final class CallThisUserSuppliedFunction extends BaseTypeDescription {
     int $counter,
     private string $func,
     private bool $isSubtypeOfArraykey,
+    private bool $superTypeOfNull,
   )[] {
     parent::__construct($counter);
   }
@@ -41,6 +42,6 @@ final class CallThisUserSuppliedFunction extends BaseTypeDescription {
 
   <<__Override>>
   public function superTypeOfNull()[]: bool {
-    return false;
+    return $this->superTypeOfNull;
   }
 }
