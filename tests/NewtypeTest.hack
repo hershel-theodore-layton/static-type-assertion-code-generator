@@ -89,17 +89,17 @@ function newtype_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
     ->test(
       'test_user_provided_functions_for_inherently_nullable_types_are_invoked_with_null',
       () ==> {
-        $sentinal =
+        $sentinel =
           NewtypeTestCodegenTargetClass::nullIsPassedToInherentlyNullableUserFunction(
             null,
           );
-        expect($sentinal)->toEqual('sentinal');
+        expect($sentinel)->toEqual('sentinal');
 
-        $sentinal =
+        $sentinel =
           NewtypeTestCodegenTargetClass::nullIsPassedToInherentlyNullableUserFunctionEvenWhenRedundantlyNullable(
             null,
           );
-        expect($sentinal)->toEqual('sentinal');
+        expect($sentinel)->toEqual('sentinal');
       },
     )
     ->test(

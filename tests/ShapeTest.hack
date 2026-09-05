@@ -150,8 +150,8 @@ function shape_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
       );
     })
     ->test('test_colliding_keys', () ==> {
-      // This is an hhvm bug.
-      // We don't get the shape fields if the keys are duplicaites.
+      // This is an HHVM bug.
+      // We don't get the shape fields when the keys are duplicates.
       // They are handed to us in a dict, which doesn't allow for duplicate keys.
       $helper->bodyOfMethodOughtToBe(
         'collidingKeys',

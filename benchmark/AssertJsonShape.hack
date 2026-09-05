@@ -1,5 +1,5 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
-/** This code was generated during benchmarking, run `hhvm benchmark/2-codegen.hack` to update it. */
+/** This code was generated during benchmarking. Run `hhvm benchmark/2-codegen.hack` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 final abstract class AssertJsonShape {

@@ -19,7 +19,7 @@ namespace HTL\StaticTypeAssertionCodegen {
     }
 
     /**
-     * Any TypeDescription leaving a non `_Private` function must first be made opaque.
+     * Any TypeDescription leaving a non-`_Private` function must first be made opaque.
      * Failure to do so is considered a bug.
      */
     function make_opaque(TypeDescription $bare)[]: OpaqueTypeDescription {

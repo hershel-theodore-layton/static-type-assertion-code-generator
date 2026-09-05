@@ -41,6 +41,6 @@ interface TypeDescription {
   public function suffixVariable(string $name)[]: string;
 
   // For upholding Hack's nullability rules in as expressions.
-  // `as ?mixed` is disallowed, so it `?null` and `??int`
+  // `as ?mixed` is disallowed, so are `?null` and `??int`.
   public function superTypeOfNull()[]: bool;
 }
