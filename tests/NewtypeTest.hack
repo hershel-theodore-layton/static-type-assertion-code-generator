@@ -17,9 +17,11 @@ newtype TNullable = ?string;
 type TNullableShape = ?shape('a' => int, ...);
 
 <<TestChain\Discover>>
-function newtype_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function newtype_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('NewtypeTest');
+  await using $ch = $helper->newCodegenHelper('NewtypeTest');
   $ch->createMethod<dict<TOpaqueIntAsInt, TOpaqueIntAsInt>>(
     'opaquenessUsingUserResolvedFunctions',
     dict[

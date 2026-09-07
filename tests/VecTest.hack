@@ -4,9 +4,11 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 use namespace HTL\TestChain;
 
 <<TestChain\Discover>>
-function vec_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function vec_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('VecTest');
+  await using $ch = $helper->newCodegenHelper('VecTest');
   $ch->createMethod<vec<num>>('vecOfNum');
   $ch->createMethod<vec<mixed>>('vecOfMixed');
 

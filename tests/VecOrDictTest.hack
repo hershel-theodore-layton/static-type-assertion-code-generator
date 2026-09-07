@@ -6,9 +6,11 @@ use function HTL\Expect\expect_invoked;
 use function HTL\StaticTypeAssertionCodegen\from_type;
 
 <<TestChain\Discover>>
-function vec_or_dict_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function vec_or_dict_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('VecOrDictTest');
+  await using $ch = $helper->newCodegenHelper('VecOrDictTest');
   $ch->createMethod<vec_or_dict<mixed>>('topTypeOneGeneric');
   $ch->createMethod<vec_or_dict<arraykey, mixed>>('topTypeTwoGenerics');
   $ch->createMethod<vec_or_dict<int, mixed>>('intKeyed');

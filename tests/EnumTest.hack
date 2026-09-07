@@ -12,9 +12,11 @@ enum SomeEnum: int {
 }
 
 <<TestChain\Discover>>
-function enum_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function enum_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('EnumTest');
+  await using $ch = $helper->newCodegenHelper('EnumTest');
   $ch->createMethod<SomeEnum>(
     'someEnum',
     dict[(string)SomeEnum::class => 'assert_enum'],

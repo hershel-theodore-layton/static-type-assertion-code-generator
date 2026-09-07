@@ -7,10 +7,12 @@ type HiddenInt = int;
 type DeeplyNested = dict<int, (vec<shape('a' => vec<HiddenInt>/*_*/)>)>;
 
 <<TestChain\Discover>>
-function statement_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function statement_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
 
-  using $ch = $helper->newCodegenHelper('StatementTest');
+  await using $ch = $helper->newCodegenHelper('StatementTest');
   $ch->createMethod<dict<int, vec<int>>>('statementInDict');
   $ch->createMethod<shape('a' => vec<int>/*_*/)>('statementInShape');
   $ch->createMethod<(vec<int>)>('statementInTuple');

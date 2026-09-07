@@ -5,8 +5,8 @@ use namespace HH;
 use namespace HH\Lib\Str;
 use namespace HTL\StaticTypeAssertionCodegen;
 use type Exception;
-use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
-use function escapeshellarg, exec;
+use function HTL\PhaLintersServer\hackfmt_and_sign_hack_source_do_not_use_async;
+use function file_put_contents;
 
 <<__EntryPoint>>
 async function codegen_async()[defaults]: Awaitable<void> {
@@ -61,18 +61,6 @@ HACK
     ),
   );
   $path = __DIR__.'/AssertJsonShape.hack';
-  hackfmt($path, $code);
-  $output = vec[];
-  $status = 0;
-  exec(
-    escapeshellarg(
-      __DIR__.
-      '/../vendor/hershel-theodore-layton/portable-hack-ast-linters-server/bin/pha-sign-hack-source.sh',
-    ).
-    ' '.
-    escapeshellarg($path),
-    inout $output,
-    inout $status,
-  );
-  invariant($status === 0, 'Could not sign generated benchmark');
+  $signed = await hackfmt_and_sign_hack_source_do_not_use_async($code);
+  file_put_contents($path, $signed);
 }

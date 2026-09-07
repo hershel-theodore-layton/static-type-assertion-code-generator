@@ -3,15 +3,15 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\{C, Str, Vec};
 use namespace HTL\{StaticTypeAssertionCodegen, TypeVisitor};
-use type IDisposable;
-use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
-use function escapeshellarg, exec, touch;
+use type IAsyncDisposable;
+use function HTL\PhaLintersServer\hackfmt_and_sign_hack_source_do_not_use_async;
+use function file_put_contents;
 
 /**
  * Note to self, this file is not formatted by hackfmt,
  * hackfmt sees at-sign-generated and leaves this file alone.
  */
-final class CodegenHelper implements IDisposable {
+final class CodegenHelper implements IAsyncDisposable {
   const string CODEGEN_BASE = __DIR__.'/../codegen/';
   const type TMethods =
     dict<string, shape('body' => string, 'type' => string /*_*/)>;
@@ -57,7 +57,7 @@ final class CodegenHelper implements IDisposable {
     );
   }
 
-  public function __dispose()[defaults]: void {
+  public async function __disposeAsync()[defaults]: Awaitable<void> {
     // hackfmt-ignore
     $code = Str\format(<<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
@@ -87,21 +87,8 @@ HACK
         |> Str\join($$, "\n"),
     );
 
-    touch($this->file);
-    hackfmt($this->file, $code);
-    $output = vec[];
-    $status = 0;
-    exec(
-      escapeshellarg(
-        __DIR__.
-        '/../../vendor/hershel-theodore-layton/portable-hack-ast-linters-server/bin/pha-sign-hack-source.sh',
-      ).
-      ' '.
-      escapeshellarg($this->file),
-      inout $output,
-      inout $status,
-    );
-    invariant($status === 0, 'Could not sign generated fixture');
+    $signed = await hackfmt_and_sign_hack_source_do_not_use_async($code);
+    file_put_contents($this->file, $signed);
     ($this->storeMethods)($this->methods);
   }
 }

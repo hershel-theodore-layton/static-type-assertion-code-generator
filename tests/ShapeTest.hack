@@ -11,10 +11,12 @@ final class ShapeTest {
 }
 
 <<TestChain\Discover>>
-function shape_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function shape_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
 
-  using $ch = $helper->newCodegenHelper('ShapeTest');
+  await using $ch = $helper->newCodegenHelper('ShapeTest');
   $ch->createMethod<shape(/*_*/)>('emptyShape');
   $ch->createMethod<shape(...)>('emptyShapeWithExtraFields');
   $ch->createMethod<shape('a' => ?int/*_*/)>('shapeAToNullableInt');

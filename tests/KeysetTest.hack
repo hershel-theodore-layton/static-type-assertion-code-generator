@@ -4,9 +4,11 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 use namespace HTL\TestChain;
 
 <<TestChain\Discover>>
-function keyset_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function keyset_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('KeysetTest');
+  await using $ch = $helper->newCodegenHelper('KeysetTest');
   $ch->createMethod<keyset<string>>('keysetOfString');
   $ch->createMethod<keyset<arraykey>>('keysetOfArrayKey');
 

@@ -5,9 +5,11 @@ use namespace HTL\TestChain;
 use type DateTime;
 
 <<TestChain\Discover>>
-function tuple_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function tuple_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('TupleTest');
+  await using $ch = $helper->newCodegenHelper('TupleTest');
   $ch->createMethod<(nonnull)>('tupleNonnull');
   $ch->createMethod<(null)>('tupleNull');
   $ch->createMethod<(mixed, mixed, mixed)>('tupleMixedMixedMixed');

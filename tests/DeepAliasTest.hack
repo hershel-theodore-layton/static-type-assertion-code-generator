@@ -13,9 +13,11 @@ newtype YesNo = bool;
 type MaybeYesNo = ?YesNo;
 
 <<TestChain\Discover>>
-function deep_alias_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function deep_alias_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('DeepAliasTest');
+  await using $ch = $helper->newCodegenHelper('DeepAliasTest');
   $ch->createMethod<TLevel1>(
     'level1',
     dict[

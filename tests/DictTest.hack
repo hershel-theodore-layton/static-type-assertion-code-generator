@@ -4,9 +4,11 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 use namespace HTL\TestChain;
 
 <<TestChain\Discover>>
-function dict_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
+async function dict_test_async(
+  TestChain\Chain $chain,
+)[defaults]: Awaitable<TestChain\Chain> {
   $helper = new TestHelpers();
-  using $ch = $helper->newCodegenHelper('DictTest');
+  await using $ch = $helper->newCodegenHelper('DictTest');
   $ch->createMethod<dict<int, bool>>('dictIntToBool');
   $ch->createMethod<dict<arraykey, bool>>('dictArraykeyToBool');
   $ch->createMethod<dict<string, mixed>>('dictStringToMixed');
