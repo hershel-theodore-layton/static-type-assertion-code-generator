@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:bbe0d493ddee2ade0f46'])>>
+
 final class DeepAliasTestCodegenTargetClass {
   public static function level1(
     mixed $htl_untyped_variable,

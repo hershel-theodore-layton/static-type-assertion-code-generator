@@ -24,6 +24,7 @@ use type HTL\StaticTypeAssertionCodegen\_Private\{
   VecTypeDescription,
 };
 use type HTL\TypeVisitor\{TAlias, TypeDeclVisitor};
+use type ReflectionException, ReflectionTypeAlias;
 use function var_export_pure;
 
 final class DefaultVisitor
@@ -353,9 +354,9 @@ final class DefaultVisitor
 
   private static function reflectAlias(string $name)[]: ?dict<arraykey, mixed> {
     try {
-      return new \ReflectionTypeAlias($name)
+      return new ReflectionTypeAlias($name)
         |> $$->getTypeStructure();
-    } catch (\ReflectionException $_) {
+    } catch (ReflectionException $_) {
       return null;
     }
   }

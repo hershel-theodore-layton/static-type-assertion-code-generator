@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:d9ac8e12e9d16edc06d1'])>>
+
 final class KeysetTestCodegenTargetClass {
   public static function keysetOfString(
     mixed $htl_untyped_variable,

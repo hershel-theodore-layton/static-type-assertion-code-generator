@@ -2,6 +2,9 @@
 namespace HTL\Project_BEjhs0zCRby4\GeneratedTestChain;
 
 use namespace HTL\TestChain;
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:42a55efdd15dc83a2f48'])>>
 
 async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller,

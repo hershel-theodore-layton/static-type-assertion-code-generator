@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:579353de6e1499821819'])>>
+
 final class EnumTestCodegenTargetClass {
   public static function someEnum(
     mixed $htl_untyped_variable,

@@ -2,6 +2,10 @@
 /** This code was generated during benchmarking. Run `hhvm benchmark/2-codegen.hack` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:e4a2b3801d0ee9f39449'])>>
+
 final abstract class AssertJsonShape {
   public static function assertJsonShape(
     mixed $htl_untyped_variable,
@@ -93,7 +97,6 @@ final abstract class AssertJsonShape {
       $out__12[] = $out__13;
     }
     $out__1['statuses'] = $out__12;
-
     return $out__1;
   }
   private static function assertTEntities(
@@ -207,7 +210,6 @@ final abstract class AssertJsonShape {
       $out__47[] = $out__48;
     }
     $out__1['user_mentions'] = $out__47;
-
     return $out__1;
   }
   private static function assertTUser(mixed $htl_untyped_variable)[]: TUser {
@@ -302,7 +304,6 @@ final abstract class AssertJsonShape {
       Shapes::removeKey(inout $out__7, 'url');
     }
     $out__1['entities'] = $out__7;
-
     return $out__1;
   }
 }

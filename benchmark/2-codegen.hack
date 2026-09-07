@@ -4,10 +4,12 @@ namespace HTL\StaticTypeAssertionCodegen\Bench;
 use namespace HH;
 use namespace HH\Lib\Str;
 use namespace HTL\StaticTypeAssertionCodegen;
+use type Exception;
 use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
+use function escapeshellarg, exec;
 
 <<__EntryPoint>>
-async function codegen_async(): Awaitable<void> {
+async function codegen_async()[defaults]: Awaitable<void> {
   $autoloader = __DIR__.'/../vendor/autoload.hack';
   if (HH\could_include($autoloader)) {
     require_once $autoloader;
@@ -15,13 +17,18 @@ async function codegen_async(): Awaitable<void> {
   }
 
   $panic = ($message)[]: nothing ==> {
-    throw new \Exception($message);
+    throw new Exception($message);
   };
 
-  $code = Str\format(<<<'HACK'
+  $code = Str\format(
+    <<<'HACK'
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 /** This code was generated during benchmarking. Run `hhvm benchmark/2-codegen.hack` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Bench;
+
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:'])>>
 
 final abstract class AssertJsonShape {
   public static function assertJsonShape(mixed $htl_untyped_variable)[]: JsonShape {
@@ -36,22 +43,36 @@ final abstract class AssertJsonShape {
 }
 
 HACK
-  ,
-  StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-    StaticTypeAssertionCodegen\from_type<JsonShape>(
-      dict[
-        (string)TEntities::class => 'self::assertTEntities',
-        (string)TUser::class => 'self::assertTUser',
-      ],
-      $panic,
+    ,
+    StaticTypeAssertionCodegen\emit_body_for_assertion_function(
+      StaticTypeAssertionCodegen\from_type<JsonShape>(
+        dict[
+          (string)TEntities::class => 'self::assertTEntities',
+          (string)TUser::class => 'self::assertTUser',
+        ],
+        $panic,
+      ),
     ),
-  ),
-  StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-    StaticTypeAssertionCodegen\from_type<TEntities>(dict[], $panic),
-  ),
-  StaticTypeAssertionCodegen\emit_body_for_assertion_function(
-    StaticTypeAssertionCodegen\from_type<TUser>(dict[], $panic),
-  ),
+    StaticTypeAssertionCodegen\emit_body_for_assertion_function(
+      StaticTypeAssertionCodegen\from_type<TEntities>(dict[], $panic),
+    ),
+    StaticTypeAssertionCodegen\emit_body_for_assertion_function(
+      StaticTypeAssertionCodegen\from_type<TUser>(dict[], $panic),
+    ),
   );
-  hackfmt(__DIR__.'/AssertJsonShape.hack', $code);
+  $path = __DIR__.'/AssertJsonShape.hack';
+  hackfmt($path, $code);
+  $output = vec[];
+  $status = 0;
+  exec(
+    escapeshellarg(
+      __DIR__.
+      '/../vendor/hershel-theodore-layton/portable-hack-ast-linters-server/bin/pha-sign-hack-source.sh',
+    ).
+    ' '.
+    escapeshellarg($path),
+    inout $output,
+    inout $status,
+  );
+  invariant($status === 0, 'Could not sign generated benchmark');
 }

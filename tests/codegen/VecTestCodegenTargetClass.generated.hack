@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:a3c8a9729f15d492898d'])>>
+
 final class VecTestCodegenTargetClass {
   public static function vecOfNum(mixed $htl_untyped_variable)[]: vec<num> {
     $out__1 = vec[];

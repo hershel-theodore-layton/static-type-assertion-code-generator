@@ -3,6 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\Str;
 use namespace HTL\Expect;
+use type TypeAssertionException;
 use function HTL\Expect\expect;
 
 final class TestHelpers {
@@ -29,7 +30,7 @@ final class TestHelpers {
       try {
         $new_value = $assertion($value);
         expect($new_value)->toEqual($value);
-      } catch (\TypeAssertionException $e) {
+      } catch (TypeAssertionException $e) {
         throw new Expect\Surprise(Str\format(
           'Expected %s to pass the assertion, but got: %s',
           $name,
@@ -50,7 +51,7 @@ final class TestHelpers {
           'Expected %s to fail the assertion, but it did not fail',
           $name,
         ));
-      } catch (\TypeAssertionException $_) {
+      } catch (TypeAssertionException $_) {
       }
     }
   }

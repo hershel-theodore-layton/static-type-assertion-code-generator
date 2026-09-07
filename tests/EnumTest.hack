@@ -3,7 +3,9 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\{C, Str};
 use namespace HTL\{StaticTypeAssertionCodegen, TestChain};
+use type TypeAssertionException;
 use function HTL\Expect\expect_invoked;
+use function get_class, gettype, is_object;
 
 enum SomeEnum: int {
   ONE = 1;
@@ -62,10 +64,10 @@ function assert_enum(mixed $m)[]: SomeEnum {
   if ($m is arraykey && C\contains_key(SomeEnum::getNames(), $m)) {
     return $m as SomeEnum;
   } else {
-    throw new \TypeAssertionException(Str\format(
+    throw new TypeAssertionException(Str\format(
       'Expected %s, got %s',
       (string)SomeEnum::class,
-      \is_object($m) ? \get_class($m) : \gettype($m) as string,
+      is_object($m) ? get_class($m) : gettype($m) as string,
     ));
   }
 }

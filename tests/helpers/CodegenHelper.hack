@@ -3,13 +3,15 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\{C, Str, Vec};
 use namespace HTL\{StaticTypeAssertionCodegen, TypeVisitor};
+use type IDisposable;
 use function HTL\StaticTypeAssertionCodegen\_Private\hackfmt;
+use function escapeshellarg, exec, touch;
 
 /**
  * Note to self, this file is not formatted by hackfmt,
  * hackfmt sees at-sign-generated and leaves this file alone.
  */
-final class CodegenHelper implements \IDisposable {
+final class CodegenHelper implements IDisposable {
   const string CODEGEN_BASE = __DIR__.'/../codegen/';
   const type TMethods =
     dict<string, shape('body' => string, 'type' => string /*_*/)>;
@@ -62,6 +64,10 @@ final class CodegenHelper implements \IDisposable {
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:'])>>
+
 final class %s {
 %s
 }
@@ -81,8 +87,21 @@ HACK
         |> Str\join($$, "\n"),
     );
 
-    \touch($this->file);
+    touch($this->file);
     hackfmt($this->file, $code);
+    $output = vec[];
+    $status = 0;
+    exec(
+      escapeshellarg(
+        __DIR__.
+        '/../../vendor/hershel-theodore-layton/portable-hack-ast-linters-server/bin/pha-sign-hack-source.sh',
+      ).
+      ' '.
+      escapeshellarg($this->file),
+      inout $output,
+      inout $status,
+    );
+    invariant($status === 0, 'Could not sign generated fixture');
     ($this->storeMethods)($this->methods);
   }
 }

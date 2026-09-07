@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:f9a0d5e955f494bb15d8'])>>
+
 final class VecOrDictTestCodegenTargetClass {
   public static function topTypeOneGeneric(
     mixed $htl_untyped_variable,

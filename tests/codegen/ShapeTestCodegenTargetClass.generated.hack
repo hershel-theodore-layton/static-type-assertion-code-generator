@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:b2bb8ccc72e2c8ca894c'])>>
+
 final class ShapeTestCodegenTargetClass {
   public static function emptyShape(mixed $htl_untyped_variable)[]: shape(
     /*_*/

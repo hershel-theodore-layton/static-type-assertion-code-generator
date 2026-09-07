@@ -3,6 +3,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use namespace HH\Lib\Str;
 use namespace HTL\{StaticTypeAssertionCodegen, TestChain};
+use type TypeAssertionException;
 use function HTL\Expect\{expect, expect_invoked};
 
 type TIntAlias = int;
@@ -124,7 +125,7 @@ function newtype_test(TestChain\Chain $chain)[defaults]: TestChain\Chain {
 
 function assert_opaque_int_as_int(mixed $mixed)[]: TOpaqueIntAsInt {
   if (($mixed as int) < 0) {
-    throw new \TypeAssertionException(
+    throw new TypeAssertionException(
       Str\format(
         'Expected a %s, got a negative integer',
         (string)TOpaqueIntAsInt::class,

@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:1c55a34851258782bc73'])>>
+
 final class NewtypeTestCodegenTargetClass {
   public static function opaquenessUsingUserResolvedFunctions(
     mixed $htl_untyped_variable,

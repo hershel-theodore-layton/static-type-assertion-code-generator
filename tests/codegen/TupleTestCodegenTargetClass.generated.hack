@@ -2,6 +2,10 @@
 /** This code was generated during testing, run `vendor/bin/hacktest tests` to update it. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'digest:7012547ca54cc4244ddd'])>>
+
 final class TupleTestCodegenTargetClass {
   public static function tupleNonnull(
     mixed $htl_untyped_variable,
