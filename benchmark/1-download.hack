@@ -3,6 +3,9 @@ namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 use namespace HH;
 use namespace HH\Asio;
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'fixme:autoload_your_code'])>>
 
 <<__EntryPoint>>
 async function download_async(): Awaitable<void> {

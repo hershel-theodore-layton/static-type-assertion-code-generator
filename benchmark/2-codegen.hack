@@ -4,9 +4,12 @@ namespace HTL\StaticTypeAssertionCodegen\Bench;
 use namespace HH;
 use namespace HH\Lib\Str;
 use namespace HTL\StaticTypeAssertionCodegen;
+use type HTL\Pragma\Pragmas;
 use type Exception;
 use function HTL\PhaLintersServer\hackfmt_and_sign_hack_source_do_not_use_async;
 use function file_put_contents;
+
+<<file: Pragmas(vec['PhaLinters', 'fixme:autoload_your_code'])>>
 
 <<__EntryPoint>>
 async function codegen_async()[defaults]: Awaitable<void> {

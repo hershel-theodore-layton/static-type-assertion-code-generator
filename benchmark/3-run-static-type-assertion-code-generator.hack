@@ -3,6 +3,9 @@ namespace HTL\StaticTypeAssertionCodegen\Bench;
 
 use namespace HH;
 use namespace HH\Lib\Str;
+use type HTL\Pragma\Pragmas;
+
+<<file: Pragmas(vec['PhaLinters', 'fixme:autoload_your_code'])>>
 
 <<__EntryPoint>>
 async function run_static_type_assertion_code_generator_async(
