@@ -17,13 +17,3 @@ function assert_boundary_inner(mixed $value)[]: TBoundaryInner {
 function assert_boundary_outer(mixed $value)[]: TBoundaryOuter {
   return assert_boundary_inner($value);
 }
-
-function assert_boundary_outer_via_transparent(
-  mixed $value,
-)[]: TBoundaryOuterViaTransparent {
-  return assert_boundary_inner($value);
-}
-
-function assert_boundary_nullable(mixed $value)[]: TBoundaryNullable {
-  return $value is null ? null : assert_boundary_inner($value);
-}

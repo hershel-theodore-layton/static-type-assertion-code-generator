@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:006644a31323173aface'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:46026d7b70ef6a4a4e26'])>>
 
 final class DeepAliasTestCodegenTargetClass {
   public static function level1(
@@ -52,11 +52,6 @@ final class DeepAliasTestCodegenTargetClass {
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryOuter {
     return assert_boundary_outer($htl_untyped_variable);
   }
-  public static function transparentOuter(
-    mixed $htl_untyped_variable,
-  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryTransparentOuter {
-    return assert_boundary_outer($htl_untyped_variable);
-  }
   public static function longChain(
     mixed $htl_untyped_variable,
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryLongChain {
@@ -71,20 +66,5 @@ final class DeepAliasTestCodegenTargetClass {
       $out__1 = assert_boundary_outer($htl_untyped_variable);
     }
     return $out__1;
-  }
-  public static function opaqueOuterViaTransparent(
-    mixed $htl_untyped_variable,
-  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryOuterViaTransparent {
-    return assert_boundary_outer_via_transparent($htl_untyped_variable);
-  }
-  public static function nullableBoundary(
-    mixed $htl_untyped_variable,
-  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryNullable {
-    return assert_boundary_nullable($htl_untyped_variable);
-  }
-  public static function transparentInner(
-    mixed $htl_untyped_variable,
-  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryTransparentInner {
-    return assert_boundary_inner($htl_untyped_variable);
   }
 }

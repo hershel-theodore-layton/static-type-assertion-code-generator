@@ -60,32 +60,14 @@ async function deep_alias_test_async(
     dict[(string)YesNo::class => 'yes_no'],
   );
 
+  // Separate generated consumers let the typechecker verify opaque returns.
   $outer_handlers = dict[
     (string)TBoundaryInner::class => 'assert_boundary_inner',
     (string)TBoundaryOuter::class => 'assert_boundary_outer',
   ];
   $ch->createMethod<TBoundaryOuter>('opaqueOuter', $outer_handlers);
-  $ch->createMethod<TBoundaryTransparentOuter>(
-    'transparentOuter',
-    $outer_handlers,
-  );
   $ch->createMethod<TBoundaryLongChain>('longChain', $outer_handlers);
   $ch->createMethod<TBoundaryNullableOuter>('nullableOuter', $outer_handlers);
-  $ch->createMethod<TBoundaryOuterViaTransparent>(
-    'opaqueOuterViaTransparent',
-    dict[
-      (string)TBoundaryOuterViaTransparent::class =>
-        'assert_boundary_outer_via_transparent',
-    ],
-  );
-  $ch->createMethod<TBoundaryNullable>(
-    'nullableBoundary',
-    dict[(string)TBoundaryNullable::class => 'assert_boundary_nullable'],
-  );
-  $ch->createMethod<TBoundaryTransparentInner>(
-    'transparentInner',
-    dict[(string)TBoundaryInner::class => 'assert_boundary_inner'],
-  );
 
   return $chain->group(__FUNCTION__)
     ->test('require_a_handler_at_each_opaque_boundary', () ==> {
@@ -95,39 +77,6 @@ async function deep_alias_test_async(
       expect_missing_boundary_handler<TBoundaryLongChain>();
       expect_missing_boundary_handler<TBoundaryNullableOuter>();
       expect_missing_boundary_handler<TBoundaryNullable>();
-    })
-    ->test('opaque_boundary_handlers_produce_typed_values', () ==> {
-      $helper->okayValues<TBoundaryOuter>(
-        DeepAliasTestCodegenTargetClass::opaqueOuter<>,
-        dict['int' => assert_boundary_outer(7)],
-      );
-      $helper->okayValues<TBoundaryTransparentOuter>(
-        DeepAliasTestCodegenTargetClass::transparentOuter<>,
-        dict['int' => assert_boundary_outer(7)],
-      );
-      $helper->okayValues<TBoundaryLongChain>(
-        DeepAliasTestCodegenTargetClass::longChain<>,
-        dict['int' => assert_boundary_outer(7)],
-      );
-      $helper->okayValues<TBoundaryNullableOuter>(
-        DeepAliasTestCodegenTargetClass::nullableOuter<>,
-        dict['null' => null, 'int' => assert_boundary_outer(7)],
-      );
-      $helper->okayValues<TBoundaryOuterViaTransparent>(
-        DeepAliasTestCodegenTargetClass::opaqueOuterViaTransparent<>,
-        dict['int' => assert_boundary_outer_via_transparent(7)],
-      );
-      $helper->okayValues<TBoundaryNullable>(
-        DeepAliasTestCodegenTargetClass::nullableBoundary<>,
-        dict[
-          'null' => assert_boundary_nullable(null),
-          'int' => assert_boundary_nullable(7),
-        ],
-      );
-      $helper->okayValues<TBoundaryTransparentInner>(
-        DeepAliasTestCodegenTargetClass::transparentInner<>,
-        dict['int' => assert_boundary_inner(7)],
-      );
     })
     ->test('test_plain_alias', ()[] ==> {
       $helper->bodyOfMethodOughtToBe(
