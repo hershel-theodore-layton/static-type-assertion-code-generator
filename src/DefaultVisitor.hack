@@ -345,7 +345,13 @@ final class DefaultVisitor
   }
 
   private static function tryGetInnerAlias(string $name)[]: ?string {
-    return static::reflectAlias($name)['classname'] ?? null |> $$ as ?string;
+    $type = static::reflectAlias($name);
+    // Transparent aliases may forward to a handler, but each newtype needs
+    // its own upcast, even when its underlying type has a handler.
+    if (($type['opaque'] ?? false) === true) {
+      return null;
+    }
+    return $type['classname'] ?? null |> $$ as ?string;
   }
 
   private static function tryGetIsNullable(string $name)[]: ?bool {

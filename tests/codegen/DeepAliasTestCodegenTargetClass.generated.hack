@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:bbe0d493ddee2ade0f46'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:006644a31323173aface'])>>
 
 final class DeepAliasTestCodegenTargetClass {
   public static function level1(
@@ -46,5 +46,45 @@ final class DeepAliasTestCodegenTargetClass {
       $out__1 = yes_no($htl_untyped_variable);
     }
     return $out__1;
+  }
+  public static function opaqueOuter(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryOuter {
+    return assert_boundary_outer($htl_untyped_variable);
+  }
+  public static function transparentOuter(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryTransparentOuter {
+    return assert_boundary_outer($htl_untyped_variable);
+  }
+  public static function longChain(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryLongChain {
+    return assert_boundary_outer($htl_untyped_variable);
+  }
+  public static function nullableOuter(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryNullableOuter {
+    if ($htl_untyped_variable is null) {
+      $out__1 = null;
+    } else {
+      $out__1 = assert_boundary_outer($htl_untyped_variable);
+    }
+    return $out__1;
+  }
+  public static function opaqueOuterViaTransparent(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryOuterViaTransparent {
+    return assert_boundary_outer_via_transparent($htl_untyped_variable);
+  }
+  public static function nullableBoundary(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryNullable {
+    return assert_boundary_nullable($htl_untyped_variable);
+  }
+  public static function transparentInner(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TBoundaryTransparentInner {
+    return assert_boundary_inner($htl_untyped_variable);
   }
 }
