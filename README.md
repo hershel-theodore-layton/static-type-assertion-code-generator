@@ -32,7 +32,7 @@ The current version of static-type-assertion-code-generator only supports valida
 - `vec<_>`
 - `vec_or_dict<...>`
 
-Support for other types can be added using aliases and the `$type_alias_asserters` argument passed to `from_type<T>()`.
+The `$type_alias_asserters` argument passed to `from_type<T>()` can supply custom assertion functions for aliases, classes, interfaces, traits, and enums. It does not bypass recursive traversal; see the limitations below.
 
 If this static-type-assertion-code-generator does not do everything you need it to do, I recommend looking towards TypeAssert.
 
@@ -43,6 +43,18 @@ This library is heavily inspired by [TypeAssert](https://github.com/hhvm/type-as
 By default, static-type-assertion-code-generator will recurse all the way down to primitives and generate all the code in one function. This gets bloaty pretty fast, especially for large shape types. You can reduce the size of the code you generate by pointing static-type-assertion-code-generator to functions that will validate a particular type alias. I used this technique in [the benchmark](./benchmark/2-codegen.hack) to deduplicate the `"entities"` and `"user"` keys, which both appeared twice in the JSON and have the exact same structure in both places.
 
 Keeping your code small reduces the number of things the JIT needs to optimize individually. The JIT reserves a certain amount of space for hot code. If you run large amounts of data through these functions often, the JIT will put it in the hot portion. Keeping the code small allows more functions to fit in the hot section.
+
+### Traversal limitations
+
+`from_type<T>()` visits a type's children, including generic arguments of classes and interfaces, before selecting its assertion function. A handler therefore only applies if every child is supported or has its own handler. For example:
+
+```hack
+final class Box<reify T> {}
+```
+
+Generating an assertion for `Box<stdClass>` with only a `Box` handler fails with `class`, even though `Box<stdClass>` is enforceable with `as`. Adding a `stdClass` handler lets generation succeed, but only the `Box` handler is called. That handler must validate the entire value. A `Box` registration applies to every `Box<...>` encountered with that table; handlers are selected by class name alone, regardless of type arguments.
+
+Alternatively, write the assertion by hand and call it directly, without passing the type to `from_type<T>()`. For this example, the handwritten assertion can return `$value as Box<stdClass>`. Selecting handlers before traversal is deferred.
 
 ## Newtype
 
