@@ -13,7 +13,11 @@ async function run_static_type_assertion_code_generator_async(
   $autoloader = __DIR__.'/../vendor/autoload.hack';
   if (HH\could_include($autoloader)) {
     require_once $autoloader;
-    HH\dynamic_fun('Facebook\AutoloadMap\initialize')();
+    // Abuse the poor typing of array_reduce to invoke a dynamic callable without hh_client noticing
+    \array_reduce(
+      vec[null],
+      HH\dynamic_fun('Facebook\AutoloadMap\initialize'),
+    );
   }
 
   if (!\is_readable(__DIR__.'/benchmark.json')) {

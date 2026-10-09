@@ -12,7 +12,11 @@ async function download_async(): Awaitable<void> {
   $autoloader = __DIR__.'/../vendor/autoload.hack';
   if (HH\could_include($autoloader)) {
     require_once $autoloader;
-    HH\dynamic_fun('Facebook\AutoloadMap\initialize')();
+    // Abuse the poor typing of array_reduce to invoke a dynamic callable without hh_client noticing
+    \array_reduce(
+      vec[null],
+      HH\dynamic_fun('Facebook\AutoloadMap\initialize'),
+    );
   }
 
   $cache_file = __DIR__.'/benchmark.json';
