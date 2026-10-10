@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:1c55a34851258782bc73'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:72dd0a69c4cb15d9259b'])>>
 
 final class NewtypeTestCodegenTargetClass {
   public static function opaquenessUsingUserResolvedFunctions(
@@ -67,6 +67,66 @@ final class NewtypeTestCodegenTargetClass {
     $out__1 = vec[];
     foreach (($htl_untyped_variable as vec<_>) as $v__1) {
       $out__1[] = assert_nullable_opaque_int_as_nullable_int($v__1);
+    }
+    return $out__1;
+  }
+  public static function genericNullableIdentity(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TGenericIdentity<?int> {
+    return assert_generic_nullable_identity($htl_untyped_variable);
+  }
+  public static function redundantlyNullableGenericIdentity(
+    mixed $htl_untyped_variable,
+  )[]: ?\HTL\StaticTypeAssertionCodegen\Tests\TGenericIdentity<?int> {
+    return assert_generic_nullable_identity($htl_untyped_variable);
+  }
+  public static function externallyNullableGenericIdentity(
+    mixed $htl_untyped_variable,
+  )[]: ?\HTL\StaticTypeAssertionCodegen\Tests\TGenericIdentity<int> {
+    if ($htl_untyped_variable is null) {
+      $out__1 = null;
+    } else {
+      $out__1 = assert_generic_identity($htl_untyped_variable);
+    }
+    return $out__1;
+  }
+  public static function genericDynamicIdentity(
+    mixed $htl_untyped_variable,
+  )[]: ?\HTL\StaticTypeAssertionCodegen\Tests\TGenericIdentity<dynamic> {
+    return assert_generic_dynamic($htl_untyped_variable);
+  }
+  public static function genericMaybe(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TGenericMaybe<int> {
+    return assert_generic_maybe($htl_untyped_variable);
+  }
+  public static function genericNested(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TGenericNested<?int> {
+    return assert_generic_nested($htl_untyped_variable);
+  }
+  public static function genericTransparent(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TGenericTransparent<?int> {
+    return assert_generic_nullable_identity($htl_untyped_variable);
+  }
+  public static function externallyNullableGenericTransparent(
+    mixed $htl_untyped_variable,
+  )[]: ?\HTL\StaticTypeAssertionCodegen\Tests\TGenericTransparent<int> {
+    if ($htl_untyped_variable is null) {
+      $out__1 = null;
+    } else {
+      $out__1 = assert_generic_identity($htl_untyped_variable);
+    }
+    return $out__1;
+  }
+  public static function externallyNullableGenericVector(
+    mixed $htl_untyped_variable,
+  )[]: ?\HTL\StaticTypeAssertionCodegen\Tests\TGenericVector<?int> {
+    if ($htl_untyped_variable is null) {
+      $out__1 = null;
+    } else {
+      $out__1 = assert_generic_vector($htl_untyped_variable);
     }
     return $out__1;
   }

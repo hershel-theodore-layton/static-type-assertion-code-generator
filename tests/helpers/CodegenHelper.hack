@@ -30,6 +30,7 @@ final class CodegenHelper implements IAsyncDisposable {
     string $name,
     dict<string, string> $table = dict[],
     ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
+    ?string $return_type = null,
   )[write_props]: void {
     invariant(
       !C\contains_key($this->methods, $name),
@@ -39,7 +40,7 @@ final class CodegenHelper implements IAsyncDisposable {
 
     $options = shape('closed_shape_suffix' => '/*_*/');
 
-    $type = TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
+    $type = $return_type ?? TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
       $shape_field_name_resolver ?? ($_, $_)[] ==> null,
       $options,
     ));

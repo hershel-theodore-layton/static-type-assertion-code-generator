@@ -62,7 +62,105 @@ async function newtype_test_async(
     ],
   );
 
+  $identity_handlers = dict[
+    (string)TGenericIdentity::class => 'assert_generic_nullable_identity',
+  ];
+  $ch->createMethod<TGenericIdentity<?int>>(
+    'genericNullableIdentity',
+    $identity_handlers,
+    null,
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericIdentity<?int>',
+  );
+  $ch->createMethod<?TGenericIdentity<?int>>(
+    'redundantlyNullableGenericIdentity',
+    $identity_handlers,
+    null,
+    '?\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericIdentity<?int>',
+  );
+  $ch->createMethod<?TGenericIdentity<int>>(
+    'externallyNullableGenericIdentity',
+    dict[(string)TGenericIdentity::class => 'assert_generic_identity'],
+    null,
+    '?\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericIdentity<int>',
+  );
+  $ch->createMethod<?TGenericIdentity<dynamic>>(
+    'genericDynamicIdentity',
+    dict[(string)TGenericIdentity::class => 'assert_generic_dynamic'],
+    null,
+    '?\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericIdentity<dynamic>',
+  );
+  $ch->createMethod<TGenericMaybe<int>>(
+    'genericMaybe',
+    dict[(string)TGenericMaybe::class => 'assert_generic_maybe'],
+  );
+  $ch->createMethod<TGenericNested<?int>>(
+    'genericNested',
+    dict[(string)TGenericNested::class => 'assert_generic_nested'],
+    null,
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericNested<?int>',
+  );
+  $ch->createMethod<TGenericTransparent<?int>>(
+    'genericTransparent',
+    $identity_handlers,
+    null,
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericTransparent<?int>',
+  );
+
+  $ch->createMethod<?TGenericTransparent<int>>(
+    'externallyNullableGenericTransparent',
+    dict[(string)TGenericIdentity::class => 'assert_generic_identity'],
+  );
+  $ch->createMethod<?TGenericVector<?int>>(
+    'externallyNullableGenericVector',
+    dict[(string)TGenericVector::class => 'assert_generic_vector'],
+  );
+
   return $chain->group(__FUNCTION__)
+    ->test('generic_handlers_receive_inherent_nulls', () ==> {
+      expect(NewtypeTestCodegenTargetClass::genericNullableIdentity(null))
+        ->toEqual(41);
+      expect(
+        NewtypeTestCodegenTargetClass::redundantlyNullableGenericIdentity(null),
+      )
+        ->toEqual(41);
+      expect(NewtypeTestCodegenTargetClass::genericMaybe(null))->toEqual(42);
+      expect(NewtypeTestCodegenTargetClass::genericDynamicIdentity(null))
+        ->toEqual(43);
+      expect(NewtypeTestCodegenTargetClass::genericNested(null))->toEqual(41);
+      expect(NewtypeTestCodegenTargetClass::genericTransparent(null))->toEqual(
+        41,
+      );
+      expect(NewtypeTestCodegenTargetClass::genericNullableIdentity(7))
+        ->toEqual(7);
+      expect(
+        NewtypeTestCodegenTargetClass::externallyNullableGenericIdentity(null),
+      )
+        ->toEqual(null);
+      expect(
+        NewtypeTestCodegenTargetClass::externallyNullableGenericIdentity(7),
+      )
+        ->toEqual(7);
+    })
+    ->test('external_nulls_bypass_nonnullable_generic_handlers', () ==> {
+      expect(
+        NewtypeTestCodegenTargetClass::externallyNullableGenericTransparent(
+          null,
+        ),
+      )
+        ->toEqual(null);
+      expect(
+        NewtypeTestCodegenTargetClass::externallyNullableGenericTransparent(7),
+      )
+        ->toEqual(7);
+      expect(
+        NewtypeTestCodegenTargetClass::externallyNullableGenericVector(null),
+      )
+        ->toEqual(null);
+      expect(NewtypeTestCodegenTargetClass::externallyNullableGenericVector(
+        vec[null, 7],
+      ))
+        ->toEqual(vec[null, 7]);
+    })
     ->test('test_throws_when_no_newtype_handler_was_provided', () ==> {
       expect_invoked(
         () ==>

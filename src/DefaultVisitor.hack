@@ -1,6 +1,7 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen;
 
+use namespace HH;
 use namespace HH\Lib\{C, Str};
 use type HTL\StaticTypeAssertionCodegen\_Private\{
   ArraykeyTypeDescription,
@@ -301,7 +302,7 @@ final class DefaultVisitor
       return null;
     }
 
-    $asserter = $this->findAsserter($name);
+    $asserter = $this->findAsserter($name, $alias['typevar_types'] ?? dict[]);
 
     if ($asserter is nonnull) {
       return new CallThisUserSuppliedFunction(
@@ -325,11 +326,26 @@ final class DefaultVisitor
 
   private function findAsserter(
     string $name,
+    KeyedContainer<string, mixed> $type_arguments,
   )[]: ?shape('assert' => string, 'nullable' => bool/*_*/) {
     $asserters = $this->typeAliasAsserters;
+    $nullable_arguments = dict[];
+    foreach ($type_arguments as $parameter => $argument) {
+      $nullable_arguments[$parameter] =
+        static::typeAcceptsNull($argument as dict<_, _>, dict[]);
+    }
 
     while ($name !== null && !C\contains_key($asserters, $name)) {
-      $name = static::tryGetInnerAlias($name);
+      $type = static::reflectAlias($name);
+      $inner_name = static::tryGetInnerAlias($name);
+      $nullable_arguments = $inner_name is null || $type is null
+        ? dict[]
+        : static::innerNullableArguments(
+            $inner_name,
+            $type,
+            $nullable_arguments,
+          );
+      $name = $inner_name;
     }
 
     $asserter = idx($asserters, $name);
@@ -340,7 +356,10 @@ final class DefaultVisitor
 
     return shape(
       'assert' => $asserter,
-      'nullable' => static::tryGetIsNullable($name) === true,
+      'nullable' => static::typeAcceptsNull(
+        static::reflectAlias($name) ?? dict[],
+        $nullable_arguments,
+      ),
     );
   }
 
@@ -354,8 +373,54 @@ final class DefaultVisitor
     return $type['classname'] ?? null |> $$ as ?string;
   }
 
-  private static function tryGetIsNullable(string $name)[]: ?bool {
-    return static::reflectAlias($name)['nullable'] ?? null |> $$ as ?bool;
+  private static function typeAcceptsNull(
+    dict<arraykey, mixed> $type,
+    dict<string, bool> $arguments,
+  )[]: bool {
+    if (($type['nullable'] ?? false) === true) {
+      return true;
+    }
+
+    switch ($type['kind'] ?? null) {
+      case HH\TypeStructureKind::OF_NULL:
+      case HH\TypeStructureKind::OF_MIXED:
+      case HH\TypeStructureKind::OF_DYNAMIC:
+        return true;
+      case HH\TypeStructureKind::OF_GENERIC:
+        $parameter = $type['name'] ?? null;
+        return $parameter is string && ($arguments[$parameter] ?? false);
+      case HH\TypeStructureKind::OF_UNRESOLVED:
+        $name = $type['classname'] ?? null;
+        if (!$name is string) {
+          return false;
+        }
+        return static::typeAcceptsNull(
+          static::reflectAlias($name) ?? dict[],
+          static::innerNullableArguments($name, $type, $arguments),
+        );
+      default:
+        return false;
+    }
+  }
+
+  private static function innerNullableArguments(
+    string $name,
+    dict<arraykey, mixed> $type,
+    dict<string, bool> $arguments,
+  )[]: dict<string, bool> {
+    $parameters = static::reflectAlias($name)['typevars'] ?? '';
+    $parameters = Str\split($parameters as string, ',');
+    $types = $type['generic_types'] ?? vec[];
+    $types = $types as KeyedContainer<_, _>;
+    $result = dict[];
+    foreach ($parameters as $index => $parameter) {
+      $argument = $types[$index] ?? null;
+      if ($argument is nonnull) {
+        $result[$parameter] =
+          static::typeAcceptsNull($argument as dict<_, _>, $arguments);
+      }
+    }
+    return $result;
   }
 
   private static function reflectAlias(string $name)[]: ?dict<arraykey, mixed> {
