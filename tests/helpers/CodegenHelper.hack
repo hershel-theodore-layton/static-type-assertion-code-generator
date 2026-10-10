@@ -40,10 +40,11 @@ final class CodegenHelper implements IAsyncDisposable {
 
     $options = shape('closed_shape_suffix' => '/*_*/');
 
-    $type = $return_type ?? TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
-      $shape_field_name_resolver ?? ($_, $_)[] ==> null,
-      $options,
-    ));
+    $type = $return_type ??
+      TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
+        $shape_field_name_resolver ?? ($_, $_)[] ==> null,
+        $options,
+      ));
 
     $this->methods[$name] = shape(
       'body' => StaticTypeAssertionCodegen\emit_body_for_assertion_function(
