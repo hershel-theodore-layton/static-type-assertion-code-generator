@@ -68,3 +68,11 @@ function assert_string_box(mixed $value)[]: TSpecializedBox<string> {
     'value' => ($value as shape('value' => mixed /*_*/))['value'] as string,
   );
 }
+
+type TSpecializedIntBox = TSpecializedBox<int>;
+
+function assert_nullable_int_box(mixed $value)[]: TSpecializedBox<?int> {
+  return shape(
+    'value' => ($value as shape('value' => mixed /*_*/))['value'] as ?int,
+  );
+}

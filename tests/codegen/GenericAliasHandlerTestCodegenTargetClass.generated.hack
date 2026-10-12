@@ -4,7 +4,7 @@ namespace HTL\StaticTypeAssertionCodegen\Tests;
 
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:e254f52f689e32849a83'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:f6023d25289f1dd5b6b8'])>>
 
 final class GenericAliasHandlerTestCodegenTargetClass {
   public static function pair(
@@ -12,6 +12,19 @@ final class GenericAliasHandlerTestCodegenTargetClass {
   )[]: \HTL\StaticTypeAssertionCodegen\Tests\TSpecializedPair {
     $out__1 = $htl_untyped_variable as (mixed, mixed);
     $out__1 = tuple(assert_int_box($out__1[0]), assert_string_box($out__1[1]));
+    return $out__1;
+  }
+  public static function repeated(mixed $htl_untyped_variable)[]: (
+    \HTL\StaticTypeAssertionCodegen\Tests\TSpecializedBox<int>,
+    \HTL\StaticTypeAssertionCodegen\Tests\TSpecializedBox<string>,
+    \HTL\StaticTypeAssertionCodegen\Tests\TSpecializedBox<int>,
+  ) {
+    $out__1 = $htl_untyped_variable as (mixed, mixed, mixed);
+    $out__1 = tuple(
+      assert_int_box($out__1[0]),
+      assert_string_box($out__1[1]),
+      assert_int_box($out__1[2]),
+    );
     return $out__1;
   }
   public static function nested(
@@ -34,6 +47,16 @@ final class GenericAliasHandlerTestCodegenTargetClass {
       $out__1[] = assert_int_box($v__1);
     }
     return $out__1;
+  }
+  public static function transparent(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TSpecializedIntBox {
+    return assert_int_box($htl_untyped_variable);
+  }
+  public static function nullableArgument(
+    mixed $htl_untyped_variable,
+  )[]: \HTL\StaticTypeAssertionCodegen\Tests\TSpecializedBox<?int> {
+    return assert_nullable_int_box($htl_untyped_variable);
   }
   public static function nullable(
     mixed $htl_untyped_variable,

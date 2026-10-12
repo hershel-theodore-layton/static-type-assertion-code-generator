@@ -18,7 +18,9 @@ function resolve_box_asserter(TAlias $alias)[]: ?string {
   $type = $argument as dict<_, _>;
   switch ($type['kind'] ?? null) {
     case HH\TypeStructureKind::OF_INT:
-      return 'assert_int_box';
+      return ($type['nullable'] ?? false) === true
+        ? 'assert_nullable_int_box'
+        : 'assert_int_box';
     case HH\TypeStructureKind::OF_STRING:
       return 'assert_string_box';
     default:
@@ -41,6 +43,17 @@ async function generic_alias_handler_test_async(
     '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedPair',
     resolve_box_asserter<>,
   );
+  $ch->createMethod<
+    (TSpecializedBox<int>, TSpecializedBox<string>, TSpecializedBox<int>),
+  >(
+    'repeated',
+    $table,
+    null,
+    '(\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedBox<int>, '.
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedBox<string>, '.
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedBox<int>)',
+    resolve_box_asserter<>,
+  );
   $ch->createMethod<TSpecializedNested>(
     'nested',
     $table,
@@ -55,6 +68,20 @@ async function generic_alias_handler_test_async(
     'vec<\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedBox<int>>',
     ($_)[] ==> null,
   );
+  $ch->createMethod<TSpecializedIntBox>(
+    'transparent',
+    $table,
+    null,
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedIntBox',
+    resolve_box_asserter<>,
+  );
+  $ch->createMethod<TSpecializedBox<?int>>(
+    'nullableArgument',
+    dict[],
+    null,
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedBox<?int>',
+    resolve_box_asserter<>,
+  );
   $ch->createMethod<?TGenericIdentity<?int>>(
     'nullable',
     dict[],
@@ -67,12 +94,22 @@ async function generic_alias_handler_test_async(
   return $chain->group(__FUNCTION__)
     ->test('specialize_composite_and_repeated_nested_aliases', () ==> {
       $pair = tuple(shape('value' => 7), shape('value' => 'seven'));
+      $repeated = tuple($pair[0], $pair[1], $pair[0]);
+      expect(GenericAliasHandlerTestCodegenTargetClass::repeated($repeated))
+        ->toEqual($repeated);
       expect(GenericAliasHandlerTestCodegenTargetClass::pair($pair))
         ->toEqual($pair);
       expect(
         GenericAliasHandlerTestCodegenTargetClass::nested(vec[$pair, $pair]),
       )
         ->toEqual(vec[$pair, $pair]);
+      $helper->badValues(
+        GenericAliasHandlerTestCodegenTargetClass::repeated<>,
+        dict[
+          'wrong third field' =>
+            tuple($pair[0], $pair[1], shape('value' => '7')),
+        ],
+      );
       $helper->badValues(
         GenericAliasHandlerTestCodegenTargetClass::pair<>,
         dict[
@@ -94,6 +131,10 @@ async function generic_alias_handler_test_async(
       expect(Str\contains($body, 'assert_string_box('))->toEqual(true);
     })
     ->test('resolver_null_falls_back_to_name_table', () ==> {
+      expect(GenericAliasHandlerTestCodegenTargetClass::transparent(
+        shape('value' => 7),
+      ))
+        ->toEqual(shape('value' => 7));
       $value = vec[shape('value' => 7)];
       expect(GenericAliasHandlerTestCodegenTargetClass::fallback($value))
         ->toEqual($value);
@@ -119,6 +160,14 @@ async function generic_alias_handler_test_async(
         ->toEqual('assert_int_box($value)');
     })
     ->test('resolved_handlers_keep_inherent_null_semantics', () ==> {
+      expect(GenericAliasHandlerTestCodegenTargetClass::nullableArgument(
+        shape('value' => null),
+      ))
+        ->toEqual(shape('value' => null));
+      expect(GenericAliasHandlerTestCodegenTargetClass::nullableArgument(
+        shape('value' => 7),
+      ))
+        ->toEqual(shape('value' => 7));
       expect(GenericAliasHandlerTestCodegenTargetClass::nullable(null))
         ->toEqual(41);
     });
