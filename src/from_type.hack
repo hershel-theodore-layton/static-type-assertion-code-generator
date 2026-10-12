@@ -8,6 +8,8 @@ function from_type<reify T>(
   (function(string)[]: nothing) $panic,
   ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
   shape(?'closed_shape_suffix' => string /*_*/) $options = shape(),
+  ?(function(TypeVisitor\TAlias)[]: ?string) $type_alias_asserter_resolver =
+    null,
 )[]: OpaqueTypeDescription {
   return TypeVisitor\visit<T, _, _>(
     new DefaultVisitor(
@@ -15,6 +17,7 @@ function from_type<reify T>(
       $panic,
       $shape_field_name_resolver ?? ($_, $_) ==> null,
       $options,
+      $type_alias_asserter_resolver,
     ),
   )
     |> _Private\make_opaque($$);

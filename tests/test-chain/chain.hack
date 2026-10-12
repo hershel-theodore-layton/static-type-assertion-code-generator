@@ -4,7 +4,7 @@ namespace HTL\Project_BEjhs0zCRby4\GeneratedTestChain;
 use namespace HTL\TestChain;
 use type HTL\Pragma\Pragmas;
 
-<<file: Pragmas(vec['PhaLinters', 'digest:ed5312c4fc644378db39'])>>
+<<file: Pragmas(vec['PhaLinters', 'digest:ab5c9ca981b298875e72'])>>
 
 async function tests_async(
   TestChain\ChainController<\HTL\TestChain\Chain> $controller,
@@ -15,6 +15,9 @@ async function tests_async(
     )
     ->addTestGroupAsync(\HTL\StaticTypeAssertionCodegen\Tests\dict_test_async<>)
     ->addTestGroupAsync(\HTL\StaticTypeAssertionCodegen\Tests\enum_test_async<>)
+    ->addTestGroupAsync(
+      \HTL\StaticTypeAssertionCodegen\Tests\generic_alias_handler_test_async<>,
+    )
     ->addTestGroupAsync(
       \HTL\StaticTypeAssertionCodegen\Tests\keyset_test_async<>,
     )

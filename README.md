@@ -44,6 +44,46 @@ By default, static-type-assertion-code-generator will recurse all the way down t
 
 Keeping your code small reduces the number of things the JIT needs to optimize individually. The JIT reserves a certain amount of space for hot code. If you run large amounts of data through these functions often, the JIT will put it in the hot portion. Keeping the code small allows more functions to fit in the hot section.
 
+### Generic alias handlers
+
+The optional fifth argument, `$type_alias_asserter_resolver`, is a pure callback
+`(function(HTL\TypeVisitor\TAlias)[]: ?string)`. It receives the alias name,
+opacity, counter, and available `typevar_types` (HHVM type structures keyed by
+parameter name). Return a callee string to override the name table for that
+occurrence, or `null` to use the existing table and transparent-alias fallback.
+For example, a resolver can select `assert_int_box` for `Box<int>` and
+`assert_string_box` for `Box<string>` in the same tuple:
+
+```hack
+from_type<Pair>(dict[], panic<>, null, shape(), $alias ==> {
+  if ($alias['alias'] !== (string)Box::class) {
+    return null;
+  }
+  $argument = idx($alias['typevar_types'] ?? dict[], 'T');
+  if ($argument is null) {
+    return null;
+  }
+  $type = $argument as dict<_, _>;
+  switch ($type['kind'] ?? null) {
+    case HH\TypeStructureKind::OF_INT:
+      return 'assert_int_box';
+    case HH\TypeStructureKind::OF_STRING:
+      return 'assert_string_box';
+    default:
+      return null;
+  }
+});
+```
+
+The resolver runs for named occurrences visited by HHVM, before table lookup;
+it does not run for each reflected alias in the table's transparent-alias chain.
+Metadata can be absent or incomplete, so a resolver should return `null` when it
+cannot select safely. A fallback table entry must be valid for every
+instantiation that reaches it. An opaque alias with neither a resolved handler
+nor a table handler still fails generation. Resolved handlers retain the same
+inherent-null handling as table handlers. The resolver does not bypass child
+traversal or provide class generic arguments.
+
 ### Traversal limitations
 
 `from_type<T>()` visits a type's children, including generic arguments of classes and interfaces, before selecting its assertion function. A handler therefore only applies if every child is supported or has its own handler. For example:

@@ -36,6 +36,7 @@ final class DefaultVisitor
     private (function(string)[]: nothing) $panic,
     private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
     private shape(?'closed_shape_suffix' => string /*_*/) $options = shape(),
+    private ?(function(TAlias)[]: ?string) $typeAliasAsserterResolver = null,
   )[] {}
 
   public function panic(string $message)[]: nothing {
@@ -302,7 +303,12 @@ final class DefaultVisitor
       return null;
     }
 
-    $asserter = $this->findAsserter($name, $alias['typevar_types'] ?? dict[]);
+    $resolver = $this->typeAliasAsserterResolver;
+    $asserter = $this->findAsserter(
+      $name,
+      $alias['typevar_types'] ?? dict[],
+      $resolver is null ? null : $resolver($alias),
+    );
 
     if ($asserter is nonnull) {
       return new CallThisUserSuppliedFunction(
@@ -327,6 +333,7 @@ final class DefaultVisitor
   private function findAsserter(
     string $name,
     KeyedContainer<string, mixed> $type_arguments,
+    ?string $resolved_asserter,
   )[]: ?shape('assert' => string, 'nullable' => bool/*_*/) {
     $asserters = $this->typeAliasAsserters;
     $nullable_arguments = dict[];
@@ -335,7 +342,11 @@ final class DefaultVisitor
         static::typeAcceptsNull($argument as dict<_, _>, dict[]);
     }
 
-    while ($name !== null && !C\contains_key($asserters, $name)) {
+    while (
+      $resolved_asserter is null &&
+      $name !== null &&
+      !C\contains_key($asserters, $name)
+    ) {
       $type = static::reflectAlias($name);
       $inner_name = static::tryGetInnerAlias($name);
       $nullable_arguments = $inner_name is null || $type is null
@@ -348,7 +359,7 @@ final class DefaultVisitor
       $name = $inner_name;
     }
 
-    $asserter = idx($asserters, $name);
+    $asserter = $resolved_asserter ?? idx($asserters, $name);
 
     if ($asserter is null || $name is null) {
       return null;

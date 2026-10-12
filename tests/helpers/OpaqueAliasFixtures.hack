@@ -53,3 +53,18 @@ function assert_generic_vector(mixed $value)[]: TGenericVector<?int> {
 function assert_generic_dynamic(mixed $value)[]: TGenericIdentity<dynamic> {
   return $value is null ? 43 : $value as int;
 }
+
+newtype TSpecializedBox<T> = shape('value' => T /*_*/);
+type TSpecializedPair = (TSpecializedBox<int>, TSpecializedBox<string>);
+type TSpecializedNested = vec<TSpecializedPair>;
+
+function assert_int_box(mixed $value)[]: TSpecializedBox<int> {
+  return
+    shape('value' => ($value as shape('value' => mixed /*_*/))['value'] as int);
+}
+
+function assert_string_box(mixed $value)[]: TSpecializedBox<string> {
+  return shape(
+    'value' => ($value as shape('value' => mixed /*_*/))['value'] as string,
+  );
+}
