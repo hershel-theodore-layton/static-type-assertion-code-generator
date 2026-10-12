@@ -138,6 +138,14 @@ async function generic_alias_handler_test_async(
       expect(Str\contains($body, 'assert_string_box('))->toEqual(true);
     })
     ->test('resolver_null_falls_back_to_name_table', () ==> {
+      $body = StaticTypeAssertionCodegen\from_type<TSpecializedBox<int>>(
+        $table,
+        panic<>,
+        null,
+        shape('assertion_resolver' => null),
+      )
+        |> StaticTypeAssertionCodegen\emit_body_for_assertion_function($$);
+      expect($body)->toEqual('return assert_int_box($htl_untyped_variable);');
       expect(GenericAliasHandlerTestCodegenTargetClass::transparent(
         shape('value' => 7),
       ))

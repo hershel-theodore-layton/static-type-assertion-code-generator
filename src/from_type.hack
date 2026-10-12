@@ -9,7 +9,7 @@ function from_type<reify T>(
   ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
   shape(
     ?'closed_shape_suffix' => string,
-    ?'assertion_resolver' => (function(
+    ?'assertion_resolver' => ?(function(
       TypeVisitor\TAlias,
       dict<string, string>,
     )[]: ?string),

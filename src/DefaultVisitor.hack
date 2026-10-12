@@ -37,7 +37,7 @@ final class DefaultVisitor
     private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
     private shape(
       ?'closed_shape_suffix' => string,
-      ?'assertion_resolver' => (function(
+      ?'assertion_resolver' => ?(function(
         TAlias,
         dict<string, string>,
       )[]: ?string),
