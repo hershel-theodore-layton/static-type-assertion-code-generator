@@ -156,10 +156,12 @@ async function generic_alias_handler_test_async(
     })
     ->test('missing_metadata_can_fall_back_to_name_table', () ==> {
       $visitor = new StaticTypeAssertionCodegen\DefaultVisitor(
-        dict[(string)TSpecializedBox::class => 'assert_int_box'],
+        StaticTypeAssertionCodegen\_Private\make_assertion_resolver(
+          dict[(string)TSpecializedBox::class => 'assert_int_box'],
+          resolve_box_asserter<>,
+        ),
         panic<>,
         ($_, $_)[] ==> null,
-        shape('assertion_resolver' => resolve_box_asserter<>),
       );
       $description = $visitor->shape(
         shape(

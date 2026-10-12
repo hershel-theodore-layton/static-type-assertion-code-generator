@@ -16,12 +16,13 @@ function from_type<reify T>(
     /*_*/
   ) $options = shape(),
 )[]: OpaqueTypeDescription {
+  $specialization = $options['assertion_resolver'] ?? ($_, $_)[] ==> null;
   return TypeVisitor\visit<T, _, _>(
     new DefaultVisitor(
-      $type_alias_asserters,
+      _Private\make_assertion_resolver($type_alias_asserters, $specialization),
       $panic,
       $shape_field_name_resolver ?? ($_, $_) ==> null,
-      $options,
+      shape('closed_shape_suffix' => $options['closed_shape_suffix'] ?? ''),
     ),
   )
     |> _Private\make_opaque($$);
