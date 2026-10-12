@@ -22,7 +22,7 @@ function resolve_box_asserter(TAlias $alias)[]: ?string {
         ? 'assert_nullable_int_box'
         : 'assert_int_box';
     case HH\TypeStructureKind::OF_STRING:
-      return 'assert_string_box';
+      return ($type['nullable'] ?? false) === true ? null : 'assert_string_box';
     default:
       return null;
   }

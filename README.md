@@ -52,7 +52,8 @@ opacity, counter, and available `typevar_types` (HHVM type structures keyed by
 parameter name). Return a callee string to override the name table for that
 occurrence, or `null` to use the existing table and transparent-alias fallback.
 For example, given `newtype Box<T> = shape('value' => T /*_*/);` and
-`type Pair = (Box<int>, Box<string>);`, a resolver can select `assert_int_box` for `Box<int>` and
+`type Pair = (Box<int>, Box<string>);`, a resolver can select
+`assert_int_box` for `Box<int>` and
 `assert_string_box` for `Box<string>` in the same tuple:
 
 ```hack
@@ -86,7 +87,8 @@ from_type<Pair>(dict[], panic<>, null, shape(), $alias ==> {
 The resolver runs for named occurrences visited by HHVM, before table lookup;
 it does not run for each reflected alias in the table's transparent-alias chain.
 Metadata can be absent or incomplete, so a resolver should return `null` when it
-cannot select safely. A fallback table entry must be valid for every
+cannot select safely. Nested arguments are type structures that the resolver
+must inspect itself. A fallback table entry must be valid for every
 instantiation that reaches it. An opaque alias with neither a resolved handler
 nor a table handler still fails generation. Resolved handlers retain the same
 inherent-null handling as table handlers. Nullable aliases can invoke the resolver
