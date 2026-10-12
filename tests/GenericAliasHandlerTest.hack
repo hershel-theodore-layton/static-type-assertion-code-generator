@@ -7,7 +7,10 @@ use namespace HTL\{StaticTypeAssertionCodegen, TestChain};
 use type HTL\TypeVisitor\TAlias;
 use function HTL\Expect\expect;
 
-function resolve_box_asserter(TAlias $alias)[]: ?string {
+function resolve_box_asserter(
+  TAlias $alias,
+  dict<string, string> $table,
+)[]: ?string {
   if ($alias['alias'] !== (string)TSpecializedBox::class) {
     return null;
   }
@@ -20,7 +23,7 @@ function resolve_box_asserter(TAlias $alias)[]: ?string {
     case HH\TypeStructureKind::OF_INT:
       return ($type['nullable'] ?? false) === true
         ? 'assert_nullable_int_box'
-        : 'assert_int_box';
+        : idx($table, (string)TSpecializedBox::class);
     case HH\TypeStructureKind::OF_STRING:
       return ($type['nullable'] ?? false) === true ? null : 'assert_string_box';
     default:
@@ -66,7 +69,7 @@ async function generic_alias_handler_test_async(
     $table,
     null,
     'vec<\\HTL\\StaticTypeAssertionCodegen\\Tests\\TSpecializedBox<int>>',
-    ($_)[] ==> null,
+    ($_, $_)[] ==> null,
   );
   $ch->createMethod<TSpecializedIntBox>(
     'transparent',
@@ -87,7 +90,7 @@ async function generic_alias_handler_test_async(
     dict[],
     null,
     '?\\HTL\\StaticTypeAssertionCodegen\\Tests\\TGenericIdentity<?int>',
-    ($alias)[] ==> $alias['alias'] === (string)TGenericIdentity::class
+    ($alias, $_)[] ==> $alias['alias'] === (string)TGenericIdentity::class
       ? 'assert_generic_nullable_identity'
       : null,
   );
@@ -123,8 +126,12 @@ async function generic_alias_handler_test_async(
         $table,
         panic<>,
         null,
-        shape(),
-        resolve_box_asserter<>,
+        shape(
+          'assertion_resolver' => ($alias, $handlers)[] ==> {
+            expect($handlers)->toEqual($table);
+            return resolve_box_asserter($alias, $handlers);
+          },
+        ),
       )
         |> StaticTypeAssertionCodegen\emit_body_for_assertion_function($$);
       expect(Str\contains($body, 'assert_int_box('))->toEqual(true);
@@ -144,8 +151,7 @@ async function generic_alias_handler_test_async(
         dict[(string)TSpecializedBox::class => 'assert_int_box'],
         panic<>,
         ($_, $_)[] ==> null,
-        shape(),
-        resolve_box_asserter<>,
+        shape('assertion_resolver' => resolve_box_asserter<>),
       );
       $description = $visitor->shape(
         shape(

@@ -46,7 +46,7 @@ Keeping your code small reduces the number of things the JIT needs to optimize i
 
 ### Generic alias handlers
 
-The optional fifth argument of `from_type<T>()` is a pure callback that receives each named `TAlias`, including `typevar_types` (HHVM type structures by parameter name). It returns the callee to use for that occurrence, which overrides the table, or `null` to fall back to the table. `typevar_types` may be absent, so return `null` when you can't tell.
+The optional `assertion_resolver` option receives a `TAlias` and the handler dictionary. Return a callee to override the table, or `null` for normal lookup. Alias arguments are in `typevar_types`, which may be absent.
 
 ### Traversal limitations
 

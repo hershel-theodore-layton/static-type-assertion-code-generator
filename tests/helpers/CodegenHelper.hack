@@ -31,7 +31,7 @@ final class CodegenHelper implements IAsyncDisposable {
     dict<string, string> $table = dict[],
     ?(function(?string, arraykey)[]: ?string) $shape_field_name_resolver = null,
     ?string $return_type = null,
-    ?(function(TypeVisitor\TAlias)[]: ?string) $type_alias_asserter_resolver = null,
+    ?(function(TypeVisitor\TAlias, dict<string, string>)[]: ?string) $assertion_resolver = null,
   )[write_props]: void {
     invariant(
       !C\contains_key($this->methods, $name),
@@ -40,6 +40,10 @@ final class CodegenHelper implements IAsyncDisposable {
     );
 
     $options = shape('closed_shape_suffix' => '/*_*/');
+    $assertion_options = $options;
+    if ($assertion_resolver is nonnull) {
+      $assertion_options['assertion_resolver'] = $assertion_resolver;
+    }
 
     $type = $return_type ??
       TypeVisitor\visit<T, _, _>(new TypeVisitor\TypenameVisitor(
@@ -53,8 +57,7 @@ final class CodegenHelper implements IAsyncDisposable {
           $table,
           panic<>,
           $shape_field_name_resolver,
-          $options,
-          $type_alias_asserter_resolver,
+          $assertion_options,
         ),
       ),
       'type' => $type,

@@ -35,8 +35,14 @@ final class DefaultVisitor
     private dict<string, string> $typeAliasAsserters,
     private (function(string)[]: nothing) $panic,
     private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
-    private shape(?'closed_shape_suffix' => string /*_*/) $options = shape(),
-    private ?(function(TAlias)[]: ?string) $typeAliasAsserterResolver = null,
+    private shape(
+      ?'closed_shape_suffix' => string,
+      ?'assertion_resolver' => (function(
+        TAlias,
+        dict<string, string>,
+      )[]: ?string),
+      /*_*/
+    ) $options = shape(),
   )[] {}
 
   public function panic(string $message)[]: nothing {
@@ -303,11 +309,11 @@ final class DefaultVisitor
       return null;
     }
 
-    $resolver = $this->typeAliasAsserterResolver;
+    $resolver = $this->options['assertion_resolver'] ?? null;
     $asserter = $this->findAsserter(
       $name,
       $alias['typevar_types'] ?? dict[],
-      $resolver is null ? null : $resolver($alias),
+      $resolver is null ? null : $resolver($alias, $this->typeAliasAsserters),
     );
 
     if ($asserter is nonnull) {
