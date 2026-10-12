@@ -46,54 +46,7 @@ Keeping your code small reduces the number of things the JIT needs to optimize i
 
 ### Generic alias handlers
 
-The optional fifth argument, `$type_alias_asserter_resolver`, is a pure callback
-`(function(HTL\TypeVisitor\TAlias)[]: ?string)`. It receives the alias name,
-opacity, counter, and available `typevar_types` (HHVM type structures keyed by
-parameter name). Return a callee string to override the name table for that
-occurrence, or `null` to use the existing table and transparent-alias fallback.
-For example, given `newtype Box<T> = shape('value' => T /*_*/);` and
-`type Pair = (Box<int>, Box<string>);`, a resolver can select
-`assert_int_box` for `Box<int>` and
-`assert_string_box` for `Box<string>` in the same tuple:
-
-```hack
-use namespace HH;
-use function HTL\StaticTypeAssertionCodegen\from_type;
-
-// The helpers are defined where Box is transparent; panic throws on failure.
-from_type<Pair>(dict[], panic<>, null, shape(), $alias ==> {
-  if ($alias['alias'] !== (string)Box::class) {
-    return null;
-  }
-  $argument = idx($alias['typevar_types'] ?? dict[], 'T');
-  if ($argument is null) {
-    return null;
-  }
-  $type = $argument as dict<_, _>;
-  if (($type['nullable'] ?? false) === true) {
-    return null;
-  }
-  switch ($type['kind'] ?? null) {
-    case HH\TypeStructureKind::OF_INT:
-      return 'assert_int_box';
-    case HH\TypeStructureKind::OF_STRING:
-      return 'assert_string_box';
-    default:
-      return null;
-  }
-});
-```
-
-The resolver runs for named occurrences visited by HHVM, before table lookup;
-it does not run for each reflected alias in the table's transparent-alias chain.
-Metadata can be absent or incomplete, so a resolver should return `null` when it
-cannot select safely. Nested arguments are type structures that the resolver
-must inspect itself. A fallback table entry must be valid for every
-instantiation that reaches it. An opaque alias with neither a resolved handler
-nor a table handler still fails generation. Resolved handlers retain the same
-inherent-null handling as table handlers. Nullable aliases can invoke the resolver
-for both the inner visit and the nullable wrapper. The resolver does not bypass child
-traversal or provide class generic arguments.
+The optional fifth argument of `from_type<T>()` is a pure callback that receives each named `TAlias`, including `typevar_types` (HHVM type structures by parameter name). It returns the callee to use for that occurrence, which overrides the table, or `null` to fall back to the table. `typevar_types` may be absent, so return `null` when you can't tell.
 
 ### Traversal limitations
 
