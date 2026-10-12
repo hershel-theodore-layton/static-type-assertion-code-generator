@@ -24,6 +24,10 @@ function resolve_class_asserter(
   TAlias $alias,
   dict<string, string> $_,
 )[]: ?string {
+  if ($alias['alias'] === (string)ResolverGenericClass::class) {
+    expect($alias['typevar_types'] ?? null)->toEqual(null);
+    return 'assert_resolver_generic_class';
+  }
   return $alias['alias'] === 'stdClass' ? 'assert_resolver_class' : null;
 }
 
@@ -63,6 +67,16 @@ async function resolver_lookup_test_async(
     '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TResolverClassAlias',
     resolve_class_asserter<>,
   );
+  $ch->createMethod<TResolverGenericClassAlias>(
+    'genericClassAlias',
+    dict[
+      (string)ResolverGenericClass::class =>
+        'handler_that_must_not_be_selected',
+    ],
+    null,
+    '\\HTL\\StaticTypeAssertionCodegen\\Tests\\TResolverGenericClassAlias',
+    resolve_class_asserter<>,
+  );
   $ch->createMethod<TResolverOuter<int>>(
     'nestedArguments',
     dict[],
@@ -94,6 +108,11 @@ async function resolver_lookup_test_async(
       }))->toEqual('return level_3_and_4_and_5($htl_untyped_variable);');
     })
     ->test('specialize_the_underlying_class_before_its_table_entry', () ==> {
+      $generic_object = new ResolverGenericClass<int>();
+      expect(ResolverLookupTestCodegenTargetClass::genericClassAlias(
+        $generic_object,
+      ))
+        ->toEqual($generic_object);
       $object = new stdClass();
       expect(ResolverLookupTestCodegenTargetClass::classAlias($object))
         ->toEqual($object);

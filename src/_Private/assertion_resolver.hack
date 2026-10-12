@@ -90,6 +90,9 @@ function inner_type_arguments(
   KeyedContainer<string, mixed> $arguments,
 )[]: dict<string, mixed> {
   $parameters = reflect_alias($name)['typevars'] ?? '';
+  if ($parameters === '') {
+    return dict[];
+  }
   $parameters = Str\split($parameters as string, ',');
   $types = ($type['generic_types'] ?? vec[]) as KeyedContainer<_, _>;
   $result = dict[];

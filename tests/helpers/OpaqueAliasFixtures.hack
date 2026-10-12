@@ -99,3 +99,12 @@ function assert_vector_int_box(mixed $value)[]: TSpecializedBox<vec<int>> {
   }
   return shape('value' => $result);
 }
+
+final class ResolverGenericClass<reify T> {}
+type TResolverGenericClassAlias = ResolverGenericClass<int>;
+
+function assert_resolver_generic_class(
+  mixed $value,
+)[]: ResolverGenericClass<int> {
+  return $value as ResolverGenericClass<int>;
+}
