@@ -1,6 +1,8 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
+use type stdClass;
+
 newtype TBoundaryInner = int;
 type TBoundaryTransparentInner = TBoundaryInner;
 newtype TBoundaryOuter = TBoundaryInner;
@@ -75,4 +77,25 @@ function assert_nullable_int_box(mixed $value)[]: TSpecializedBox<?int> {
   return shape(
     'value' => ($value as shape('value' => mixed /*_*/))['value'] as ?int,
   );
+}
+
+type TResolverClassAlias = stdClass;
+newtype TResolverOpaqueClass = stdClass;
+type TResolverInner<TItem> = TSpecializedBox<TItem>;
+type TResolverMiddle<TValue> = TResolverInner<vec<TValue>>;
+type TResolverOuter<T> = TResolverMiddle<T>;
+type TResolverNullable<T> = TGenericTransparent<?T>;
+
+function assert_resolver_class(mixed $value)[]: stdClass {
+  return $value as stdClass;
+}
+
+function assert_vector_int_box(mixed $value)[]: TSpecializedBox<vec<int>> {
+  $result = vec[];
+  foreach (
+    (($value as shape('value' => mixed /*_*/))['value'] as vec<_>) as $item
+  ) {
+    $result[] = $item as int;
+  }
+  return shape('value' => $result);
 }

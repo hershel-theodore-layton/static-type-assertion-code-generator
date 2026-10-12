@@ -46,7 +46,7 @@ Keeping your code small reduces the number of things the JIT needs to optimize i
 
 ### Generic alias handlers
 
-The optional `assertion_resolver` option receives a `TAlias` and the handler dictionary. Return a callee to override the table, or `null` for normal lookup. Alias arguments are in `typevar_types`, which may be absent.
+The optional `assertion_resolver` option receives a `TAlias` and the handler dictionary. It runs before table lookup at each alias step and the underlying class name. Return a callee to stop lookup, or `null` to continue. Alias arguments are in `typevar_types`, which may be absent.
 
 ### Traversal limitations
 

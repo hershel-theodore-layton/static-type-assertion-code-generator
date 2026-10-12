@@ -30,7 +30,7 @@ final class DefaultVisitor
   implements TypeDeclVisitor<TypeDescription, ShapeField> {
 
   public function __construct(
-    private (function(TAlias)[]: ?shape(
+    private (function(TAlias, ?string)[]: ?shape(
       'assert' => string,
       'nullable' => bool, /*_*/
     )) $assertionResolver,
@@ -92,15 +92,7 @@ final class DefaultVisitor
     string $classname,
     vec<mixed> $_generics,
   )[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ??
-      $this->resolveAlias(
-        shape(
-          'alias' => $classname,
-          'counter' => $alias['counter'],
-          'opaque' => $alias['opaque'],
-        ),
-        false,
-      ) ??
+    return $this->resolveAlias($alias, false, $classname) ??
       $this->unsupportedType('class');
   }
 
@@ -119,15 +111,7 @@ final class DefaultVisitor
   }
 
   public function enum(TAlias $alias, string $classname)[]: TypeDescription {
-    return $this->resolveAlias($alias, true) ??
-      $this->resolveAlias(
-        shape(
-          'alias' => $classname,
-          'counter' => $alias['counter'],
-          'opaque' => $alias['opaque'],
-        ),
-        true,
-      ) ??
+    return $this->resolveAlias($alias, true, $classname) ??
       $this->panic(Str\format(
         'Support for enums must be added using a $type_alias_asserters entry, got %s'.
         'See the README to learn why.',
@@ -150,15 +134,7 @@ final class DefaultVisitor
     string $classname,
     vec<mixed> $_generics,
   )[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ??
-      $this->resolveAlias(
-        shape(
-          'alias' => $classname,
-          'counter' => $alias['counter'],
-          'opaque' => $alias['opaque'],
-        ),
-        false,
-      ) ??
+    return $this->resolveAlias($alias, false, $classname) ??
       $this->unsupportedType('interface');
   }
 
@@ -246,15 +222,7 @@ final class DefaultVisitor
     string $classname,
     vec<mixed> $_generics,
   )[]: TypeDescription {
-    return $this->resolveAlias($alias, false) ??
-      $this->resolveAlias(
-        shape(
-          'alias' => $classname,
-          'counter' => $alias['counter'],
-          'opaque' => $alias['opaque'],
-        ),
-        false,
-      ) ??
+    return $this->resolveAlias($alias, false, $classname) ??
       $this->unsupportedType('trait');
   }
 
@@ -295,15 +263,16 @@ final class DefaultVisitor
   private function resolveAlias(
     TAlias $alias,
     bool $is_arraykey,
+    ?string $fallback_name = null,
   )[]: ?TypeDescription {
     $name = $alias['alias'];
     $opaque = $alias['opaque'];
 
-    if ($name is null) {
+    if ($name is null && $fallback_name is null) {
       return null;
     }
 
-    $asserter = ($this->assertionResolver)($alias);
+    $asserter = ($this->assertionResolver)($alias, $fallback_name);
 
     if ($asserter is nonnull) {
       return new CallThisUserSuppliedFunction(
@@ -314,7 +283,7 @@ final class DefaultVisitor
       );
     }
 
-    if ($opaque) {
+    if ($opaque && $name is nonnull) {
       return $this->panic(Str\format(
         'Could not generate typesafe code for %s. '.
         'This type is a newtype and no $type_alias_asserters entry was provided.',
@@ -324,5 +293,4 @@ final class DefaultVisitor
 
     return null;
   }
-
 }
