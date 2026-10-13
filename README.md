@@ -44,10 +44,6 @@ By default, static-type-assertion-code-generator will recurse all the way down t
 
 Keeping your code small reduces the number of things the JIT needs to optimize individually. The JIT reserves a certain amount of space for hot code. If you run large amounts of data through these functions often, the JIT will put it in the hot portion. Keeping the code small allows more functions to fit in the hot section.
 
-### Generic alias handlers
-
-The optional `assertion_resolver` option receives a `TAlias` and the handler dictionary. It runs before table lookup at each alias step and at the underlying class name. Return a callee to stop lookup, or `null` to continue. Alias arguments are in `typevar_types`, which may be absent.
-
 ### Traversal limitations
 
 `from_type<T>()` visits a type's children, including generic arguments of classes and interfaces, before selecting its assertion function. A handler therefore only applies if every child is supported or has its own handler. For example:
