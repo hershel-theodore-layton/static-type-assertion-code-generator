@@ -7,17 +7,6 @@ use type HH\Shapes;
 use type HTL\TypeVisitor\TAlias;
 use type ReflectionException, ReflectionTypeAlias;
 
-function make_assertion_resolver(
-  dict<string, string> $asserters,
-  (function(TAlias, dict<string, string>)[]: ?string) $specialization,
-)[]: (function(
-  TAlias,
-  ?string,
-)[]: ?shape('assert' => string, 'nullable' => bool /*_*/)) {
-  return ($alias, $fallback_name)[] ==>
-    find_asserter($alias, $fallback_name, $asserters, $specialization);
-}
-
 function find_asserter(
   TAlias $alias,
   ?string $fallback_name,

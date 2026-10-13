@@ -156,12 +156,10 @@ async function generic_alias_handler_test_async(
     })
     ->test('missing_metadata_can_fall_back_to_name_table', () ==> {
       $visitor = new StaticTypeAssertionCodegen\DefaultVisitor(
-        StaticTypeAssertionCodegen\_Private\make_assertion_resolver(
-          dict[(string)TSpecializedBox::class => 'assert_int_box'],
-          resolve_box_asserter<>,
-        ),
+        dict[(string)TSpecializedBox::class => 'assert_int_box'],
         panic<>,
         ($_, $_)[] ==> null,
+        shape('assertion_resolver' => resolve_box_asserter<>),
       );
       $description = $visitor->shape(
         shape(
@@ -174,6 +172,28 @@ async function generic_alias_handler_test_async(
       );
       expect($description->emitAssertionExpression('$value'))
         ->toEqual('assert_int_box($value)');
+    })
+    ->test('direct_visitor_preserves_dictionary_constructor', () ==> {
+      $table = dict[(string)TSpecializedBox::class => 'assert_int_box'];
+      foreach (vec[shape(), shape('assertion_resolver' => null)] as $options) {
+        $visitor = new StaticTypeAssertionCodegen\DefaultVisitor(
+          $table,
+          panic<>,
+          ($_, $_)[] ==> null,
+          $options,
+        );
+        $description = $visitor->shape(
+          shape(
+            'alias' => (string)TSpecializedBox::class,
+            'counter' => 1,
+            'opaque' => true,
+          ),
+          vec[],
+          false,
+        );
+        expect($description->emitAssertionExpression('$value'))
+          ->toEqual('assert_int_box($value)');
+      }
     })
     ->test('resolved_handlers_keep_inherent_null_semantics', () ==> {
       expect(GenericAliasHandlerTestCodegenTargetClass::nullableArgument(

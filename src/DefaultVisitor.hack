@@ -30,13 +30,17 @@ final class DefaultVisitor
   implements TypeDeclVisitor<TypeDescription, ShapeField> {
 
   public function __construct(
-    private (function(TAlias, ?string)[]: ?shape(
-      'assert' => string,
-      'nullable' => bool, /*_*/
-    )) $assertionResolver,
+    private dict<string, string> $typeAliasAsserters,
     private (function(string)[]: nothing) $panic,
     private (function(?string, arraykey)[]: ?string) $shapeFieldNameResolver,
-    private shape(?'closed_shape_suffix' => string /*_*/) $options = shape(),
+    private shape(
+      ?'closed_shape_suffix' => string,
+      ?'assertion_resolver' => ?(function(
+        TAlias,
+        dict<string, string>,
+      )[]: ?string),
+      /*_*/
+    ) $options = shape(),
   )[] {}
 
   public function panic(string $message)[]: nothing {
@@ -272,7 +276,12 @@ final class DefaultVisitor
       return null;
     }
 
-    $asserter = ($this->assertionResolver)($alias, $fallback_name);
+    $asserter = _Private\find_asserter(
+      $alias,
+      $fallback_name,
+      $this->typeAliasAsserters,
+      $this->options['assertion_resolver'] ?? ($_, $_)[] ==> null,
+    );
 
     if ($asserter is nonnull) {
       return new CallThisUserSuppliedFunction(
