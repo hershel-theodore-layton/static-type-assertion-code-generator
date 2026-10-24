@@ -1,11 +1,10 @@
 /** static-type-assertion-code-generator is MIT licensed, see /LICENSE. */
 namespace HTL\StaticTypeAssertionCodegen\Tests;
 
-use namespace HH\Lib\{C, Str, Vec};
+use namespace HH\Lib\{C, File, Str, Vec};
 use namespace HTL\{StaticTypeAssertionCodegen, TypeVisitor};
 use type IAsyncDisposable;
 use function HTL\PhaLintersServer\hackfmt_and_sign_hack_source_do_not_use_async;
-use function file_put_contents;
 
 /**
  * Note to self, this file is not formatted by hackfmt,
@@ -95,7 +94,10 @@ HACK
     );
 
     $signed = await hackfmt_and_sign_hack_source_do_not_use_async($code);
-    file_put_contents($this->file, $signed);
+    $file = File\open_write_only($this->file, File\WriteMode::TRUNCATE, 0666);
+    using ($file->closeWhenDisposed()) {
+      await $file->writeAllAsync($signed);
+    }
     ($this->storeMethods)($this->methods);
   }
 }
